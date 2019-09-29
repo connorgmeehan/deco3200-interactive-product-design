@@ -76,7 +76,9 @@
 # add a runtime path to search for those shared libraries, since they aren't 
 # incorporated directly into the final executable application binary.
 ################################################################################
-PROJECT_LDFLAGS=-Wl,-rpath=./libs -lfacedetection
+
+# Link with OpenCv in ./bin/libs file
+PROJECT_LDFLAGS += -L ./libs -lopencv_dnn -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_videoio -lopencv_imgcodecs -lopencv_features2d -lopencv_video -lopencv_photo -lopencv_imgproc -lopencv_flann -lopencv_viz -lopencv_core -lopencv_objdetect
 
 ################################################################################
 # PROJECT DEFINES
@@ -87,7 +89,7 @@ PROJECT_LDFLAGS=-Wl,-rpath=./libs -lfacedetection
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_DEFINES = 
+# PROJECT_DEFINES = -DENABLE_AVX2=ON -DCMAKE_BUILD_TYPE=RELEASE -DDEMO=ON
 
 ################################################################################
 # PROJECT CFLAGS
@@ -104,7 +106,7 @@ PROJECT_LDFLAGS=-Wl,-rpath=./libs -lfacedetection
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_CFLAGS = 
+PROJECT_CFLAGS = -w
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS

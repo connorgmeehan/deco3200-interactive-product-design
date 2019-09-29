@@ -1,6 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
+#include "./libs/facedetectcnn.h"
+
+#define INPUT_WIDTH 640
+#define INPUT_HEIGHT 480
 
 class ofApp : public ofBaseApp{
 	public:
@@ -19,4 +23,11 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+		void exit();
+
+		ofVideoGrabber webcam;
+
+
+		int * pResults = NULL;
+		unsigned char * pBuffer;
 };

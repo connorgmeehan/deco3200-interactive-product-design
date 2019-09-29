@@ -67,5 +67,6 @@
         "type_traits": "cpp",
         "tuple": "cpp",
         "utility": "cpp"
-    }
+    },
+    "C_Cpp.default.intelliSenseMode": "gcc-x64"
 }

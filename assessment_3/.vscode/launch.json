@@ -20,7 +20,7 @@
                         "ignoreFailures": true
                     }
                 ],
-                "program": "${workspaceRoot}/controlcentre/bin/${workspaceFolderBasename}_debug"
+                "program": "${workspaceRoot}/bin/${workspaceFolderBasename}_debug"
             },
             "osx": {
                 "MIMode": "lldb"
