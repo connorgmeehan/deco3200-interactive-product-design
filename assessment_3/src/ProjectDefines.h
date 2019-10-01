@@ -1,0 +1,2 @@
+#define INPUT_WIDTH 640
+#define INPUT_HEIGHT 480

@@ -21,6 +21,7 @@ class ThreadedFaceTracker {
     void stop();
 
     void setDeliverPayloadCallback(ThreadedFaceTrackerCallback callback);
+    void setClearRoiTrackerCallback(std::function<void()> callback);
     void setPadding(int padding);
   private:
     int _width, _height;
@@ -30,10 +31,11 @@ class ThreadedFaceTracker {
     ofVideoGrabber _grabber;
     ofxFaceTracker _tracker;
     Throttler _payloadThrottler;
-    
+
     ofRectangle _activeRoi;
 
     ThreadedFaceTrackerCallback _deliverPayloadCallback;
+    std::function<void()> _clearRoiTrackerCallback;
 
     ofRectangle _getBoundingRect(ofxFaceTracker & tracker);
 };

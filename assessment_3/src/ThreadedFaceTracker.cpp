@@ -1,4 +1,5 @@
 #include "ThreadedFaceTracker.h"
+#include "ProjectDefines.h"
 
 ThreadedFaceTracker::~ThreadedFaceTracker() {
 }
@@ -13,6 +14,10 @@ void ThreadedFaceTracker::setup(int width, int height, float refreshRate) {
 
 void ThreadedFaceTracker::setDeliverPayloadCallback(ThreadedFaceTrackerCallback cb) {
   _deliverPayloadCallback = cb;
+}
+
+void ThreadedFaceTracker::setClearRoiTrackerCallback(std::function<void()> cb) {
+  _clearRoiTrackerCallback = cb;
 }
 
 void ThreadedFaceTracker::setPadding(int padding) {
@@ -33,14 +38,18 @@ void ThreadedFaceTracker::update() {
       _activeRoi = _getBoundingRect(_tracker);
       // ofLog() << "Mask discovered: x: " << mask.tl().x << " y: " << mask.tl().y << " x+w: " << mask.br().x << " y+h: "<<  mask.br().y; 
       // Crop cvFrame to get cutout roi
-      cvFrame(ofxCv::toCv(_activeRoi)).copyTo(payload->roi);
+      if(!_activeRoi.x <= 0 || !_activeRoi.y <= 0 || !_activeRoi.width >= INPUT_WIDTH || !_activeRoi.height >= INPUT_HEIGHT) {
+        cvFrame(ofxCv::toCv(_activeRoi)).copyTo(payload->roi);
 
-      if(_payloadThrottler.check()) {
-        // lock();
-        _deliverPayloadCallback(payload);
-        // unlock();
-      }
-    }      
+        if(_payloadThrottler.check()) {
+          // lock();
+          _deliverPayloadCallback(payload);
+          // unlock();
+        }
+      }     
+    } else {
+      _clearRoiTrackerCallback();
+    }
   }
 }
 

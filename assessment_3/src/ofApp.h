@@ -2,10 +2,10 @@
 
 #include "ofMain.h"
 
-#include "ThreadedFaceTracker.h"
+#include "ProjectDefines.h"
 
-#define INPUT_WIDTH 640
-#define INPUT_HEIGHT 480
+#include "ThreadedFaceTracker.h"
+#include "RoiManager.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -26,10 +26,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		void exit();
 
-		void handleFaceTrackerPayload(ThreadedFaceTrackerPayload * pPayload);
-
-		ofVideoGrabber webcam;
 		ThreadedFaceTracker tracker;
-
-		std::vector<ofImage> images;
+		RoiManager roiManager;
 };

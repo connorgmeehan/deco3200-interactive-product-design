@@ -5,26 +5,24 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  auto trackerCallback = std::bind(&ofApp::handleFaceTrackerPayload, this, std::placeholders::_1);
-  tracker.setDeliverPayloadCallback(trackerCallback);  
-  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, .5f);
+  roiManager.setup(50);
+
+  tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
+  tracker.setDeliverPayloadCallback(roiManager.getFaceTrackerCallback());  
+  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 0.5f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
   tracker.update();
+  roiManager.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
   ofBackground(20);
   tracker.draw();
-  
-  int offset = 0;
-  for(auto & image : images) {
-    image.draw(0,offset);
-    offset += image.getHeight();
-  }
+  roiManager.draw();
 }
 
 //--------------------------------------------------------------
@@ -84,15 +82,4 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::exit() {
   tracker.stop();
-}
-
-void ofApp::handleFaceTrackerPayload(ThreadedFaceTrackerPayload* pPayload) {
-  ofLog() << "handleFaceTrackerPayload(payload)";
-  ofLog() << "payload.position" << pPayload->position;
-  ofLog() << "payload.orientation" << pPayload->orientation;
-  
-  ofImage temp;
-  ofxCv::toOf(pPayload->roi, temp);
-  temp.update();
-  images.push_back(temp);
 }
