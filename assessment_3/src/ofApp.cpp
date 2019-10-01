@@ -5,25 +5,31 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  webcam.setPixelFormat(OF_PIXELS_RGB);
-  webcam.setup(INPUT_WIDTH, INPUT_HEIGHT);
+  auto trackerCallback = std::bind(&ofApp::handleFaceTrackerPayload, this, std::placeholders::_1);
+  tracker.setDeliverPayloadCallback(trackerCallback);  
+  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 0.1f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-  webcam.update();
+  tracker.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-  ofBackground(ofColor::grey);
-  ofSetColor(ofColor::white);
-  webcam.draw(0, 0);
+  ofBackground(20);
+  tracker.draw();
+  
+  int offset = 0;
+  for(auto & image : images) {
+    image.draw(0,offset);
+    offset += image.getHeight();
+  }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+  
 }
 
 //--------------------------------------------------------------
@@ -77,4 +83,14 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::exit() {
+  tracker.stop();
+}
+
+void ofApp::handleFaceTrackerPayload(ThreadedFaceTrackerPayload* pPayload) {
+  ofLog() << "handleFaceTrackerPayload(payload)";
+  ofLog() << "payload.position" << pPayload->position;
+  ofLog() << "payload.orientation" << pPayload->orientation;
+  
+  images.push_back(ofImage());
+  ofxCv::toOf(pPayload->roi, images[images.size()-1].getPixels());
 }

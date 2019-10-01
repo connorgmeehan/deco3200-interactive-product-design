@@ -67,7 +67,9 @@
         "type_traits": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "regex": "cpp",
+        "variant": "cpp"
     },
     "C_Cpp.default.intelliSenseMode": "gcc-x64"
 }

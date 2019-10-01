@@ -34,6 +34,7 @@
                 "${workspaceRoot}/openFrameworks/libs/uriparser/include",
                 "${workspaceRoot}/openFrameworks/libs/utf8/include",
                 "${workspaceRoot}/openFrameworks/addons/ofxOsc/src",
+                "${workspaceRoot}/openFrameworks/addons/ofxFaceTracker/src",
                 "${workspaceRoot}/openFrameworks/addons/ofxOsc/libs/oscpack/src/osc",
                 "${workspaceRoot}/openFrameworks/addons/ofxOsc/libs/oscpack/src/ip"
             ],
@@ -47,7 +48,9 @@
                     "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/",
                     "${workspaceRoot}/openFrameworks/libs",
                     "${workspaceRoot}/openFrameworks/addons",
-                    "${workspaceRoot}/openFrameworks/libs/openFrameworks"
+                    "${workspaceRoot}/openFrameworks/libs/openFrameworks",
+                    "${workspaceRoot}/openFrameworks/addons/ofxFaceTracker/src"
+
                 ]
             },
             "intelliSenseMode": "clang-x64",
@@ -109,7 +112,8 @@
                 "${workspaceRoot}/openFrameworks/libs/uriparser/include",
                 "${workspaceRoot}/openFrameworks/libs/utf8/include",
                 "${workspaceRoot}/openFrameworks/libs/poco/include",
-                "${workspaceRoot}/openFrameworks/libs/kiss/include"
+                "${workspaceRoot}/openFrameworks/libs/kiss/include",
+                "${workspaceRoot}/openFrameworks/addons/ofxFaceTracker/src"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
@@ -125,7 +129,7 @@
                     "${workspaceRoot}/openFrameworks/addons/**",
                     "${workspaceRoot}/openFrameworks/libs/openFrameworks/",
                     "${workspaceRoot}/openFrameworks/libs/openFrameworks/**"
-                ]
+                ],
             },
             "intelliSenseMode": "clang-x64",
             "compilerPath": "/bin/clang",

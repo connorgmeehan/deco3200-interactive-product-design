@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 
+#include "ThreadedFaceTracker.h"
+
 #define INPUT_WIDTH 640
 #define INPUT_HEIGHT 480
 
@@ -24,6 +26,10 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		void exit();
 
-		ofVideoGrabber webcam;
+		void handleFaceTrackerPayload(ThreadedFaceTrackerPayload * pPayload);
 
+		ofVideoGrabber webcam;
+		ThreadedFaceTracker tracker;
+
+		std::vector<ofImage> images;
 };

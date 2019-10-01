@@ -36,7 +36,9 @@ echo "1c. Building openFrameworks 0.10.0..."
 cd openFrameworks/libs/openFrameworksCompiled/project/
 make -j 4
 cd "$PROJECT_ROOT"
-echo "1d. DONE!"
+echo "1d. Cleaning up unneeded files"
+rm -rf ./openFrameworks/apps ./openFrameworks/docs/ ./openFrameworks/examples ./openFrameworks/scripts/templates ./openFrameworks/tests ./openFrameworks/other
+echo "1e. DONE!"
 
 echo "2.  Building opencv3.4 - Computer vision library required to track users"
 echo "2a. Cloning opencv 3.4..."
