@@ -37,7 +37,7 @@
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_EXTERNAL_SOURCE_PATHS = 
+# PROJECT_EXTERNAL_SOURCE_PATHS = ./bin/include
 
 ################################################################################
 # PROJECT EXCLUSIONS
@@ -78,7 +78,7 @@
 ################################################################################
 
 # Link with OpenCv in ./bin/libs file
-PROJECT_LDFLAGS += -L ./libs -lopencv_dnn -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_videoio -lopencv_imgcodecs -lopencv_features2d -lopencv_video -lopencv_photo -lopencv_imgproc -lopencv_flann -lopencv_viz -lopencv_core -lopencv_objdetect
+PROJECT_LDFLAGS = -Wl,-rpath,./lib
 
 ################################################################################
 # PROJECT DEFINES
@@ -89,7 +89,7 @@ PROJECT_LDFLAGS += -L ./libs -lopencv_dnn -lopencv_highgui -lopencv_ml -lopencv_
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_DEFINES = -DENABLE_AVX2=ON -DCMAKE_BUILD_TYPE=RELEASE -DDEMO=ON
+# PROJECT_DEFINES =
 
 ################################################################################
 # PROJECT CFLAGS

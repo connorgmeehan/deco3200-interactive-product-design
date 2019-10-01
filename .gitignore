@@ -3,10 +3,10 @@ assessment_3/libfacedetection
 # ignore all
 # check another .ignore file in addons folder
 
-!/assessment_3/opencv
-assessment_3/opencv/*
-!/assessment_3/openFrameworks
-assessment_3/openFrameworks/*
+!/opencv
+/opencv/*
+!/openFrameworks
+/openFrameworks/*
 
 !/assessment_3/bin
 /assessment_3/bin/*
