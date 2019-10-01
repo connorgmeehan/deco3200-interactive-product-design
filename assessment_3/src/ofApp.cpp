@@ -7,7 +7,7 @@
 void ofApp::setup(){
   auto trackerCallback = std::bind(&ofApp::handleFaceTrackerPayload, this, std::placeholders::_1);
   tracker.setDeliverPayloadCallback(trackerCallback);  
-  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 0.1f);
+  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, .5f);
 }
 
 //--------------------------------------------------------------
@@ -91,6 +91,8 @@ void ofApp::handleFaceTrackerPayload(ThreadedFaceTrackerPayload* pPayload) {
   ofLog() << "payload.position" << pPayload->position;
   ofLog() << "payload.orientation" << pPayload->orientation;
   
-  images.push_back(ofImage());
-  ofxCv::toOf(pPayload->roi, images[images.size()-1].getPixels());
+  ofImage temp;
+  ofxCv::toOf(pPayload->roi, temp);
+  temp.update();
+  images.push_back(temp);
 }

@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxFaceTracker.h"
+#include "utils/Throttler.h"
 
 struct ThreadedFaceTrackerPayload {
   glm::vec2 position;
@@ -28,7 +29,8 @@ class ThreadedFaceTracker {
 
     ofVideoGrabber _grabber;
     ofxFaceTracker _tracker;
-
+    Throttler _payloadThrottler;
+    
     ofRectangle _activeRoi;
 
     ThreadedFaceTrackerCallback _deliverPayloadCallback;
