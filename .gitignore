@@ -3,28 +3,25 @@ assessment_3/libfacedetection
 # ignore all
 # check another .ignore file in addons folder
 
-!/recogniser/env
-/recogniser/env*
-!/recogniser/data
-/recogniser/data*
-!/recogniser/__pycache__
-/recogniser/__pycache__*
-/recogniser/model.dat
+!/assessment_3/recogniser/env
+/assessment_3/recogniser/env*
+!/assessment_3/recogniser/data
+/assessment_3/recogniser/data*
+!/assessment_3/recogniser/__pycache__
+/assessment_3/recogniser/__pycache__*
+/assessment_3/recogniser/model.dat
 
-!/opencv
-/opencv/*
-!/openFrameworks
-/openFrameworks/*
+!/assessment_3/opencv
+/assessment_3/opencv/*
+!/assessment_3/openFrameworks
+/assessment_3/openFrameworks/*
 
-!/assessment_3/bin
-/assessment_3/bin/*
-/assessment_3/bin/data/vids/sunless*
-!/assessment_3/bin/data/
-!/assessment_3/bin/data/*
-/assessment_3/obj
-/assessment_3/.vscode/browse.db
-/assessment_3/.vscode/browse.db*
-/assessment_3/.vscode/ipch/*
+!/assessment_3/control_centre/bin
+/assessment_3/control_centre/bin/*
+/assessment_3/control_centre/bin/data/vids/sunless*
+!/assessment_3/control_centre/bin/data/
+!/assessment_3/control_centre/bin/data/*
+/assessment_3/control_centre/obj
 
 # Xcode Project
 xcuserdata/

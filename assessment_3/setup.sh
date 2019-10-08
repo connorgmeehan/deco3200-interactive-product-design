@@ -58,11 +58,11 @@ cmake -D CMAKE_BUILD_TYPE=Release \
 echo "2b. Building opencv 3.4..."
 exit
 make -j 4
-echo "2c. Installing opencv 3.4 into ./assessment_3/bin/libs"
+echo "2c. Installing opencv 3.4 into ./control_centre/bin/libs"
 make install
 echo "2d. Copying shared objects to project"
 cd "$PROJECT_ROOT"
-cp ./openFrameworks/addons/ofxOpenCv/libs/lib ./assessment_3/bin/lib
+cp ./openFrameworks/addons/ofxOpenCv/libs/lib ./control_centre/bin/lib
 echo "2e. Replacing ofxOpenCv config makefile to use locally installed openCV version"
 cp ./custom_addon_config.mk ./openFrameworks/addons/ofxOpenCv/addon_config.mk
 echo "2f. DONE!"
@@ -78,7 +78,7 @@ git clone --depth 1 https://github.com/kylemcdonald/ofxFaceTracker
 cd "$PROJECT_ROOT"
 
 echo "2. Control Center"
-cd assessment_3
+cd control_centre
 echo "Building application..."
 make -j4
 echo "DONE!"
