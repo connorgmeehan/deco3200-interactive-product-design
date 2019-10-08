@@ -82,3 +82,16 @@ cd assessment_3
 echo "Building application..."
 make -j4
 echo "DONE!"
+
+cd "$PROJECT_ROOT"
+echo "4.  Recogniser"
+echo "4a. Building venv (virtual python environment to install modules locally)..."
+cd recogniser
+python -m venv env
+source env/bin/activate
+
+pip install pickle
+pip install face_recognition
+pip install pillow
+echo "4x. Done, leaving Recogniser venv"
+deactivate

@@ -3,6 +3,14 @@ assessment_3/libfacedetection
 # ignore all
 # check another .ignore file in addons folder
 
+!/recogniser/env
+/recogniser/env*
+!/recogniser/data
+/recogniser/data*
+!/recogniser/__pycache__
+/recogniser/__pycache__*
+/recogniser/model.dat
+
 !/opencv
 /opencv/*
 !/openFrameworks
