@@ -7,7 +7,7 @@ ThreadedFaceTracker::~ThreadedFaceTracker() {
 void ThreadedFaceTracker::setup(int width, int height, float refreshRate) {
   _grabber.setup(width, height);
   _tracker.setup();
-  _tracker.setRescale(.5);
+  _tracker.setRescale(1.0f);
 
   _payloadThrottler = Throttler(refreshRate);
 }
@@ -38,7 +38,11 @@ void ThreadedFaceTracker::update() {
       _activeRoi = _getBoundingRect(_tracker);
       // ofLog() << "Mask discovered: x: " << mask.tl().x << " y: " << mask.tl().y << " x+w: " << mask.br().x << " y+h: "<<  mask.br().y; 
       // Crop cvFrame to get cutout roi
-      if(!_activeRoi.x <= 0 || !_activeRoi.y <= 0 || !_activeRoi.width >= INPUT_WIDTH || !_activeRoi.height >= INPUT_HEIGHT) {
+      if(0 <= _activeRoi.x 
+        && 0 <= _activeRoi.width
+        && _activeRoi.x + _activeRoi.width <= INPUT_WIDTH
+        && 0 <= _activeRoi.y && 0 <= _activeRoi.height
+        && _activeRoi.y + _activeRoi.height <= INPUT_HEIGHT) {
         cvFrame(ofxCv::toCv(_activeRoi)).copyTo(payload->roi);
 
         if(_payloadThrottler.check()) {

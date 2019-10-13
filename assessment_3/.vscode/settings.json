@@ -86,7 +86,8 @@
         "shared_mutex": "cpp",
         "cfenv": "cpp",
         "typeindex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "*.ipp": "cpp"
     },
     "C_Cpp.default.intelliSenseMode": "gcc-x64"
 }

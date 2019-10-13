@@ -8,9 +8,11 @@ class Throttler {
       setRate(UINT64_MAX);
     }
     Throttler(float rateSeconds) {
-      setRate((uint16_t) rateSeconds * 1000);
+      ofLog() << "Throttler::Throttler(float rateSeconds: " << rateSeconds << ");";
+      setRate((uint64_t) rateSeconds * 1000);
     }
     Throttler(uint64_t rateMillis) {
+      ofLog() << "Throttler::Throttler(uint64_t rateMillis: " << rateMillis << ");";
       setRate(rateMillis);
     }
 
