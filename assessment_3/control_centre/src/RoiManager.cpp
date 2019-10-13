@@ -36,7 +36,8 @@ void RoiManager::handleFaceTrackerPayload(ThreadedFaceTrackerPayload* pPayload) 
 }
 
 void RoiManager::clear() {
-    rois.clear();
+  _currentId++; // update ID so each batch of images has a unique identifier
+  rois.clear();
 }
 
 ThreadedFaceTrackerCallback RoiManager::getFaceTrackerCallback() {

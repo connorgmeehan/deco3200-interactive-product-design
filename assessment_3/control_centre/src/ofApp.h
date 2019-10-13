@@ -6,6 +6,7 @@
 
 #include "ThreadedFaceTracker.h"
 #include "RoiManager.h"
+#include "AlgorithmCommunicator.h"
 
 class ofApp : public ofBaseApp{
 	public:
@@ -28,4 +29,5 @@ class ofApp : public ofBaseApp{
 
 		ThreadedFaceTracker tracker;
 		RoiManager roiManager;
+		AlgorithmCommunicator communicator;
 };

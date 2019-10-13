@@ -5,11 +5,15 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+  communicator.setup();
+  
   roiManager.setup(3);
-
+  roiManager.setSendRoisCallback(communicator.getSendRoisCallback());
+  
   tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
   tracker.setDeliverPayloadCallback(roiManager.getFaceTrackerCallback());  
   tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 0.5f);
+  
 }
 
 //--------------------------------------------------------------

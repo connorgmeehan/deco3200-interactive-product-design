@@ -17,6 +17,7 @@ class RoiManager {
     ThreadedFaceTrackerCallback getFaceTrackerCallback();
     std::function<void()> getClearRoiCallback();
   private:
+    uint64_t _currentId = 0;  // Stores unique identifier for each user (to remember their face by)
     int _triggerLimit;
     std::vector<ofImage> rois;
 };
