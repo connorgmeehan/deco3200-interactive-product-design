@@ -24,18 +24,22 @@ class ThreadedFaceTracker {
     void setClearRoiTrackerCallback(std::function<void()> callback);
     void setPadding(int padding);
   private:
+
+    ofRectangle _getBoundingRect(ofxFaceTracker & tracker);
+    bool _faceOrientedForward(glm::vec3 orientation);
+    
     int _width, _height;
     float _refreshRate;
     int _padding = 10;
+    float _maxOrientationDifference = 0.4f;
 
     ofVideoGrabber _grabber;
     ofxFaceTracker _tracker;
     Throttler _payloadThrottler;
 
-    ofRectangle _activeRoi;
+    ofRectangle _activeRoi; // Stores the current position of the face on camera
 
     ThreadedFaceTrackerCallback _deliverPayloadCallback;
     std::function<void()> _clearRoiTrackerCallback;
 
-    ofRectangle _getBoundingRect(ofxFaceTracker & tracker);
 };

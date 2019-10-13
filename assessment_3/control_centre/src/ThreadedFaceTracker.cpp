@@ -30,10 +30,7 @@ void ThreadedFaceTracker::update() {
     auto cvFrame = ofxCv::toCv(_grabber);
     _tracker.update(cvFrame);
 
-    if(_tracker.getFound()) {
-      auto payload = new ThreadedFaceTrackerPayload();
-      payload->position = _tracker.getPosition();
-      payload->orientation = _tracker.getOrientation();
+    if(_tracker.getFound() && _faceOrientedForward(_tracker.getOrientation())) {
       // Get bounding box from face object points
       _activeRoi = _getBoundingRect(_tracker);
       // ofLog() << "Mask discovered: x: " << mask.tl().x << " y: " << mask.tl().y << " x+w: " << mask.br().x << " y+h: "<<  mask.br().y; 
@@ -43,7 +40,11 @@ void ThreadedFaceTracker::update() {
         && _activeRoi.x + _activeRoi.width <= INPUT_WIDTH
         && 0 <= _activeRoi.y && 0 <= _activeRoi.height
         && _activeRoi.y + _activeRoi.height <= INPUT_HEIGHT) {
+        
+        auto payload = new ThreadedFaceTrackerPayload();
         cvFrame(ofxCv::toCv(_activeRoi)).copyTo(payload->roi);
+        payload->position = _tracker.getPosition();
+        payload->orientation = _tracker.getOrientation();
 
         if(_payloadThrottler.check()) {
           // lock();
@@ -83,4 +84,9 @@ ofRectangle ThreadedFaceTracker::_getBoundingRect(ofxFaceTracker & tracker) {
   bounds.y -= _padding;
   bounds.setSize(bounds.width + _padding*2, bounds.height + _padding * 2);
   return bounds;
+}
+
+bool ThreadedFaceTracker::_faceOrientedForward(glm::vec3 orientation) {
+  ofLog() << "glm::length " << glm::length(orientation);
+  return glm::length(orientation) < _maxOrientationDifference;
 }
