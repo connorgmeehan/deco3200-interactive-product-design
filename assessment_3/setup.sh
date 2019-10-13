@@ -1,5 +1,6 @@
 # #!/bin/bash
 
+CORE_COUNT=$(nproc --all)
 PROJECT_ROOT=$(pwd)
 echo Project root is ${PROJECT_ROOT}
 
@@ -21,24 +22,43 @@ git clone --single-branch --branch 0.10.0 --depth 1 --recursive https://github.c
 echo "1b. Downloading dependencies"
 if [ $machine == Linux ]; then
   echo "  Patching ofConstants.h"
-  sed -i '212d' ./openFrameworks/libs/openFrameworks/utils/ofConstants.h
-  echo "  Downloading codecs..."
+  tr 'CV_RGB(' 'cv::Scalar(' < openFrameworks/addons/ofxOpenCv/src/ofxCvImage.cpp
+  echo "  Downloading codecs..."# echo "2. Control Center"
+cd control_centre
+echo "Building application..."
+make -j$CORE_COUNT
+echo "DONE!"
+cd "$PROJECT_ROOT"
+
+echo "4.  Recogniser"
+echo "4a. Building venv (virtual python environment to install modules locally)..."
+cd recogniser
+python -m venv env
+source env/bin/activate
+
+pip install pickle
+pip install face_recognition
+pip install pillow
+echo "4x. Done, leaving Recogniser venv"
+deactivate
+cd "$PROJECT_ROOT"
   /bin/bash ./openFrameworks/scripts/linux/archlinux/install_codecs.sh
   echo "  Installing globally dependant libraries..."
   /bin/bash ./openFrameworks/scripts/linux/archlinux/install_dependencies.sh
   echo "  Downloading locally dependant libraries..."
   /bin/bash ./openFrameworks/scripts/linux/download_libs.sh
 fi
-if [ $machine = Mac ]; then 
+if [ $machine == Mac ]; then 
   /bin/bash ./openFrameworks/scripts/osx/download_libs.sh
 fi
 echo "1c. Building openFrameworks 0.10.0..."
 cd openFrameworks/libs/openFrameworksCompiled/project/
-make -j 4
+make -j$CORE_COUNT
 cd "$PROJECT_ROOT"
 echo "1d. Cleaning up unneeded files"
 rm -rf ./openFrameworks/apps ./openFrameworks/docs/ ./openFrameworks/examples ./openFrameworks/scripts/templates ./openFrameworks/tests ./openFrameworks/other
 echo "1e. DONE!"
+cd "$PROJECT_ROOT"
 
 echo "2.  Building opencv3.4 - Computer vision library required to track users"
 echo "2a. Cloning opencv 3.4..."
@@ -56,8 +76,7 @@ cmake -D CMAKE_BUILD_TYPE=Release \
   -D BUILD_opencv_python=OFF \
   ..
 echo "2b. Building opencv 3.4..."
-exit
-make -j 4
+make -j 7
 echo "2c. Installing opencv 3.4 into ./control_centre/bin/libs"
 make install
 echo "2d. Copying shared objects to project"
@@ -65,7 +84,9 @@ cd "$PROJECT_ROOT"
 cp ./openFrameworks/addons/ofxOpenCv/libs/lib ./control_centre/bin/lib
 echo "2e. Replacing ofxOpenCv config makefile to use locally installed openCV version"
 cp ./custom_addon_config.mk ./openFrameworks/addons/ofxOpenCv/addon_config.mk
+cp -r ./openFrameworks/addons/ofxOpenCv/libs/opencv/lib ./control_centre/bin/lib
 echo "2f. DONE!"
+cd "$PROJECT_ROOT"
 
 echo "3.  Extensions for main program"
 cd openFrameworks/addons/
@@ -80,10 +101,10 @@ cd "$PROJECT_ROOT"
 echo "2. Control Center"
 cd control_centre
 echo "Building application..."
-make -j4
+make -j$CORE_COUNT
 echo "DONE!"
-
 cd "$PROJECT_ROOT"
+
 echo "4.  Recogniser"
 echo "4a. Building venv (virtual python environment to install modules locally)..."
 cd recogniser
@@ -95,3 +116,4 @@ pip install face_recognition
 pip install pillow
 echo "4x. Done, leaving Recogniser venv"
 deactivate
+cd "$PROJECT_ROOT"

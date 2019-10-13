@@ -67,6 +67,7 @@ linux64:
   # ADDON_PKG_CONFIG_LIBRARIES = opencv harfbuzz
 	ADDON_PKG_CONFIG_LIBARIES = opencv
 	ADDON_INCLUDES = src
+	ADDON_INCLUDES += libs/opencv/include
 	ADDON_INCLUDES += libs/opencv/include/opencv
 	ADDON_INCLUDES += libs/opencv/include/opencv2
 
