@@ -9,7 +9,7 @@ class Throttler {
     }
     Throttler(float rateSeconds) {
       ofLog() << "Throttler::Throttler(float rateSeconds: " << rateSeconds << ");";
-      setRate((uint64_t) rateSeconds * 1000);
+      setRate((int) (rateSeconds * 1000.0f));
     }
     Throttler(uint64_t rateMillis) {
       ofLog() << "Throttler::Throttler(uint64_t rateMillis: " << rateMillis << ");";
@@ -17,6 +17,7 @@ class Throttler {
     }
 
     void setRate(uint64_t millis) {
+      ofLog() << "Throttler::setRate(uint64_t millis: " << millis << ");";
       rate = millis;
       last = ofGetElapsedTimeMillis();
     }
