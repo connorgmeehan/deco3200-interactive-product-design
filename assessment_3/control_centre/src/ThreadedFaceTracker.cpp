@@ -87,6 +87,5 @@ ofRectangle ThreadedFaceTracker::_getBoundingRect(ofxFaceTracker & tracker) {
 }
 
 bool ThreadedFaceTracker::_faceOrientedForward(glm::vec3 orientation) {
-  ofLog() << "glm::length " << glm::length(orientation);
   return glm::length(orientation) < _maxOrientationDifference;
 }

@@ -1,3 +1,9 @@
 ofxOpenCv
 ofxCv
 ofxFaceTracker
+ofxPoco
+ofxIO
+ofxMediaType
+ofxNetworkUtils
+ofxSSLManager
+ofxHTTP

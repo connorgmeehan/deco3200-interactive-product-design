@@ -129,8 +129,10 @@
                     "${workspaceRoot}/openFrameworks/addons/",
                     "${workspaceRoot}/openFrameworks/addons/**",
                     "${workspaceRoot}/openFrameworks/libs/openFrameworks/",
-                    "${workspaceRoot}/openFrameworks/libs/openFrameworks/**"
-                ],
+                    "${workspaceRoot}/openFrameworks/libs/openFrameworks/**",
+                    "${workspaceRoot}/openFrameworks/addons/ofxHTTP/src",
+                    "${workspaceRoot}/openFrameworks/addons/ofxHTTP/libs/ofxHTTP/include"
+                ]
             },
             "intelliSenseMode": "clang-x64",
             "compilerPath": "/bin/clang",
