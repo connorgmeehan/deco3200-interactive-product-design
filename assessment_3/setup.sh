@@ -18,35 +18,27 @@ echo "Building project..."
 
 echo "1.  Building openFrameworks - creative coding toolkit used for webcam processing / display"
 echo "1a. Cloning openframeworks 0.10.0..."
-git clone --single-branch --branch 0.10.0 --depth 1 --recursive https://github.com/openframeworks/openFrameworks.git
+git clone --single-branch --branch 0.10.0 --depth 1 --recursive https://github.com/openframeworks/openFrameworks.git --recursive
 echo "1b. Downloading dependencies"
 if [ $machine == Linux ]; then
-  echo "  Patching ofConstants.h"
+  echo "  Patching openFrameworks/libs/openFrameworks/utils/ofConstants.h"
+  sed -i '212d' ./openFrameworks/libs/openFrameworks/utils/ofConstants.h
+  echo "  Patching openFrameworks/addons/ofxOpenCv/src/ofxCvImage.cpp"
   tr 'CV_RGB(' 'cv::Scalar(' < openFrameworks/addons/ofxOpenCv/src/ofxCvImage.cpp
   echo "  Downloading codecs..."# echo "2. Control Center"
-cd control_centre
-echo "Building application..."
-make -j$CORE_COUNT
-echo "DONE!"
-cd "$PROJECT_ROOT"
-
-echo "4.  Recogniser"
-echo "4a. Building venv (virtual python environment to install modules locally)..."
-cd recogniser
-python -m venv env
-source env/bin/activate
-
-pip install pickle
-pip install face_recognition
-pip install pillow
-echo "4x. Done, leaving Recogniser venv"
-deactivate
-cd "$PROJECT_ROOT"
   /bin/bash ./openFrameworks/scripts/linux/archlinux/install_codecs.sh
   echo "  Installing globally dependant libraries..."
   /bin/bash ./openFrameworks/scripts/linux/archlinux/install_dependencies.sh
   echo "  Downloading locally dependant libraries..."
   /bin/bash ./openFrameworks/scripts/linux/download_libs.sh
+  echo "  Recompiling POCO libs for OFX Poco..."  
+  cd openFrameworks/scripts/
+  git clone https://github.com/openframeworks/apothecary.git
+  cd apothecary/apothecary
+  ./apothecary update poco
+  cd "$PROJECT_ROOT"
+  rm -rf ./openFrameworks/addons/ofxPoco/libs/poco
+  cp -r ./openFrameworks/scripts/apothecary/poco ./openFrameworks/addons/ofxPoco/libs/poco
 fi
 if [ $machine == Mac ]; then 
   /bin/bash ./openFrameworks/scripts/osx/download_libs.sh
@@ -76,7 +68,7 @@ cmake -D CMAKE_BUILD_TYPE=Release \
   -D BUILD_opencv_python=OFF \
   ..
 echo "2b. Building opencv 3.4..."
-make -j 7
+# make -j 7
 echo "2c. Installing opencv 3.4 into ./control_centre/bin/libs"
 make install
 echo "2d. Copying shared objects to project"
@@ -96,24 +88,31 @@ git clone --depth 1 https://github.com/kylemcdonald/ofxCv
 echo "3b. ofxFaceTracker - openFrameworks addon - Face Tracking library + models (uses ofxCv)..."
 echo $(pwd)
 git clone --depth 1 https://github.com/kylemcdonald/ofxFaceTracker
+
+echo "3c. ofxHTTP - used to communicate with our algorithms (also dependencies ofxIO, ofxMediaType, ofxNetworkUtils, ofxSSLManager)"
+git clone --depth 1 https://github.com/bakercp/ofxHTTP
+git clone --depth 1 https://github.com/bakercp/ofxIO
+git clone --depth 1 https://github.com/bakercp/ofxMediaType
+git clone --depth 1 https://github.com/bakercp/ofxNetworkUtils
+git clone --depth 1 https://github.com/bakercp/ofxSSLManager
 cd "$PROJECT_ROOT"
 
-echo "2. Control Center"
+echo "4. Control Center"
 cd control_centre
 echo "Building application..."
 make -j$CORE_COUNT
 echo "DONE!"
 cd "$PROJECT_ROOT"
 
-echo "4.  Recogniser"
-echo "4a. Building venv (virtual python environment to install modules locally)..."
-cd recogniser
-python -m venv env
-source env/bin/activate
+# echo "4.  Recogniser"
+# echo "4a. Building venv (virtual python environment to install modules locally)..."
+# cd recogniser
+# python -m venv env
+# source env/bin/activate
 
-pip install pickle
-pip install face_recognition
-pip install pillow
-echo "4x. Done, leaving Recogniser venv"
-deactivate
-cd "$PROJECT_ROOT"
+# pip install pickle
+# pip install face_recognition
+# pip install pillow
+# echo "4x. Done, leaving Recogniser venv"
+# deactivate
+# cd "$PROJECT_ROOT"

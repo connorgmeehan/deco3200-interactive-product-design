@@ -5,10 +5,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  communicator.setup();
-  
   roiManager.setup(3);
-  roiManager.setSendRoisCallback(communicator.getSendRoisCallback());
   
   tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
   tracker.setDeliverPayloadCallback(roiManager.getFaceTrackerCallback());  

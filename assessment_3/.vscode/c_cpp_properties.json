@@ -113,7 +113,8 @@
                 "${workspaceRoot}/openFrameworks/libs/utf8/include",
                 "${workspaceRoot}/openFrameworks/libs/poco/include",
                 "${workspaceRoot}/openFrameworks/libs/kiss/include",
-                "${workspaceRoot}/openFrameworks/addons/ofxFaceTracker/src"
+                "${workspaceRoot}/openFrameworks/addons/ofxFaceTracker/src",
+                "${workspaceRoot}/openFrameworks/addons/ofxHTTP/src"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,

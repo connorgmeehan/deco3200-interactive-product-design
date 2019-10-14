@@ -1,12 +1,13 @@
 #include "RoiManager.h"
 
 void RoiManager::setup(int triggerLimit) {
+  communicator.setup();
   _triggerLimit = triggerLimit;
 }
 
 void RoiManager::update() {
   if(rois.size() > _triggerLimit) {
-    // send to algorithms
+    communicator.sendRois(_currentId, rois);
     clear();
   }
 }
