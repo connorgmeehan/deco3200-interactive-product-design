@@ -31,9 +31,7 @@ void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
   ofLog() << "\n\n\n\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ");";
   
   // Send image over FIFO
-  _fifoWriteThread.lock();
-  roi.getTexture().readToPixels(_fifoWriteThread.pixels);
-  _fifoWriteThread.unlock();  
+  _fifoWriteThread.setPixels(roi);
 
   // Send OSC
   ofxOscMessage recogniserMessage;

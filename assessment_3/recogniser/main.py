@@ -1,27 +1,38 @@
 import os
-
-from user_recogniser import UserRecogniser
-import face_recognition
-
 from pythonosc import dispatcher
 from pythonosc import osc_server
 
 host = "localhost"
 port = int(os.environ.get("RECOGNISER_PORT"))
-
 print("host = {}".format(host))
 print("port = {}".format(port))
 
-def add_new(address, args, buffer, uid, width, height):
-  print(args)
+import fifoutil
+video_out_dir = os.environ.get('VID_OUT_DIR')
+
+from user_recogniser import UserRecogniser
+import face_recognition
+import cv2
+recogniser = UserRecogniser()
+recogniser.load_known_faces()
+
+
+def add_new(address, args, uid, width, height):
   try:
     print("____________________")
-    print("|{0}\t|{1}\t|{2}\t|lenght|".format(args[1], args[2], args[3]))
-    print("|{0}\t|{1}\t|{2}\t|{3}".format(uid, width, height, len(buffer)))
+    print("|{0}\t|{1}\t|{2}\t|".format(args[0], args[1], args[2]))
+    print("|{0}\t|{1}\t|{2}\t|".format(uid, width, height))
   except ValueError: pass
-  except IndexError:
-    print("Index error on add_new, are you sending the osc params successfully?")
+  im = None
+  try:
+    im = fifoutil.read_array(video_out_dir) # read data as image from pipe
+  except:
     pass
+  if im is not None:
+    print("| im is not None: attempting to handle new face")
+    im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR) # cv2 uses BGR colorspace
+    metadata = recogniser.handle_face_detected(im)
+    print(metadata)
 
 def clear_all():
   print("clear_all")
@@ -37,11 +48,9 @@ if __name__ == "__main__":
   print("Serving on {}".format(server.server_address))
   server.serve_forever()
 
-# # dataset_dir = "../assessment_3/bin/data/faces"
+# dataset_dir = "../assessment_3/bin/data/faces"
 # dataset_dir = "./data/training_faces"
 
-# recogniser = UserRecogniser()
-# recogniser.load_known_faces()
 # # recogniser.train_from_folder(dataset_dir)
 # # recogniser.save_known_faces()
 

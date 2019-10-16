@@ -48,7 +48,7 @@ from face_recognition.face_recognition_cli import image_files_in_folder
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class UserRecogniser:
-    def __init__(self, model_save_path="model.dat", threshhold=0.7):
+    def __init__(self, model_save_path="model.dat", threshhold=0.3):
         self.model_save_path = model_save_path
         self.known_face_encodings = []
         self.known_face_metadata = []
@@ -105,7 +105,7 @@ class UserRecogniser:
 
         face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)
-        print("best match index = {}".format(best_match_index))
+        print("best match index is {0} with a distance of {1}".format(best_match_index, face_distances[best_match_index]))
         print("face_distances length = {}".format(len(face_distances)))
         if len(face_distances) > best_match_index and face_distances[best_match_index] < self.threshold:
             metadata = self.known_face_metadata[best_match_index]
