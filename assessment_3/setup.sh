@@ -89,12 +89,8 @@ echo "3b. ofxFaceTracker - openFrameworks addon - Face Tracking library + models
 echo $(pwd)
 git clone --depth 1 https://github.com/kylemcdonald/ofxFaceTracker
 
-echo "3c. ofxHTTP - used to communicate with our algorithms (also dependencies ofxIO, ofxMediaType, ofxNetworkUtils, ofxSSLManager)"
-git clone --depth 1 https://github.com/bakercp/ofxHTTP
-git clone --depth 1 https://github.com/bakercp/ofxIO
-git clone --depth 1 https://github.com/bakercp/ofxMediaType
-git clone --depth 1 https://github.com/bakercp/ofxNetworkUtils
-git clone --depth 1 https://github.com/bakercp/ofxSSLManager
+echo "3c. ofxFifo - used to send images between control centre and each facial analysis algorithm"
+git clone --depth 1 https://github.com/connorgmeehan/ofxFifo
 cd "$PROJECT_ROOT"
 
 echo "4. Control Center"
