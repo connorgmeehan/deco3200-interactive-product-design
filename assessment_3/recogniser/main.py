@@ -19,20 +19,20 @@ recogniser.load_known_faces()
 
 def add_new(address, args, uid, width, height):
   try:
-    print("____________________")
-    print("|{0}\t|{1}\t|{2}\t|".format(args[0], args[1], args[2]))
-    print("|{0}\t|{1}\t|{2}\t|".format(uid, width, height))
+    print("\n")
+    print("OSC -> /roi/add_new (uid: {0}, width: {1}, height: {2})".format(uid, width, height))
   except ValueError: pass
   im = None
   try:
     im = fifoutil.read_array(video_out_dir) # read data as image from pipe
-  except:
+  except FileNotFoundError:
+    print("FileNotFoundError when trying to read {}".format(video_out_dir))
     pass
   if im is not None:
-    print("| im is not None: attempting to handle new face")
+    print("\tgot image, handling face detection")
     im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR) # cv2 uses BGR colorspace
     metadata = recogniser.handle_face_detected(im)
-    print(metadata)
+    print("metadata: {}".format(metadata))
 
 def clear_all():
   print("clear_all")

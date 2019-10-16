@@ -105,8 +105,8 @@ class UserRecogniser:
 
         face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)
-        print("best match index is {0} with a distance of {1}".format(best_match_index, face_distances[best_match_index]))
-        print("face_distances length = {}".format(len(face_distances)))
+        print("\t\tbest match index is {0} with a distance of {1}".format(best_match_index, face_distances[best_match_index]))
+        print("\t\tface_distances length = {}".format(len(face_distances)))
         if len(face_distances) > best_match_index and face_distances[best_match_index] < self.threshold:
             metadata = self.known_face_metadata[best_match_index]
 
@@ -120,7 +120,7 @@ class UserRecogniser:
         face_encodings = face_recognition.face_encodings(image, face_locations)
 
         for face_location, face_encoding in zip(face_locations, face_encodings):
-            print("Face found, checking if seen before...")
+            print("\tFace found, checking if seen before...")
             self.number_of_faces_since_save += 1
             
             metadata = self.lookup_known_face(face_encoding)
@@ -134,6 +134,6 @@ class UserRecogniser:
             self.save_known_faces()
             self.number_of_faces_since_save = 0
 
-        if metadata is not None:
-            print("Face has been detected before, returning None...")
+        if metadata is None:
+            print("\tFace has not been detected before, returning None...")
         return metadata

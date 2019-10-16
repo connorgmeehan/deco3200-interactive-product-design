@@ -5,8 +5,6 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  ofSetLogLevel(OF_LOG_VERBOSE);
-  
   roiManager.setup(3);
   
   tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
