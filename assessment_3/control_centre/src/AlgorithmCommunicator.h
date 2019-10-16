@@ -22,7 +22,7 @@ class AlgorithmCommunicator {
 		ofxOscReceiver _reciever;
 		ofxOscSender _recogniserSender;
 
-		std::string _host = "localhost";
+		std::string _host = "127.0.0.1";
 		int _recogniserPort;
 };
 

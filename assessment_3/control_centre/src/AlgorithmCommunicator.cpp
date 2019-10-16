@@ -35,15 +35,12 @@ void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
   roi.getTexture().readToPixels(_fifoWriteThread.pixels);
   _fifoWriteThread.unlock();  
 
-  ofBuffer buffer;
-  buffer.set((char*) roi.getPixelsRef().getData(), roi.getPixelsRef().size());
-
   // Send OSC
   ofxOscMessage recogniserMessage;
   recogniserMessage.setAddress("/roi/add_new");
-  recogniserMessage.addInt64Arg(uid);
-  recogniserMessage.addInt64Arg(roi.getWidth());
-  recogniserMessage.addInt64Arg(roi.getHeight());
+  recogniserMessage.addInt32Arg(uid);
+  recogniserMessage.addInt32Arg(roi.getWidth());
+  recogniserMessage.addInt32Arg(roi.getHeight());
   _recogniserSender.sendMessage(recogniserMessage, false);
 }
 

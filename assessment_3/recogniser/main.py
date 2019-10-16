@@ -1,24 +1,42 @@
+import os
+
 from user_recogniser import UserRecogniser
 import face_recognition
 
-from flask import Flask, request
-app = Flask(__name__)
+from pythonosc import dispatcher
+from pythonosc import osc_server
 
-rois = []
+host = "localhost"
+port = int(os.environ.get("RECOGNISER_PORT"))
 
-@app.route('/clear_rois', methods=['POST'])
-def clear_rois():
-  print('info: rois cleared')
-  rois.clear()
-  return "cleared rois"
+print("host = {}".format(host))
+print("port = {}".format(port))
 
-@app.route('/add_roi', methods=['POST'])
-def add_roi():
-  print('info: adding roi')
-  print(request.args)
-  return "added roi"
+def add_new(address, args, buffer, uid, width, height):
+  print(args)
+  try:
+    print("____________________")
+    print("|{0}\t|{1}\t|{2}\t|lenght|".format(args[1], args[2], args[3]))
+    print("|{0}\t|{1}\t|{2}\t|{3}".format(uid, width, height, len(buffer)))
+  except ValueError: pass
+  except IndexError:
+    print("Index error on add_new, are you sending the osc params successfully?")
+    pass
 
-app.run(debug=True, host='localhost', port=8001)
+def clear_all():
+  print("clear_all")
+
+if __name__ == "__main__":
+  dispatcher = dispatcher.Dispatcher()
+  dispatcher.map("/roi/add_new", add_new, "uid", "width", "height")
+  dispatcher.map("/roi/clear_all", clear_all)
+
+  server = osc_server.ThreadingOSCUDPServer(
+    (host, port), dispatcher)
+  
+  print("Serving on {}".format(server.server_address))
+  server.serve_forever()
+
 # # dataset_dir = "../assessment_3/bin/data/faces"
 # dataset_dir = "./data/training_faces"
 
