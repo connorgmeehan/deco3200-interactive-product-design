@@ -9,7 +9,7 @@ void ofApp::setup(){
   
   tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
   tracker.setDeliverPayloadCallback(roiManager.getFaceTrackerCallback());  
-  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 3.0f);
+  tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 1.0f);
   
 }
 
