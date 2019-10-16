@@ -1,6 +1,9 @@
 #include "ThreadedFaceTracker.h"
 #include "ProjectDefines.h"
 
+int ThreadedFaceTracker::_padding = 40;
+float ThreadedFaceTracker::_maxOrientationDifference = 0.4f;
+
 ThreadedFaceTracker::~ThreadedFaceTracker() {
 }
 
@@ -80,9 +83,11 @@ ofRectangle ThreadedFaceTracker::_getBoundingRect(ofxFaceTracker & tracker) {
   for(int i = 1; i < points.size(); i++) {
     bounds.growToInclude(points[i]);
   }
-  bounds.x -= _padding;
-  bounds.y -= _padding;
-  bounds.setSize(bounds.width + _padding*2, bounds.height + _padding * 2);
+  bounds.x = ofClamp(bounds.x - _padding, 0, bounds.x);
+  bounds.y = ofClamp(bounds.y - _padding, 0, bounds.y);
+  bounds.width = ofClamp(bounds.width + _padding * 2, bounds.width, (_grabber.getWidth() - bounds.x) + bounds.width + _padding * 2);
+  bounds.height = ofClamp(bounds.height + _padding * 2, bounds.height, (_grabber.getHeight() - bounds.y) + bounds.height + _padding * 2);
+
   return bounds;
 }
 

@@ -24,14 +24,14 @@ class ThreadedFaceTracker {
     void setClearRoiTrackerCallback(std::function<void()> callback);
     void setPadding(int padding);
   private:
+    static int _padding;
+    static float _maxOrientationDifference;
 
     ofRectangle _getBoundingRect(ofxFaceTracker & tracker);
     bool _faceOrientedForward(glm::vec3 orientation);
     
     int _width, _height;
     float _refreshRate;
-    int _padding = 10;
-    float _maxOrientationDifference = 0.4f;
 
     ofVideoGrabber _grabber;
     ofxFaceTracker _tracker;
