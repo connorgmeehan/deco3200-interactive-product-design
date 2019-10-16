@@ -2,8 +2,21 @@
 
 #include "AlgorithmCommunicator.h"
 
+AlgorithmCommunicator::~AlgorithmCommunicator() {  
+  _fifoWriteThread.stopThread();
+  ofxFifo::del(_fifoWriteThread.pipe_dir);
+}
+
 void AlgorithmCommunicator::setup() {
-  _baseUri = ofToString("http://127.0.0.1:8001");
+  ofLog() << "AlgorithmCommunicator::setup()";
+  std::string recogniserPortString = ofToString(getenv("RECOGNISER_PORT"));
+  std::string videoOutDir = ofToString(getenv("VID_OUT_DIR"));
+  _recogniserPort = ofToInt(recogniserPortString);
+
+  _fifoWriteThread.pipe_dir = videoOutDir;
+  _fifoWriteThread.startThread();
+
+  _recogniserSender.setup(_host, _recogniserPort);
 }
 
 void AlgorithmCommunicator::update() {
@@ -16,57 +29,28 @@ void AlgorithmCommunicator::draw() {
 
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
   ofLog() << "\n\n\n\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ");";
-
-  std::string uri = _baseUri + "/add_roi";
   
-  ofxHTTP::PostRequest request(uri);
-  // Build data pack
-  std::multimap<std::string, std::string> formFields =
-  {
-      { "uid", ofToString(uid) },
-  };
-  request.addFormFields(formFields);
-  
-  char * roiPixels = (char *) roi.getPixels().getData();
-  size_t size = roi.getPixels().size();
-  ofLog() << "\tAlgorithmCommunicator::sendRoi(...) -> roi.size(): " << size * sizeof(char);
+  // Send image over FIFO
+  _fifoWriteThread.lock();
+  roi.getTexture().readToPixels(_fifoWriteThread.pixels);
+  _fifoWriteThread.unlock();  
 
-  std::string encoding = ofxIO::Base64Encoding::encode(ofBuffer(roiPixels, size));
-  ofx::HTTP::FormPart roiFormPart(ofx::HTTP::FormPart::Type::STRING, "roi", encoding);
-  request.addFormPart(roiFormPart);
+  ofBuffer buffer;
+  buffer.set((char*) roi.getPixelsRef().getData(), roi.getPixelsRef().size());
 
-  _executePostRequest(request);
+  // Send OSC
+  ofxOscMessage recogniserMessage;
+  recogniserMessage.setAddress("/roi/add_new");
+  recogniserMessage.addInt64Arg(uid);
+  recogniserMessage.addInt64Arg(roi.getWidth());
+  recogniserMessage.addInt64Arg(roi.getHeight());
+  _recogniserSender.sendMessage(recogniserMessage, false);
 }
 
 void AlgorithmCommunicator::clearRois() {
-  ofLog() << "AlgorithmCommunicator::clearRois();";
-  std::string uri = _baseUri + "/clear_rois";
-  ofxHTTP::PostRequest request(uri);
-  _executePostRequest(request);
-}
-
-bool AlgorithmCommunicator::_executePostRequest(ofx::HTTP::PostRequest& request) {
-  ofLog() << "AlgorithmCommunicator::_executePostRequest()";
-  ofLog() << "\turi: " << request.getURI();
-
-  ofx::HTTP::Client client;
-  try {
-    // Execute the request.
-    auto response = client.execute(request);
-    ofLog() << "response status " << Poco::Net::HTTPResponse::HTTP_OK;
-    // Check the response.
-    if (response->getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
-    {
-      // A successful response.
-      ofLogNotice("ofApp::setup") << "Response success, expecting " << response->estimatedContentLength() << " bytes.";
-      return true;
-    }
-  } catch (const Poco::Exception& exc) {
-    ofLogError("ofApp::setup") << exc.displayText();
-  } catch (const std::exception& exc) {
-    ofLogError("ofApp::setup") << exc.what();
-  }
-  return false;
+  // Send OSC
+  ofxOscMessage recogniserMessage;
+  recogniserMessage.setAddress("/roi/clear_all");
 }
 
 std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallback() {

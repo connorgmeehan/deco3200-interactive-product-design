@@ -114,7 +114,8 @@
                 "${workspaceRoot}/openFrameworks/libs/poco/include",
                 "${workspaceRoot}/openFrameworks/libs/kiss/include",
                 "${workspaceRoot}/openFrameworks/addons/ofxFaceTracker/src",
-                "${workspaceRoot}/openFrameworks/addons/ofxHTTP/src"
+                "${workspaceRoot}/openFrameworks/addons/ofxOsc/src",
+                "${workspaceRoot}/openFrameworks/addons/ofxFifo/src"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
@@ -130,8 +131,8 @@
                     "${workspaceRoot}/openFrameworks/addons/**",
                     "${workspaceRoot}/openFrameworks/libs/openFrameworks/",
                     "${workspaceRoot}/openFrameworks/libs/openFrameworks/**",
-                    "${workspaceRoot}/openFrameworks/addons/ofxHTTP/src",
-                    "${workspaceRoot}/openFrameworks/addons/ofxHTTP/libs/ofxHTTP/include"
+                    "${workspaceRoot}/openFrameworks/addons/ofxOsc/src",
+                    "${workspaceRoot}/openFrameworks/addons/ofxFifo/src"
                 ]
             },
             "intelliSenseMode": "clang-x64",

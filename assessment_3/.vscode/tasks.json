@@ -3,7 +3,24 @@
     "shell": {
         "task": true
     },
-    "tasks": [{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Set Environment",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "command": "source",
+            "args": [
+                "./assessment_3/setup_env.sh"
+            ]
+        },
+        {
             "type": "shell",
             "label": "Build Debug",
             "presentation": {
