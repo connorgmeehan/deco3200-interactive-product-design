@@ -51,7 +51,7 @@ class OscManager:
           self.recogniser.save_stored_encodings()
         else:
           print("Already seen user with uid: {}".format(coresponding_uid))
-          
+        self.clear_all_rois()          
   
   def handle_decision(self, results):
     print("OscManager.handle_decision(results: {})".format(results))
@@ -73,7 +73,7 @@ class OscManager:
     print("results_frequency: {}.".format(results_frequency))
     # Find the value that was most frequent
     max_uid = None
-    for uid, frequency in results_frequency:
+    for uid, frequency in zip(results_frequency.keys(), results_frequency.values()):
       # Defaults to the first value
       if max_uid == None:
         max_uid = uid
