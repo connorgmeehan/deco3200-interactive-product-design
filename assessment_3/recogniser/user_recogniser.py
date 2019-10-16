@@ -91,14 +91,15 @@ class UserRecogniser:
             print("No previous face data found - starting from previous list")
             pass
 
-    def register_new_face(self, face_encoding, face_image):
+    def register_new_face(self, face_encoding, uid):
         self.known_face_encodings.append(face_encoding)
         self.known_face_metadata.append({
-            "first_seen": datetime.now()
+            "first_seen": datetime.now(),
+            "uid": uid
         })
 
-    def lookup_known_face(self, face_encoding):
-        metadata = None
+    def lookup_known_face(self, *face_encoding):
+        metadata = {None}
 
         if len(self.known_face_encodings) == 0:
             return metadata
@@ -112,14 +113,36 @@ class UserRecogniser:
 
         return metadata
 
-    def handle_face_detected(self, image):
+    def lookup_face_from_roi(self, roi):
+        print("FaceRecogniser::lookup_face_from_roi(image)")
+        metadata = None
+
+        face_locations = face_recognition.face_locations(roi)
+        face_encodings = face_recognition.face_encodings(roi, face_locations)
+        encoding = None
+
+        for face_encoding in face_encodings:
+            metadata = self.lookup_known_face(face_encoding)
+            encoding = face_encoding
+
+        return metadata, encoding
+
+    def learn_faces(uid, *rois):
+        for roi in rois:
+            face_locations = face_recognition.face_locations(roi)
+            face_encodings = face_recognition.face_encodings(roi, face_locations)
+            for encoding in face_encodings:
+                self.register_new_face(encoding, uid)
+
+
+    def handle_face_detected(self, image, uid):
         print("FaceRecogniser::handle_face_detect(image)")
         metadata = None
 
         face_locations = face_recognition.face_locations(image)
         face_encodings = face_recognition.face_encodings(image, face_locations)
 
-        for face_location, face_encoding in zip(face_locations, face_encodings):
+        for face_encoding in face_encodings:
             print("\tFace found, checking if seen before...")
             self.number_of_faces_since_save += 1
             
@@ -127,7 +150,7 @@ class UserRecogniser:
             
             if metadata is None:
                 print("\t\tFace is new, saving...")
-                self.register_new_face(face_encoding, face_location)
+                self.register_new_face(face_encoding, uid)
         
         if(self.number_of_faces_since_save > self.number_of_faces_save_limit):
             print("\tHas seen {} faces since last save, saving...".format(self.number_of_faces_save_limit))
@@ -136,4 +159,5 @@ class UserRecogniser:
 
         if metadata is None:
             print("\tFace has not been detected before, returning None...")
+            return {}
         return metadata

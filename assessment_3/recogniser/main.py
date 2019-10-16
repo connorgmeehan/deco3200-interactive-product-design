@@ -1,4 +1,5 @@
 import os
+from statistics import mode
 from pythonosc import dispatcher
 from pythonosc import osc_server
 
@@ -16,8 +17,40 @@ import cv2
 recogniser = UserRecogniser()
 recogniser.load_known_faces()
 
+session_uid = None
+session_metadata_list = []
+session_encodings_list = []
+
+def extract_uid_from_metdata(metadata):
+  print(metadata)
+  return 0
+
+def handle_completed_list():
+  print("handle_completed_list()")
+  metadata_hashmap = map(extract_uid_from_metdata, session_metadata_list)
+  most_common = mode(metadata_hashmap)
+  print("most_common uid: {}".format(most_common))
+
+  if most_common == 0 or most_common == None:
+    recogniser.learn_faces(session_uid, session_encodings_list)
+
+def handle_new_face(roi, uid):
+  print("handle_new_face(roi: {0}, uid: {1})".format(roi, uid))
+
+  # Add new metadata to list
+  metadata, encoding = recogniser.lookup_face_from_roi(roi)
+  print(metadata)
+  session_metadata_list.append(metadata)
+  session_encodings_list.append(encoding)
+  print("metadata_list size = {}/3".format(len(session_metadata_list)))
+
+  if len(session_metadata_list) >= 3:
+    print("metadata_list:")
+    print(session_metadata_list)
+    handle_completed_list()
 
 def add_new(address, args, uid, width, height):
+  global session_uid
   try:
     print("\n")
     print("OSC -> /roi/add_new (uid: {0}, width: {1}, height: {2})".format(uid, width, height))
@@ -30,11 +63,19 @@ def add_new(address, args, uid, width, height):
     pass
   if im is not None:
     print("\tgot image, handling face detection")
+
+    # if we're sent a new uid, you can consider it a new session/face to analyse
+    if session_uid is not uid:
+      clear_all()
+      session_uid = uid
+
     im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR) # cv2 uses BGR colorspace
-    metadata = recogniser.handle_face_detected(im)
-    print("metadata: {}".format(metadata))
+    handle_new_face(im, uid)
 
 def clear_all():
+  session_metadata_list.clear()
+  session_encodings_list.clear()
+  session_uid = None
   print("clear_all")
 
 if __name__ == "__main__":
