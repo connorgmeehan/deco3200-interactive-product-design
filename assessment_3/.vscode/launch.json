@@ -12,7 +12,7 @@
             "environment": [
                 {"name": "VID_OUT_DIR", "value": "/home/connorgm/deco3200-interactive-product-design/assessment_3/control_centre/webcam_out"},
                 {"name": "CONTROL_CENTRE_RECIEVER_PORT", "value": "8001"},
-                {"name": "RECOGNISER_PORT", "value": "8002"},
+                {"name": "RECOGNISER_SERVER_PORT", "value": "8002"},
             ],
             "externalConsole": false,
             "linux": {

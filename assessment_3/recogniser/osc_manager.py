@@ -1,21 +1,26 @@
 
 from pythonosc import dispatcher
 from pythonosc import osc_server
+from pythonosc import udp_client
 
 import fifoutil
 
 import cv2
 
-import alt_recogniser
+import recogniser
 
 class OscManager:
   def __init__(self, video_out_dir, host, serverport, clientport):
-    self.recogniser = alt_recogniser.Recogniser()
+    print("OscManager(video_out_dir: {0}, host: {1}, serverport: {2}, clientport{3})".format(video_out_dir, host, serverport, clientport))
+    self.recogniser = recogniser.Recogniser()
+    self.client = udp_client.SimpleUDPClient(host, clientport)
+    self.client.send_message("/ping", 0)
 
     self.video_out_dir = video_out_dir
     self.clientport = clientport
     self.dispatcher = dispatcher.Dispatcher()
     self.map_handlers()
+
     self.server = osc_server.ThreadingOSCUDPServer(
       (host, serverport), self.dispatcher)
     print("Serving on {}".format(self.server.server_address))
@@ -49,7 +54,9 @@ class OscManager:
         coresponding_uid = self.handle_decision(self.recogniser.handle_is_new_decision())        
         if coresponding_uid is None:
           self.recogniser.save_stored_encodings()
+          self.pass_decision_to_client(None)
         else:
+          self.pass_decision_to_client(coresponding_uid)
           print("Already seen user with uid: {}".format(coresponding_uid))
         self.clear_all_rois()          
   
@@ -82,6 +89,12 @@ class OscManager:
         max_uid = uid
     # Return it
     return max_uid
+
+  def pass_decision_to_client(self, retrieved_uid):
+    print("\nOscManager.pass_decision_to_client() client.port -> {}".format(self.clientport))
+    if retrieved_uid is None:
+      retrieved_uid = -1
+    self.client.send_message("/user/detected", retrieved_uid)
 
   def clear_all_rois(self):
     print("\nOscManager.clear_all_rois()")
