@@ -15,14 +15,19 @@ class AlgorithmCommunicator {
 		void sendRoi(uint64_t uid, ofImage& rois);
 		void clearRois();
 		
-    std::function<void(uint64_t, ofImage&)> getSendRoiCallback();		
+    std::function<void(uint64_t, ofImage&)> getSendRoiCallback();	
+
+		void handleUserDetected(int uid, bool isNew);	
 	private:
-	    ofxFifo::vidWriteThread _fifoWriteThread;
+		ofxFifo::vidWriteThread _fifoWriteThread;
 
 		std::string _host = "127.0.0.1";
-		int _recieverPort, _recogniserServerPort;
+		int _recieverPort, _recogniserServerPort, _asciiServerPort;
 		ofxOscReceiver _reciever;
 		ofxOscSender _recogniserSender;
+		ofxOscSender _asciiSender;
+
+		int _lastWidth, _lastHeight;
 
 };
 

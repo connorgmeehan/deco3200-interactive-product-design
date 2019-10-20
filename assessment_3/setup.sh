@@ -108,6 +108,25 @@ source env/bin/activate
 
 pip install face_recognition
 pip install pillow
-echo "4x. Done, leaving Recogniser venv"
+pip install python-osc
+echo "4x. Done, leaving Recogniser environment..."
 deactivate
 cd "$PROJECT_ROOT"
+
+echo "5. pyasciigen - Converts images into ASCII art"
+cd ascii_gen
+echo "5a. Cloning asciigen..."
+git clone https://github.com/ajalt/pyasciigen
+echo "5b. Building virtual environment..."
+python -m venv env
+source env/bin/activate
+echo "5c. Downloading dependencies for virtual environment..."
+pip install numpy
+pip install pillow
+pip install python-osc
+echo "5d. Done, leaving pyascii gen environment..."
+deactivate
+
+cd "$PROJECT_ROOT"
+
+

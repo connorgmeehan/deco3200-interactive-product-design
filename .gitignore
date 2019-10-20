@@ -3,6 +3,13 @@ assessment_3/libfacedetection
 # ignore all
 # check another .ignore file in addons folder
 
+# Ignore ascii_gen virtual environment
+!/assessment_3/ascii_gen/env
+/assessment_3/ascii_gen/env*
+!/assessment_3/ascii_gen/__pycache__
+/assessment_3/ascii_gen/__pycache__*
+
+# Ignore recogniser virtual environment and data
 !/assessment_3/recogniser/env
 /assessment_3/recogniser/env*
 !/assessment_3/recogniser/data
@@ -11,6 +18,7 @@ assessment_3/libfacedetection
 /assessment_3/recogniser/__pycache__*
 /assessment_3/recogniser/model.dat
 
+# Ignore opencv
 !/assessment_3/opencv
 /assessment_3/opencv/*
 !/assessment_3/openFrameworks
