@@ -100,14 +100,32 @@ make -j$CORE_COUNT
 echo "DONE!"
 cd "$PROJECT_ROOT"
 
-echo "4.  Recogniser"
-echo "4a. Building venv (virtual python environment to install modules locally)..."
+echo "5.  Recogniser"
+echo "5a. Building venv (virtual python environment to install modules locally)..."
 cd recogniser
 python -m venv env
 source env/bin/activate
 
 pip install face_recognition
 pip install pillow
-echo "4x. Done, leaving Recogniser venv"
+echo "5b. Done, leaving Recogniser venv"
 deactivate
 cd "$PROJECT_ROOT"
+
+echo "6.  oscP5 communication library for processing..."
+echo "6a. Downloading library..."
+wget http://www.sojamo.de/libraries/oscP5/download/oscP5-0.9.8.zip
+echo "6b. Unziping to project folders..."
+
+declare -a displays=("ascii_display" "face_points")
+
+for i in "${displays[@]}"
+do
+  echo "$i"
+  unzip oscP5*.zip -d "$PROJECT_ROOT/displays/$i"
+  rm "$PROJECT_ROOT/displays/$i/INSTALL.txt"
+  mkdir "$PROJECT_ROOT/displays/$i/code"
+  mv "$PROJECT_ROOT/displays/$i/oscP5/library/oscP5.jar" "$PROJECT_ROOT/displays/$i/code/oscP5.jar"
+  mv -v "$PROJECT_ROOT/displays/$i/src" "$PROJECT_ROOT/displays/$i/include"
+  rm -r "$PROJECT_ROOT/displays/$i/oscP5"
+done
