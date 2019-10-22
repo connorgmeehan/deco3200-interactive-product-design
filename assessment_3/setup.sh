@@ -112,6 +112,17 @@ echo "5b. Done, leaving Recogniser venv"
 deactivate
 cd "$PROJECT_ROOT"
 
+echo "6. Emotion detector"
+echo "6a. Building venv (virtual python environment to install modules locally)..."
+cd emotion_detector
+python -m venv env
+source env/bin/activate
+pip install keras numpy 
+
+echo "6b. Done, leaving Emotion detector venv"
+deactivate
+cd "$PROJECT_ROOT"
+
 echo "6.  oscP5 communication library for processing..."
 echo "6a. Downloading library..."
 wget http://www.sojamo.de/libraries/oscP5/download/oscP5-0.9.8.zip

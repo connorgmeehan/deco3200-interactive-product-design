@@ -14,7 +14,6 @@ class OscManager:
     print("OscManager(video_out_dir: {0}, host: {1}, serverport: {2}, clientport{3})".format(video_out_dir, host, serverport, clientport))
     self.recogniser = recogniser.Recogniser()
     self.client = udp_client.SimpleUDPClient(host, clientport)
-    self.client.send_message("/ping", 0)
 
     self.video_out_dir = video_out_dir
     self.clientport = clientport
@@ -58,7 +57,7 @@ class OscManager:
         else:
           self.pass_decision_to_client(coresponding_uid)
           print("Already seen user with uid: {}".format(coresponding_uid))
-        self.clear_all_rois()          
+        self.clear_all_rois()
   
   def handle_decision(self, results):
     print("OscManager.handle_decision(results: {})".format(results))
