@@ -9,18 +9,28 @@ AlgorithmCommunicator::~AlgorithmCommunicator() {
 
 void AlgorithmCommunicator::setup() {
   ofLog() << "AlgorithmCommunicator::setup()";
-  std::string recogniserPortString = ofToString(getenv("RECOGNISER_PORT"));
-  std::string videoOutDir = ofToString(getenv("VID_OUT_DIR"));
-  _recogniserPort = ofToInt(recogniserPortString);
+  _recieverPort = ofToInt(ofToString(getenv("CONTROL_CENTRE_RECIEVER_PORT")));
+  _recogniserServerPort = ofToInt(ofToString(getenv("RECOGNISER_SERVER_PORT")));
 
-  _fifoWriteThread.pipe_dir = videoOutDir;
+  _fifoWriteThread.pipe_dir = ofToString(getenv("VID_OUT_DIR"));
   _fifoWriteThread.startThread();
 
-  _recogniserSender.setup(_host, _recogniserPort);
+  ofLog() << "\tstarting control centre's OSC sender for the recogniser, targetting host: " << _host << " on port: " << _recogniserServerPort;
+  _recogniserSender.setup(_host, _recogniserServerPort);
+  ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
+  _reciever.setup(_recieverPort);
 }
 
 void AlgorithmCommunicator::update() {
-  
+  while(_reciever.hasWaitingMessages()) {
+    ofxOscMessage message;
+    _reciever.getNextMessage(message);
+    ofLog() << "Reciever() -> new message at address: " << message.getAddress();
+    if (message.getAddress() == "/user/detected") {
+      int uid = message.getArgAsInt32(0);
+      ofLog() << "User Detected uid: " << uid;
+    }
+  }
 }
 
 void AlgorithmCommunicator::draw() {
@@ -28,7 +38,7 @@ void AlgorithmCommunicator::draw() {
 }
 
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
-  ofLog() << "\n\n\n\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ");";
+  ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ");";
   
   // Send image over FIFO
   _fifoWriteThread.setPixels(roi);

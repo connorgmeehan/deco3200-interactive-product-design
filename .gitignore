@@ -1,5 +1,18 @@
 assessment_3/libfacedetection
 
+# Ignore oscP5 library on processing sketch
+!/assessment_3/displays/ascii_display/code
+/assessment_3/displays/ascii_display/code/*
+!/assessment_3/displays/ascii_display/include
+/assessment_3/displays/ascii_display/include/*
+
+!/assessment_3/displays/face_points/code
+/assessment_3/displays/face_points/code/*
+!/assessment_3/displays/face_points/oscP5
+/assessment_3/displays/face_points/oscP5/*
+!/assessment_3/displays/face_points/include
+/assessment_3/displays/face_points/include/*
+
 # ignore all
 # check another .ignore file in addons folder
 

@@ -6,6 +6,7 @@ void RoiManager::setup(int triggerLimit) {
 }
 
 void RoiManager::update() {
+  communicator.update();
   if(_rois.size() > _triggerLimit) {
     clear();
   }
