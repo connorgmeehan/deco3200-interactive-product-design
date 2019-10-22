@@ -11,12 +11,14 @@ void AlgorithmCommunicator::setup() {
   ofLog() << "AlgorithmCommunicator::setup()";
   _recieverPort = ofToInt(ofToString(getenv("CONTROL_CENTRE_RECIEVER_PORT")));
   _recogniserServerPort = ofToInt(ofToString(getenv("RECOGNISER_SERVER_PORT")));
+  _asciiServerPort = ofToInt(ofToString(getenv("ASCII_SERVER_PORT")));
 
   _fifoWriteThread.pipe_dir = ofToString(getenv("VID_OUT_DIR"));
   _fifoWriteThread.startThread();
 
   ofLog() << "\tstarting control centre's OSC sender for the recogniser, targetting host: " << _host << " on port: " << _recogniserServerPort;
   _recogniserSender.setup(_host, _recogniserServerPort);
+  _asciiSender.setup(_host, _asciiServerPort);
   ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
   _reciever.setup(_recieverPort);
 }
@@ -54,10 +56,14 @@ void AlgorithmCommunicator::draw() {
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
   ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ");";
   
+  // Save last roi's dimensions
+  _lastWidth = roi.getWidth();
+  _lastHeight = roi.getHeight();
+
   // Send image over FIFO
   _fifoWriteThread.setPixels(roi);
 
-  // Send OSC
+  // Send OSC to recogniser
   ofxOscMessage recogniserMessage;
   recogniserMessage.setAddress("/algorithm/roi");
   recogniserMessage.addInt32Arg(uid);
