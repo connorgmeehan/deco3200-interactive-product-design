@@ -23,6 +23,18 @@ void ThreadedFaceTracker::setClearRoiTrackerCallback(std::function<void()> cb) {
   _clearRoiTrackerCallback = cb;
 }
 
+std::vector<ofPolyline> ThreadedFaceTracker::getFaceTrackingFeatures() {
+  std::vector<ofPolyline> retval;
+  retval.resize(ofxFaceTracker::Feature::ALL_FEATURES);
+
+  for(int featureInt = ofxFaceTracker::Feature::LEFT_EYE_TOP; featureInt < ofxFaceTracker::Feature::ALL_FEATURES; featureInt++) {
+    ofxFaceTracker::Feature feature = static_cast<ofxFaceTracker::Feature>(featureInt);
+    retval[featureInt] = _tracker.getImageFeature(feature);
+  }
+
+  return retval;
+}
+
 void ThreadedFaceTracker::setPadding(int padding) {
   _padding = padding;
 }

@@ -29,6 +29,20 @@ void AlgorithmCommunicator::update() {
     if (message.getAddress() == "/user/detected") {
       int uid = message.getArgAsInt32(0);
       ofLog() << "User Detected uid: " << uid;
+      _handleUserDetected(uid, false);
+    }
+
+    if (message.getAddress() == "/user/demographic") {
+      int uid = message.getArgAsInt32(0);
+      bool isMale = message.getArgAsBool(1);
+      int age = message.getArgAsInt32(2);
+      _handleUserDemographic(uid, isMale, age);
+    }
+
+    if(message.getAddress() == "/user/ascii") {
+      int uid = message.getArgAsInt32(0);
+      std::string ascii = message.getArgAsString(1);
+      _handleUserASCII(uid, ascii);
     }
   }
 }
@@ -56,8 +70,37 @@ void AlgorithmCommunicator::clearRois() {
   // Send OSC
   ofxOscMessage recogniserMessage;
   recogniserMessage.setAddress("/roi/clear_all");
+  _displayViewModel = DisplayVM();
 }
 
 std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallback() {
   return std::bind(&AlgorithmCommunicator::sendRoi, this, std::placeholders::_1, std::placeholders::_2);
+}
+
+void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
+  ofLog() << "User Detected uid: " << uid << ", isNew: " << (isNew ? "true" : "false");
+
+  _displayViewModel.uid = uid;
+  if(isNew) {
+    ofxOscMessage asciiMessage;
+    asciiMessage.setAddress("/roi/trigger_ascii");
+    asciiMessage.addInt32Arg(_lastWidth);
+    asciiMessage.addInt32Arg(_lastHeight);
+    _asciiSender.sendMessage(asciiMessage, false);
+  }
+}
+
+void AlgorithmCommunicator::_handleUserDemographic(int uid, bool isMale, int age) {
+  ofLog() << "AlgorithmCommunicator::_handleUserDemographic(uid: " << uid << ", isMale: " << (isMale ? "true" : "false") << ", age: " << age << ");";
+  if(_displayViewModel.uid == uid) {
+    _displayViewModel.isMale = isMale;
+    _displayViewModel.age = age;
+  }
+}
+
+void AlgorithmCommunicator::_handleUserASCII(int uid, std::string& ascii) {
+  ofLog() << "AlgorithmCommunicator::_handleUserASCII(uid: " << uid << ", ascii:\n" << ascii << "\n);";
+  if(_displayViewModel.uid == uid) {
+    _displayViewModel.ascii = ascii;
+  }
 }
