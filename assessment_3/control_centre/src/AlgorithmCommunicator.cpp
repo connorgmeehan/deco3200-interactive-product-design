@@ -26,20 +26,20 @@ void AlgorithmCommunicator::update() {
     ofxOscMessage message;
     _reciever.getNextMessage(message);
     ofLog() << "Reciever() -> new message at address: " << message.getAddress();
-    if (message.getAddress() == "/user/detected") {
+    if (message.getAddress() == "/display/detected") {
       int uid = message.getArgAsInt32(0);
       ofLog() << "User Detected uid: " << uid;
       _handleUserDetected(uid, false);
     }
 
-    if (message.getAddress() == "/user/demographic") {
+    if (message.getAddress() == "/display/demographic") {
       int uid = message.getArgAsInt32(0);
       bool isMale = message.getArgAsBool(1);
       int age = message.getArgAsInt32(2);
       _handleUserDemographic(uid, isMale, age);
     }
 
-    if(message.getAddress() == "/user/ascii") {
+    if(message.getAddress() == "/display/ascii") {
       int uid = message.getArgAsInt32(0);
       std::string ascii = message.getArgAsString(1);
       _handleUserASCII(uid, ascii);
@@ -59,7 +59,7 @@ void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
 
   // Send OSC
   ofxOscMessage recogniserMessage;
-  recogniserMessage.setAddress("/roi/add_new");
+  recogniserMessage.setAddress("/algorithm/roi");
   recogniserMessage.addInt32Arg(uid);
   recogniserMessage.addInt32Arg(roi.getWidth());
   recogniserMessage.addInt32Arg(roi.getHeight());
@@ -69,7 +69,7 @@ void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
 void AlgorithmCommunicator::clearRois() {
   // Send OSC
   ofxOscMessage recogniserMessage;
-  recogniserMessage.setAddress("/roi/clear_all");
+  recogniserMessage.setAddress("/algorithm/clear_all");
   _displayViewModel = DisplayVM();
 }
 
@@ -83,7 +83,7 @@ void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   _displayViewModel.uid = uid;
   if(isNew) {
     ofxOscMessage asciiMessage;
-    asciiMessage.setAddress("/roi/trigger_ascii");
+    asciiMessage.setAddress("/algorith/ascii");
     asciiMessage.addInt32Arg(_lastWidth);
     asciiMessage.addInt32Arg(_lastHeight);
     _asciiSender.sendMessage(asciiMessage, false);

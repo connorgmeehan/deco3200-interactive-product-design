@@ -1,13 +1,15 @@
+from time import sleep
 
 from pythonosc import dispatcher
 from pythonosc import osc_server
 from pythonosc import udp_client
-
 import fifoutil
 
 import cv2
-
 import recogniser
+
+
+
 
 class OscManager:
   def __init__(self, video_out_dir, host, serverport, clientport):
@@ -26,14 +28,15 @@ class OscManager:
     self.server.serve_forever()
 
   def map_handlers(self):
-    self.dispatcher.map("/roi/add_new", self.handle_new_roi, "uid", "width", "height")
-    self.dispatcher.map("/roi/clear_all", self.clear_all_rois)
+    self.dispatcher.map("/algorithm/roi", self.handle_new_roi, "uid", "width", "height")
+    self.dispatcher.map("/algorithm/clear_all", self.clear_all_rois)
 
   def handle_new_roi(self, address, args, uid, width, height):
     print("\nOscManager.handle_new_roi(uid: {0}, width: {1}, height: {2})".format(uid, width, height))
     im = None
     # Try to read the image
     try:
+      sleep(0.05)
       im = fifoutil.read_array(self.video_out_dir)
     except FileNotFoundError:
       print("FileNotFoundError when trying to read {}".format(self.video_out_dir))
@@ -93,7 +96,7 @@ class OscManager:
     print("\nOscManager.pass_decision_to_client() client.port -> {}".format(self.clientport))
     if retrieved_uid is None:
       retrieved_uid = -1
-    self.client.send_message("/user/detected", retrieved_uid)
+    self.client.send_message("/display/detected", retrieved_uid)
 
   def clear_all_rois(self):
     print("\nOscManager.clear_all_rois()")

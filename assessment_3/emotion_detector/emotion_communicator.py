@@ -1,7 +1,11 @@
-from pythonosc import dispatcher, osc_server, udp_client
-import fifoutil
-import cv2
+from time import sleep
 
+from pythonosc import dispatcher
+from pythonosc import osc_server
+from pythonosc import udp_client
+import fifoutil
+
+import cv2
 import emotion_detector
 
 class EmotionCommunicator:
@@ -25,6 +29,7 @@ class EmotionCommunicator:
         im = None
         # Try to read the image
         try:
+
             im = fifoutil.read_array(self.video_out_dir)
         except FileNotFoundError:
             print("FileNotFoundError when trying to read {}".format(self.video_out_dir))
