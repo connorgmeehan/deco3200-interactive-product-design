@@ -16,7 +16,7 @@ class OscManager:
     print("OscManager(video_out_dir: {0}, host: {1}, serverport: {2}, clientport: {3})".format(video_out_dir, host, serverport, clientport))
     self.client = udp_client.SimpleUDPClient(host, clientport)
     self.client.send_message("/ping", 0)
-
+    self.lastUid = -1
     self.video_out_dir = video_out_dir
     self.clientport = clientport
     self.dispatcher = dispatcher.Dispatcher()
@@ -28,11 +28,12 @@ class OscManager:
     self.server.serve_forever()
 
   def map_handlers(self):
-    self.dispatcher.map("/roi/trigger_ascii", self.handle_new_roi, "generate_ascii")
+    self.dispatcher.map("/algorithm/ascii", self.handle_new_roi, "uid", "width", "height")
     self.dispatcher
 
-  def handle_new_roi(self, address, args, width, height):
+  def handle_new_roi(self, address, args, uid, width, height):
     print("\nOscManager.handle_new_roi()")
+    self.lastUid = uid
     im = None
     # Try to read the image
     try:

@@ -96,7 +96,9 @@ class OscManager:
     print("\nOscManager.pass_decision_to_client() client.port -> {}".format(self.clientport))
     if retrieved_uid is None:
       retrieved_uid = -1
-    self.client.send_message("/display/detected", retrieved_uid)
+    is_new = True if retrieved_uid == -1 else False
+    is_new = True
+    self.client.send_message("/display/detected", [retrieved_uid, is_new])
 
   def clear_all_rois(self):
     print("\nOscManager.clear_all_rois()")

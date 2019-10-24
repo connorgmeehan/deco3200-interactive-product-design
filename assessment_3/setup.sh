@@ -18,7 +18,9 @@ echo "Building project..."
 
 echo "1.  Building openFrameworks - creative coding toolkit used for webcam processing / display"
 echo "1a. Cloning openframeworks 0.10.0..."
-git clone --single-branch --branch 0.10.0 --depth 1 --recursive https://github.com/openframeworks/openFrameworks.git --recursive
+wget https://openframeworks.cc/versions/v0.10.1/of_v0.10.1_linux64gcc6_release.tar.gz
+mkdir openFrameworks && tar xfz of_v0.10.1_linux64gcc6_release.tar -C openFrameworks --strip-components 1
+rm ./of_v0.10.1_linux64gcc6_release.tar.gz
 echo "1b. Downloading dependencies"
 if [ $machine == Linux ]; then
   echo "  Patching openFrameworks/libs/openFrameworks/utils/ofConstants.h"
@@ -31,14 +33,6 @@ if [ $machine == Linux ]; then
   /bin/bash ./openFrameworks/scripts/linux/archlinux/install_dependencies.sh
   echo "  Downloading locally dependant libraries..."
   /bin/bash ./openFrameworks/scripts/linux/download_libs.sh
-  echo "  Recompiling POCO libs for OFX Poco..."  
-  cd openFrameworks/scripts/
-  git clone https://github.com/openframeworks/apothecary.git
-  cd apothecary/apothecary
-  ./apothecary update poco
-  cd "$PROJECT_ROOT"
-  rm -rf ./openFrameworks/addons/ofxPoco/libs/poco
-  cp -r ./openFrameworks/scripts/apothecary/poco ./openFrameworks/addons/ofxPoco/libs/poco
 fi
 if [ $machine == Mac ]; then 
   /bin/bash ./openFrameworks/scripts/osx/download_libs.sh
@@ -73,7 +67,7 @@ echo "2c. Installing opencv 3.4 into ./control_centre/bin/libs"
 make install
 echo "2d. Copying shared objects to project"
 cd "$PROJECT_ROOT"
-cp ./openFrameworks/addons/ofxOpenCv/libs/lib ./control_centre/bin/lib
+cp ./openFrameworks/addons/ofxOpenCv/libs/opencv/lib ./control_centre/bin/lib
 echo "2e. Replacing ofxOpenCv config makefile to use locally installed openCV version"
 cp ./custom_addon_config.mk ./openFrameworks/addons/ofxOpenCv/addon_config.mk
 cp -r ./openFrameworks/addons/ofxOpenCv/libs/opencv/lib ./control_centre/bin/lib

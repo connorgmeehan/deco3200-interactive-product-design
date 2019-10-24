@@ -12,6 +12,7 @@ void AlgorithmCommunicator::setup() {
   _recieverPort = ofToInt(ofToString(getenv("CONTROL_CENTRE_RECIEVER_PORT")));
   _recogniserServerPort = ofToInt(ofToString(getenv("RECOGNISER_SERVER_PORT")));
   _asciiServerPort = ofToInt(ofToString(getenv("ASCII_SERVER_PORT")));
+  _asciiServerPort = ofToInt(ofToString(getenv("EMOTION_SERVER_PORT")));
 
   _fifoWriteThread.pipe_dir = ofToString(getenv("VID_OUT_DIR"));
   _fifoWriteThread.startThread();
@@ -19,6 +20,7 @@ void AlgorithmCommunicator::setup() {
   ofLog() << "\tstarting control centre's OSC sender for the recogniser, targetting host: " << _host << " on port: " << _recogniserServerPort;
   _recogniserSender.setup(_host, _recogniserServerPort);
   _asciiSender.setup(_host, _asciiServerPort);
+  _asciiSender.setup(_host, _emotionServerPort);
   ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
   _reciever.setup(_recieverPort);
 }
@@ -54,7 +56,7 @@ void AlgorithmCommunicator::draw() {
 }
 
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
-  ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ");";
+  ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ") to " << _host << ":" << _recogniserServerPort;
   
   // Save last roi's dimensions
   _lastWidth = roi.getWidth();
@@ -85,14 +87,24 @@ std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallbac
 
 void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   ofLog() << "User Detected uid: " << uid << ", isNew: " << (isNew ? "true" : "false");
-
-  _displayViewModel.uid = uid;
   if(isNew) {
+    _displayViewModel.uid = uid;
+    _lastUid = uid;
+    ofLog() << "\tSending ascii to " << _host << ":" << _asciiServerPort << "...";
     ofxOscMessage asciiMessage;
-    asciiMessage.setAddress("/algorith/ascii");
+    asciiMessage.setAddress("/algorithm/ascii");
+    asciiMessage.addInt32Arg(_lastUid);
     asciiMessage.addInt32Arg(_lastWidth);
     asciiMessage.addInt32Arg(_lastHeight);
     _asciiSender.sendMessage(asciiMessage, false);
+
+    ofLog() << "\tSending emotion to " << _host << ":" << _emotionServerPort << "...";
+    ofxOscMessage emotionMessage;
+    emotionMessage.setAddress("/algorithm/emotion");
+    emotionMessage.addInt32Arg(_lastUid);
+    emotionMessage.addInt32Arg(_lastWidth);
+    emotionMessage.addInt32Arg(_lastHeight);
+    _emotionSender.sendMessage(emotionMessage, false);   
   }
 }
 
