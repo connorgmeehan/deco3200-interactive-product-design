@@ -1,7 +1,7 @@
 
-from pythonosc import dispatcher
-from pythonosc import osc_server
-from pythonosc import udp_client
+from osc4py3.as_eventloop import *
+from osc4py3 import oscmethod as osm
+from osc4py3 import oscbuildparse
 
 import fifoutil
 
@@ -11,27 +11,29 @@ from PIL import Image
 
 from normalize_array import normalize
 
-class OscManager:
+class AsciiCommunicator:
   def __init__(self, video_out_dir, host, serverport, clientport):
     print("OscManager(video_out_dir: {0}, host: {1}, serverport: {2}, clientport: {3})".format(video_out_dir, host, serverport, clientport))
-    self.client = udp_client.SimpleUDPClient(host, clientport)
-    self.client.send_message("/ping", 0)
+    print("Server running on {0}:{1}, sending results back to {0}:{2}".format(host, serverport, clientport))
     self.lastUid = -1
     self.video_out_dir = video_out_dir
-    self.clientport = clientport
-    self.dispatcher = dispatcher.Dispatcher()
-    self.map_handlers()
 
-    self.server = osc_server.ThreadingOSCUDPServer(
-      (host, serverport), self.dispatcher)
-    print("Serving on {}".format(self.server.server_address))
-    self.server.serve_forever()
+    osc_startup()
+    osc_udp_client(host, clientport, "asciiclient")
+    osc_udp_server(host, serverport, "asciiserver")
+    self.map_handlers()
+    finished = False
+    while not finished:
+      osc_process()
+    osc_terminate()
+
 
   def map_handlers(self):
-    self.dispatcher.map("/algorithm/ascii", self.handle_new_roi, "uid", "width", "height")
-    self.dispatcher
+    osc_method("/algorithm/ascii", self.handle_new_roi)
+    osc_method("/*", self.default_handler)
+    osc_method("/*/*", self.default_handler)
 
-  def handle_new_roi(self, address, args, uid, width, height):
+  def handle_new_roi(self, uid, width, height):
     print("\nOscManager.handle_new_roi()")
     self.lastUid = uid
     im = None
@@ -50,10 +52,11 @@ class OscManager:
       im = cv.normalize(im,None,0,255,cv.NORM_MINMAX)
       pil_image = Image.fromarray(im)
       ascii_string = from_image(pil_image, 100, brightness=None, contrast=3) 
-      print(ascii_string)
-      
-  def pass_ascii_to_client(self, retrieved_uid):
-    print("\nOscManager.pass_decision_to_client() client.port -> {}".format(self.clientport))
-    if retrieved_uid is None:
-      retrieved_uid = -1
-    self.client.send_message("/user/detected", retrieved_uid)
+      self.pass_result_to_client(ascii_string)
+
+  def pass_result_to_client(self, ascii_string):
+    msg = oscbuildparse.OSCMessage("/display/ascii", ",is", [self.lastUid, ascii_string])
+    osc_send(msg, "asciiclient")
+
+  def default_handler(self, address, args):
+    print("AsciiCommunicator.default_handler(address: {0}, args: {1})".format(address, args))

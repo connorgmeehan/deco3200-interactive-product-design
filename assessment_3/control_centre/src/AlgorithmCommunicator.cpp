@@ -12,7 +12,7 @@ void AlgorithmCommunicator::setup() {
   _recieverPort = ofToInt(ofToString(getenv("CONTROL_CENTRE_RECIEVER_PORT")));
   _recogniserServerPort = ofToInt(ofToString(getenv("RECOGNISER_SERVER_PORT")));
   _asciiServerPort = ofToInt(ofToString(getenv("ASCII_SERVER_PORT")));
-  _asciiServerPort = ofToInt(ofToString(getenv("EMOTION_SERVER_PORT")));
+  _emotionServerPort = ofToInt(ofToString(getenv("EMOTION_SERVER_PORT")));
 
   _fifoWriteThread.pipe_dir = ofToString(getenv("VID_OUT_DIR"));
   _fifoWriteThread.startThread();
@@ -20,7 +20,7 @@ void AlgorithmCommunicator::setup() {
   ofLog() << "\tstarting control centre's OSC sender for the recogniser, targetting host: " << _host << " on port: " << _recogniserServerPort;
   _recogniserSender.setup(_host, _recogniserServerPort);
   _asciiSender.setup(_host, _asciiServerPort);
-  _asciiSender.setup(_host, _emotionServerPort);
+  _emotionSender.setup(_host, _emotionServerPort);
   ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
   _reciever.setup(_recieverPort);
 }
@@ -32,8 +32,9 @@ void AlgorithmCommunicator::update() {
     ofLog() << "Reciever() -> new message at address: " << message.getAddress();
     if (message.getAddress() == "/display/detected") {
       int uid = message.getArgAsInt32(0);
+      int isNew = message.getArgAsBool(1);
       ofLog() << "User Detected uid: " << uid;
-      _handleUserDetected(uid, false);
+      _handleUserDetected(uid, isNew);
     }
 
     if (message.getAddress() == "/display/demographic") {
@@ -117,7 +118,7 @@ void AlgorithmCommunicator::_handleUserDemographic(int uid, bool isMale, int age
 }
 
 void AlgorithmCommunicator::_handleUserASCII(int uid, std::string& ascii) {
-  ofLog() << "AlgorithmCommunicator::_handleUserASCII(uid: " << uid << ", ascii:\n" << ascii << "\n);";
+  ofLog() << "AlgorithmCommunicator::_handleUserASCII(uid: " << uid << ", ascii.size(): " << ascii.size() << ");";
   if(_displayViewModel.uid == uid) {
     _displayViewModel.ascii = ascii;
   }

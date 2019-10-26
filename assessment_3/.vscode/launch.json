@@ -10,9 +10,11 @@
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [
-                {"name": "VID_OUT_DIR", "value": "/home/connorgm/deco3200-interactive-product-design/assessment_3/control_centre/webcam_out"},
+                {"name": "VID_OUT_DIR", "value": "/home/connorgm/workspace/deco3200-interactive-product-design/assessment_3/webcam_out"},
                 {"name": "CONTROL_CENTRE_RECIEVER_PORT", "value": "8001"},
                 {"name": "RECOGNISER_SERVER_PORT", "value": "8002"},
+                {"name": "ASCII_SERVER_PORT", "value": "8004"},
+                {"name": "EMOTION_SERVER_PORT", "value": "8006"},
             ],
             "externalConsole": false,
             "linux": {

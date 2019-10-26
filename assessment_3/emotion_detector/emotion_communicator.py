@@ -1,35 +1,45 @@
 from time import sleep
 
-from pythonosc import dispatcher
-from pythonosc import osc_server
-from pythonosc import udp_client
+from osc4py3.as_eventloop import *
+from osc4py3 import oscmethod as osm
+from osc4py3 import oscbuildparse
+
 import fifoutil
 
 import cv2
 import emotion_detector
 
+import logging
+
 class EmotionCommunicator:
     def __init__(self, video_out_dir, host, serverport, clientport):
         self.emotion_detector = emotion_detector.EmotionDetector()
-
         self.video_out_dir = video_out_dir
-        self.client = udp_client.SimpleUDPClient(host, clientport)
-        self.dispatcher = dispatcher.Dispatcher()
+
+        # logging.basicConfig(format='%(asctime)s - %(threadName)s ø %(name)s - '
+        # '%(levelname)s - %(message)s')
+        # logger = logging.getLogger("osc")
+        # logger.setLevel(logging.DEBUG)
+        # osc_startup(logger=logger)
+
+        osc_startup()
+        osc_udp_client(host, clientport, "emotionclient")
+        osc_udp_server(host, serverport, "emotionserver")
         self.map_handlers()
-        self.server = osc_server.ThreadingOSCUDPServer(
-            (host, serverport), self.dispatcher)
-        print("Serving on {}".format(self.server.server_address))
-        self.server.serve_forever()
+
+        finished = False
+        while not finished:
+            osc_process()    
+        osc_terminate()
 
     def map_handlers(self):
-        self.dispatcher.map("/algorithm/emotions", self.handle_new_roi, "uid", "width", "height")
+        osc_method("/algorithm/emotion", self.handle_new_roi)
 
-    def handle_new_roi(self, address, args, uid, width, height):
+    def handle_new_roi(self, uid, width, height):
         print("\EmotionCommunicator.handle_new_roi(uid: {0}, width: {1}, height: {2})".format(uid, width, height))        
         im = None
         # Try to read the image
         try:
-
             im = fifoutil.read_array(self.video_out_dir)
         except FileNotFoundError:
             print("FileNotFoundError when trying to read {}".format(self.video_out_dir))
@@ -47,4 +57,5 @@ class EmotionCommunicator:
     
     def pass_emotion_to_client(self, emotion, certainty):
         print("EmotionCommunicator.pass_emotion_to_client() -> emotion: {0}, certainty: {1}".format(emotion, certainty))
-        self.client.send_message("/display/emotion", [emotion, certainty])
+        msg = oscbuildparse.OSCMessage("/display/emotion", ",sf", [emotion, certainty])
+        osc_send(msg, "emotionclient")

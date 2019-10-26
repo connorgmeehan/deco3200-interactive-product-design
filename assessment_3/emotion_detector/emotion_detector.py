@@ -8,8 +8,10 @@ class EmotionDetector:
     
     def handleNewRoi(self, roi):
         print("EmotionDetector::handleNewRoi()")
-        predictions = self.emotion_classifier.predict(roi)[0]
+        predictions = self.emotion_classifier.predict(roi)
+        print("Predicted on roi")
         emotional_probability = np.max(predictions)
+        print("found highest probability")
         label = self.emotions[predictions.argmax()]
         print("Chosen emotion: {}".format(label))
 
