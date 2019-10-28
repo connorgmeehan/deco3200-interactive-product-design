@@ -1,5 +1,13 @@
 assessment_3/libfacedetection
 
+# Ignore demographics detector
+!/assessment_3/demographics/env
+/assessment_3/demographics/env*
+!/assessment_3/demographics/__pycache__
+/assessment_3/demographics/__pycache__*
+!/assessment_3/demographics/Agendernet
+/assessment_3/demographics/Agendernet*
+
 # Ignore emotion detector
 !/assessment_3/emotion_detector/env
 /assessment_3/emotion_detector/env*

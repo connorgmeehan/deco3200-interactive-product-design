@@ -137,6 +137,20 @@ echo "6b. Done, leaving Emotion detector venv"
 deactivate
 cd "$PROJECT_ROOT"
 
+echo "6. Demographic detector"
+echo "6a. Building venv (virtual python environment to install modules locally)..."
+cd demographics
+python3.6 -m venv env
+source env/bin/activate
+pip install -r requirements.txt 
+git clone https://github.com/dandynaufaldi/Agendernet
+cd Agendernet
+patch -p1 < ../patch.diff
+
+echo "6b. Done, leaving Demographic detector venv"
+deactivate
+cd "$PROJECT_ROOT"
+
 echo "6.  oscP5 communication library for processing..."
 echo "6a. Downloading library..."
 wget http://www.sojamo.de/libraries/oscP5/download/oscP5-0.9.8.zip
