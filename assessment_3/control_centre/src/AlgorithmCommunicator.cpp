@@ -41,9 +41,9 @@ void AlgorithmCommunicator::update() {
 
     if (message.getAddress() == "/display/demographic") {
       int uid = message.getArgAsInt32(0);
-      bool isMale = message.getArgAsBool(1);
-      int age = message.getArgAsInt32(2);
-      _handleUserDemographic(uid, isMale, age);
+      int age = message.getArgAsFloat(1);
+      bool isMale = message.getArgAsBool(2);
+      _handleUserDemographic(uid, age, isMale);
     }
 
     if(message.getAddress() == "/display/ascii") {
@@ -131,7 +131,7 @@ void AlgorithmCommunicator::_handleUserEmotion(int uid, std::string emotion) {
   _trySendModelToDisplays();
 }
 
-void AlgorithmCommunicator::_handleUserDemographic(int uid, bool isMale, int age) {
+void AlgorithmCommunicator::_handleUserDemographic(int uid, int age, bool isMale) {
   ofLog() << "AlgorithmCommunicator::_handleUserDemographic(uid: " << uid << ", isMale: " << (isMale ? "true" : "false") << ", age: " << age << ");";
   if(_displayViewModel.uid == uid) {
     _displayViewModel.isMale = isMale;

@@ -17,11 +17,11 @@ class DemographicCommunicator:
         self.demographic_detector = demographic_detector.DemographicDetector()
         self.video_out_dir = video_out_dir
 
-        logging.basicConfig(format='%(asctime)s - %(threadName)s ø %(name)s - '
-        '%(levelname)s - %(message)s')
-        logger = logging.getLogger("osc")
-        logger.setLevel(logging.DEBUG)
-        osc_startup(logger=logger)
+        # logging.basicConfig(format='%(asctime)s - %(threadName)s ø %(name)s - '
+        # '%(levelname)s - %(message)s')
+        # logger = logging.getLogger("osc")
+        # logger.setLevel(logging.DEBUG)
+        # osc_startup(logger=logger)
 
         osc_startup()
         osc_udp_client(host, clientport, "demographicclient")
@@ -53,13 +53,15 @@ class DemographicCommunicator:
         if im is not None:
             # cv2 uses BGR colorspace
             im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-            gender, age = self.demographic_detector.handleNewRoi(im, width, height)
+            isMale, age = self.demographic_detector.handleNewRoi(im, width, height)
             print("demographic_detector gender: {0}, age: {1}".format(gender, age))
-            if(age is not None and gender is not None):
-                gender = "male" if gender == 1 else "female"
-                self.pass_emotion_to_client(age, uid, gender)
+            if(age is not None and isMale is not None):
+                self.pass_emotion_to_client(uid, age, isMale)
     
-    def pass_emotion_to_client(self, uid, age, gender):
-        print("EmotionCommunicator.pass_demographic_to_client() -> age: {0}, gender: {1}".format(age, gender))
-        msg = oscbuildparse.OSCMessage("/display/demographic", ",ifs", [uid, age, gender])
+    def pass_emotion_to_client(self, uid, age, isMale):
+        print("EmotionCommunicator.pass_demographic_to_client() -> age: {0}, gender(isMale): {1}".format(age, isMale))
+        if isMale:
+            msg = oscbuildparse.OSCMessage("/display/demographic", ",ifT", [uid, age])
+        else:
+            msg = oscbuildparse.OSCMessage("/display/demographic", ",ifF", [uid, age])
         osc_send(msg, "demographicclient")

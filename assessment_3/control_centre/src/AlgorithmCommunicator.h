@@ -23,7 +23,7 @@ class AlgorithmCommunicator {
 	private:
 		std::function<void(DisplayVM&)> _sendModelCallback;
 		void _handleUserDetected(int uid, bool isNew);	
-		void _handleUserDemographic(int uid, bool isMale, int age);
+		void _handleUserDemographic(int uid, int age, bool isMale);
 		void _handleUserEmotion(int uid, std::string emotion);
 		void _handleUserASCII(int uid, std::string& asciiArt);
 		void _trySendModelToDisplays();
