@@ -146,7 +146,11 @@ pip install -r requirements.txt
 git clone https://github.com/dandynaufaldi/Agendernet
 cd Agendernet
 patch -p1 < ../patch.diff
-
+cd model/weight
+wget https://github.com/JonathanCMitchell/mobilenet_v2_keras/releases/download/v1.1/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_96_no_top.h5
+cd "$PROJECT_ROOT/demographics"
+cp -r Agendernet/model ./model
+cp -r Agendernet/utils ./utils
 echo "6b. Done, leaving Demographic detector venv"
 deactivate
 cd "$PROJECT_ROOT"

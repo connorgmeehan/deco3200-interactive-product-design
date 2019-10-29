@@ -13,14 +13,15 @@ import logging
 
 class DemographicCommunicator:
     def __init__(self, video_out_dir, host, serverport, clientport):
+        print("DemographicCommuncator.setup(video_out_dir: {0}, host: {1}, serverport: {2}, clientport: {3})".format(video_out_dir, host, serverport, clientport))
         self.demographic_detector = demographic_detector.DemographicDetector()
         self.video_out_dir = video_out_dir
 
-        # logging.basicConfig(format='%(asctime)s - %(threadName)s ø %(name)s - '
-        # '%(levelname)s - %(message)s')
-        # logger = logging.getLogger("osc")
-        # logger.setLevel(logging.DEBUG)
-        # osc_startup(logger=logger)
+        logging.basicConfig(format='%(asctime)s - %(threadName)s ø %(name)s - '
+        '%(levelname)s - %(message)s')
+        logger = logging.getLogger("osc")
+        logger.setLevel(logging.DEBUG)
+        osc_startup(logger=logger)
 
         osc_startup()
         osc_udp_client(host, clientport, "demographicclient")
@@ -52,10 +53,13 @@ class DemographicCommunicator:
         if im is not None:
             # cv2 uses BGR colorspace
             im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-            age, gender = self.demographic_detector.handleNewRoi(im)
-            self.pass_emotion_to_client(age, gender)
+            gender, age = self.demographic_detector.handleNewRoi(im, width, height)
+            print("demographic_detector gender: {0}, age: {1}".format(gender, age))
+            if(age is not None and gender is not None):
+                gender = "male" if gender == 1 else "female"
+                self.pass_emotion_to_client(age, uid, gender)
     
-    def pass_emotion_to_client(self, age, gender):
+    def pass_emotion_to_client(self, uid, age, gender):
         print("EmotionCommunicator.pass_demographic_to_client() -> age: {0}, gender: {1}".format(age, gender))
-        msg = oscbuildparse.OSCMessage("/display/emotion", ",sf", [age, gender])
-        osc_send(msg, "demographic")
+        msg = oscbuildparse.OSCMessage("/display/demographic", ",ifs", [uid, age, gender])
+        osc_send(msg, "demographicclient")

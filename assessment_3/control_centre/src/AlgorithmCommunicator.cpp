@@ -13,6 +13,7 @@ void AlgorithmCommunicator::setup() {
   _recogniserServerPort = ofToInt(ofToString(getenv("RECOGNISER_SERVER_PORT")));
   _asciiServerPort = ofToInt(ofToString(getenv("ASCII_SERVER_PORT")));
   _emotionServerPort = ofToInt(ofToString(getenv("EMOTION_SERVER_PORT")));
+  _demographicServerPort = ofToInt(ofToString(getenv("DEMOGRAPHIC_SERVER_PORT")));
 
   _fifoWriteThread.pipe_dir = ofToString(getenv("VID_OUT_DIR"));
   _fifoWriteThread.startThread();
@@ -21,6 +22,7 @@ void AlgorithmCommunicator::setup() {
   _recogniserSender.setup(_host, _recogniserServerPort);
   _asciiSender.setup(_host, _asciiServerPort);
   _emotionSender.setup(_host, _emotionServerPort);
+  _demographicSender.setup(_host, _demographicServerPort);
   ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
   _reciever.setup(_recieverPort);
 }
@@ -105,7 +107,15 @@ void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
     emotionMessage.addInt32Arg(_lastUid);
     emotionMessage.addInt32Arg(_lastWidth);
     emotionMessage.addInt32Arg(_lastHeight);
-    _emotionSender.sendMessage(emotionMessage, false);   
+    _emotionSender.sendMessage(emotionMessage, false);
+
+    ofLog() << "\tSending demographic to " << _host << ":" << _demographicServerPort << "...";
+    ofxOscMessage demographicMessage;
+    demographicMessage.setAddress("/algorithm/demographic");
+    demographicMessage.addInt32Arg(_lastUid);
+    demographicMessage.addInt32Arg(_lastWidth);
+    demographicMessage.addInt32Arg(_lastHeight);
+    _demographicSender.sendMessage(demographicMessage, false);   
   }
 }
 

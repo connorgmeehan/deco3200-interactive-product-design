@@ -26,11 +26,12 @@ class AlgorithmCommunicator {
 		ofxFifo::vidWriteThread _fifoWriteThread;
 
 		std::string _host = "127.0.0.1";
-		int _recieverPort, _recogniserServerPort, _asciiServerPort, _emotionServerPort;
+		int _recieverPort, _recogniserServerPort, _asciiServerPort, _emotionServerPort, _demographicServerPort;
 		ofxOscReceiver _reciever;
 		ofxOscSender _recogniserSender;
 		ofxOscSender _asciiSender;
 		ofxOscSender _emotionSender;
+		ofxOscSender _demographicSender;
 
 		int _lastUid, _lastWidth, _lastHeight;
 		DisplayVM _displayViewModel;
