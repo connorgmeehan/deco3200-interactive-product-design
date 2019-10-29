@@ -88,6 +88,10 @@ std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallbac
   return std::bind(&AlgorithmCommunicator::sendRoi, this, std::placeholders::_1, std::placeholders::_2);
 }
 
+void AlgorithmCommunicator::setSendModelCallback(std::function<void(DisplayVM&)> callback) {
+  _sendModelCallback = callback;
+}
+
 void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   ofLog() << "User Detected uid: " << uid << ", isNew: " << (isNew ? "true" : "false");
   if(isNew) {
@@ -119,6 +123,14 @@ void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   }
 }
 
+void AlgorithmCommunicator::_handleUserEmotion(int uid, std::string emotion) {
+  ofLog() << "AlgorithmCommunicator::_handleUserEmotion(uid: " << uid << ", emotion: " << emotion << ");";
+  if(_displayViewModel.uid == uid) {
+    _displayViewModel.emotion = emotion;
+  }
+  _trySendModelToDisplays();
+}
+
 void AlgorithmCommunicator::_handleUserDemographic(int uid, bool isMale, int age) {
   ofLog() << "AlgorithmCommunicator::_handleUserDemographic(uid: " << uid << ", isMale: " << (isMale ? "true" : "false") << ", age: " << age << ");";
   if(_displayViewModel.uid == uid) {
@@ -131,5 +143,11 @@ void AlgorithmCommunicator::_handleUserASCII(int uid, std::string& ascii) {
   ofLog() << "AlgorithmCommunicator::_handleUserASCII(uid: " << uid << ", ascii.size(): " << ascii.size() << ");";
   if(_displayViewModel.uid == uid) {
     _displayViewModel.ascii = ascii;
+  }
+}
+
+void AlgorithmCommunicator::_trySendModelToDisplays() {
+  if(_displayViewModel.isReadyToBeSent()) {
+    _sendModelCallback(_displayViewModel);
   }
 }

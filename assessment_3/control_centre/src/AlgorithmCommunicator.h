@@ -1,3 +1,4 @@
+#pragma once
 
 #include "ofMain.h"
 
@@ -5,7 +6,7 @@
 #include "ofxFifo.h"
 #include "ofxFifoThread.h"
 
-#include "DisplayCommunicator.h"
+#include "DisplayVM.h"
 
 class AlgorithmCommunicator {
 	public:
@@ -17,11 +18,15 @@ class AlgorithmCommunicator {
 		void sendRoi(uint64_t uid, ofImage& rois);
 		void clearRois();
 		
-    std::function<void(uint64_t, ofImage&)> getSendRoiCallback();	
+		std::function<void(uint64_t, ofImage&)> getSendRoiCallback();
+		void setSendModelCallback(std::function<void(DisplayVM&)> callback);
 	private:
+		std::function<void(DisplayVM&)> _sendModelCallback;
 		void _handleUserDetected(int uid, bool isNew);	
 		void _handleUserDemographic(int uid, bool isMale, int age);
+		void _handleUserEmotion(int uid, std::string emotion);
 		void _handleUserASCII(int uid, std::string& asciiArt);
+		void _trySendModelToDisplays();
 
 		ofxFifo::vidWriteThread _fifoWriteThread;
 

@@ -12,6 +12,6 @@ void DisplayCommunicator::draw() {
 
 }
 
-void DisplayCommunicator::sendDataToDisplays(DisplayVM& viewModel) {
+void DisplayCommunicator::sendModelToDisplays(DisplayVM& viewModel) {
   
 }

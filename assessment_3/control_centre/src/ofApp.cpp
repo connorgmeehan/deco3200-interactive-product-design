@@ -5,8 +5,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  roiManager.setup(3);
-  
+  displayCommunicator.setup();
+
+  algorithmCommunicator.setup();
+  algorithmCommunicator.setSendModelCallback(std::bind(&DisplayCommunicator::sendModelToDisplays, &displayCommunicator, std::placeholders::_1));
+
+  roiManager.setup(&algorithmCommunicator, 3);
+
   tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
   tracker.setDeliverPayloadCallback(roiManager.getFaceTrackerCallback());  
   tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 1.0f);
