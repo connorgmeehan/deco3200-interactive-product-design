@@ -1,5 +1,11 @@
 assessment_3/libfacedetection
 
+# Ignore emotion detection
+!/assessment_3/Emotion-recognition/env
+/assessment_3/Emotion-recognition/env/*
+!/assessment_3/Emotion-recognition/__pycache__
+/assessment_3/Emotion-recognition/__pycache__/*
+
 # Ignore oscP5 library on processing sketch
 !/assessment_3/displays/ascii_display/code
 /assessment_3/displays/ascii_display/code/*
