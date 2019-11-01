@@ -6,7 +6,7 @@ from osc4py3 import oscbuildparse
 
 import fifoutil
 
-import cv2
+import cv2 as cv
 import emotion_detector
 
 import logging
@@ -51,8 +51,9 @@ class EmotionCommunicator:
         # If successful
         if im is not None:
             # cv2 uses BGR colorspace
-            im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-            emotion, certainty = self.emotion_detector.handleNewRoi(im)
+            # im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
+            grey = cv.cvtColor(im, cv.COLOR_RGB2GRAY)
+            emotion, certainty = self.emotion_detector.handleNewRoi(grey)
             self.pass_emotion_to_client(emotion, certainty)
     
     def pass_emotion_to_client(self, emotion, certainty):
