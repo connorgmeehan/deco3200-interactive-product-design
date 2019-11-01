@@ -14,5 +14,7 @@ class DisplayCommunicator {
     void sendModelToDisplays(DisplayVM& viewModel);
 
   private:
-
+    std::string _oscTestAddr;
+    int _oscTestPort;
+    ofxOscSender _oscTestSender;
 };
