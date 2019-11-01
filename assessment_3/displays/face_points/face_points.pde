@@ -288,7 +288,7 @@ void draw() {
         fill(255);
         ellipse(currentVal.x, currentVal.y, 7, 7);
         stroke(255);
-        //line(currentVal.x, currentVal.y, nextVert.x, nextVert.y);
+        line(currentVal.x, currentVal.y, nextVert.x, nextVert.y);
 
 
         if (j == features[i].length-2) {
