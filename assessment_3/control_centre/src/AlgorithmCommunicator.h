@@ -6,12 +6,12 @@
 #include "ofxFifo.h"
 #include "ofxFifoThread.h"
 
-#include "DisplayVM.h"
+#include "DisplayCommunicator.h"
 
 class AlgorithmCommunicator {
 	public:
 		~AlgorithmCommunicator();
-		void setup();
+		void setup(DisplayCommunicator* pDisplayCommunicator);
 		void update();
 		void draw();
 
@@ -21,6 +21,7 @@ class AlgorithmCommunicator {
 		std::function<void(uint64_t, ofImage&)> getSendRoiCallback();
 		void setSendModelCallback(std::function<void(DisplayVM&)> callback);
 	private:
+		DisplayCommunicator* _pDisplayCommunicator;
 		std::function<void(DisplayVM&)> _sendModelCallback;
 		void _handleUserDetected(int uid, bool isNew);	
 		void _handleUserDemographic(int uid, int age, bool isMale);

@@ -7,7 +7,9 @@ AlgorithmCommunicator::~AlgorithmCommunicator() {
   ofxFifo::del(_fifoWriteThread.pipe_dir);
 }
 
-void AlgorithmCommunicator::setup() {
+void AlgorithmCommunicator::setup(DisplayCommunicator* pDisplayCommunicator) {
+  _pDisplayCommunicator = pDisplayCommunicator;
+  
   ofLog() << "AlgorithmCommunicator::setup()";
   _recieverPort = ofToInt(ofToString(getenv("CONTROL_CENTRE_RECIEVER_PORT")));
   _recogniserServerPort = ofToInt(ofToString(getenv("RECOGNISER_SERVER_PORT")));
@@ -49,6 +51,7 @@ void AlgorithmCommunicator::update() {
     if(message.getAddress() == "/display/ascii") {
       int uid = message.getArgAsInt32(0);
       std::string ascii = message.getArgAsString(1);
+      _pDisplayCommunicator->
       _handleUserASCII(uid, ascii);
     }
   }
@@ -120,34 +123,5 @@ void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
     demographicMessage.addInt32Arg(_lastWidth);
     demographicMessage.addInt32Arg(_lastHeight);
     _demographicSender.sendMessage(demographicMessage, false);   
-  }
-}
-
-void AlgorithmCommunicator::_handleUserEmotion(int uid, std::string emotion) {
-  ofLog() << "AlgorithmCommunicator::_handleUserEmotion(uid: " << uid << ", emotion: " << emotion << ");";
-  if(_displayViewModel.uid == uid) {
-    _displayViewModel.emotion = emotion;
-  }
-  _trySendModelToDisplays();
-}
-
-void AlgorithmCommunicator::_handleUserDemographic(int uid, int age, bool isMale) {
-  ofLog() << "AlgorithmCommunicator::_handleUserDemographic(uid: " << uid << ", isMale: " << (isMale ? "true" : "false") << ", age: " << age << ");";
-  if(_displayViewModel.uid == uid) {
-    _displayViewModel.isMale = isMale;
-    _displayViewModel.age = age;
-  }
-}
-
-void AlgorithmCommunicator::_handleUserASCII(int uid, std::string& ascii) {
-  ofLog() << "AlgorithmCommunicator::_handleUserASCII(uid: " << uid << ", ascii.size(): " << ascii.size() << ");";
-  if(_displayViewModel.uid == uid) {
-    _displayViewModel.ascii = ascii;
-  }
-}
-
-void AlgorithmCommunicator::_trySendModelToDisplays() {
-  if(_displayViewModel.isReadyToBeSent()) {
-    _sendModelCallback(_displayViewModel);
   }
 }
