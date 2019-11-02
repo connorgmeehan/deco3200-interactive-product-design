@@ -2,7 +2,7 @@ class GenderDisplay {
     StateManager stateManager;
     int uid;
     boolean isMale;
-    ArrayList<ArrayList<PVector>> features;
+    List<List<PVector>> features;
 
     GenderDisplay() {
       stateManager = new StateManager();
@@ -12,12 +12,12 @@ class GenderDisplay {
       stateManager.addState("FINISH", 170);
     }
 
-    void setup(int _uid, boolean _isMale, ArrayList<ArrayList<PVector>> _features) {
+    void setup(int _uid, boolean _isMale, List<List<PVector>> _features) {
       stateManager.reset();
       uid = _uid;
       isMale = _isMale;
       features = _features;
-      println("GenderDisplay::setup(uid: "+uid+", emotion: "+emotion+", features.size(): " + features.size());
+      println("GenderDisplay::setup(uid: "+uid+", isMale: "+isMale+", features.size(): " + features.size());
     }
 
     void draw() {
