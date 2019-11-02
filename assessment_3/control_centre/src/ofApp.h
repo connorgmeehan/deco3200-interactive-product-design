@@ -4,6 +4,8 @@
 
 #include "ProjectDefines.h"
 
+#include "DisplayCommunicator.h"
+#include "AlgorithmCommunicator.h"
 #include "ThreadedFaceTracker.h"
 #include "RoiManager.h"
 
@@ -28,4 +30,6 @@ class ofApp : public ofBaseApp{
 
 		ThreadedFaceTracker tracker;
 		RoiManager roiManager;
+		AlgorithmCommunicator algorithmCommunicator;
+		DisplayCommunicator displayCommunicator;
 };

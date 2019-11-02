@@ -5,8 +5,13 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-  roiManager.setup(3);
+  displayCommunicator.setup();
+
+  algorithmCommunicator.setup(&displayCommunicator);
+  auto getFaceTrackingFeatures = std::bind(&ThreadedFaceTracker::getFaceTrackingFeatures, &tracker);
+  algorithmCommunicator.setFaceTrackingFeaturesGetter(getFaceTrackingFeatures);
   
+  roiManager.setup(&algorithmCommunicator, 3);
   tracker.setClearRoiTrackerCallback(roiManager.getClearRoiCallback());
   tracker.setDeliverPayloadCallback(roiManager.getFaceTrackerCallback());  
   tracker.setup(INPUT_WIDTH, INPUT_HEIGHT, 1.0f);

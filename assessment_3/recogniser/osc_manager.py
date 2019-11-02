@@ -1,40 +1,41 @@
+from time import sleep
 
-from pythonosc import dispatcher
-from pythonosc import osc_server
-from pythonosc import udp_client
+from osc4py3.as_eventloop import *
+from osc4py3 import oscmethod as osm
+from osc4py3 import oscbuildparse
 
 import fifoutil
 
 import cv2
-
 import recogniser
+
 
 class OscManager:
   def __init__(self, video_out_dir, host, serverport, clientport):
     print("OscManager(video_out_dir: {0}, host: {1}, serverport: {2}, clientport{3})".format(video_out_dir, host, serverport, clientport))
     self.recogniser = recogniser.Recogniser()
-    self.client = udp_client.SimpleUDPClient(host, clientport)
-    self.client.send_message("/ping", 0)
-
     self.video_out_dir = video_out_dir
-    self.clientport = clientport
-    self.dispatcher = dispatcher.Dispatcher()
+
+    osc_startup()
+    osc_udp_client(host, clientport, "recogniserclient")
+    osc_udp_server(host, serverport, "recogniserserver")
     self.map_handlers()
 
-    self.server = osc_server.ThreadingOSCUDPServer(
-      (host, serverport), self.dispatcher)
-    print("Serving on {}".format(self.server.server_address))
-    self.server.serve_forever()
+    finished = False
+    while not finished:
+      osc_process()    
+    osc_terminate()
 
   def map_handlers(self):
-    self.dispatcher.map("/roi/add_new", self.handle_new_roi, "uid", "width", "height")
-    self.dispatcher.map("/roi/clear_all", self.clear_all_rois)
+    osc_method("/algorithm/roi", self.handle_new_roi)
+    osc_method("/algorithm/clear_all", self.clear_all_rois)
 
-  def handle_new_roi(self, address, args, uid, width, height):
+  def handle_new_roi(self, uid, width, height):
     print("\nOscManager.handle_new_roi(uid: {0}, width: {1}, height: {2})".format(uid, width, height))
     im = None
     # Try to read the image
     try:
+      sleep(0.05)
       im = fifoutil.read_array(self.video_out_dir)
     except FileNotFoundError:
       print("FileNotFoundError when trying to read {}".format(self.video_out_dir))
@@ -57,8 +58,8 @@ class OscManager:
           self.pass_decision_to_client(None)
         else:
           self.pass_decision_to_client(coresponding_uid)
-          print("Already seen user with uid: {}".format(coresponding_uid))
-        self.clear_all_rois()          
+          print("\tAlready seen user with uid: {}".format(coresponding_uid))
+        self.clear_all_rois()
   
   def handle_decision(self, results):
     print("OscManager.handle_decision(results: {})".format(results))
@@ -66,7 +67,6 @@ class OscManager:
     results = list(filter(None.__ne__, results))
     if len(results) <= 1:
       return None 
-    print("results is not majority None.")
     # Build a key value dictionary of each result and its frequency
     results_frequency = {}
     for res in results:
@@ -77,7 +77,7 @@ class OscManager:
           results_frequency[res['uid']] = results_frequency[res['uid']] + 1
       else:
         print("\tNo 'uid' in res({})".format(res))
-    print("results_frequency: {}.".format(results_frequency))
+    print("\tresults_frequency: {}.".format(results_frequency))
     # Find the value that was most frequent
     max_uid = None
     for uid, frequency in zip(results_frequency.keys(), results_frequency.values()):
@@ -91,10 +91,18 @@ class OscManager:
     return max_uid
 
   def pass_decision_to_client(self, retrieved_uid):
-    print("\nOscManager.pass_decision_to_client() client.port -> {}".format(self.clientport))
+    print("\nOscManager.pass_decision_to_client()")
+    msg = None
     if retrieved_uid is None:
       retrieved_uid = -1
-    self.client.send_message("/user/detected", retrieved_uid)
+      msg = oscbuildparse.OSCMessage("/control/detected", ",iT", [retrieved_uid, True])
+    else:
+      msg = oscbuildparse.OSCMessage("/control/detected", ",iF", [retrieved_uid, False])
+
+    # Override decision for testing purposes
+    msg = oscbuildparse.OSCMessage("/control/detected", ",iT", [retrieved_uid, True])
+    osc_send(msg, "recogniserclient")
+
 
   def clear_all_rois(self):
     print("\nOscManager.clear_all_rois()")
