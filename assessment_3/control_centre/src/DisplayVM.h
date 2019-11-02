@@ -18,6 +18,13 @@ struct DisplayVM {
     detectedState(DetectedState::UNKNOWN) { }
 
   bool isReadyToBeSent() {
+    ofLog() << "isReadyToBeSend() " << std::endl
+      << "age: " << age << std::endl
+      << "ascii.length(): " << ascii.length() << std::endl
+      << "features.size(): " << features.size() << std::endl
+      << "emotion.length(): " << emotion.length() << std::endl
+      << "detectedState: " << (detectedState == DetectedState::UNKNOWN ? "UNKOWN"
+        : detectedState == DetectedState::NEW ? "NEW" : "OLD");
     return uid != -1
       && age != -1
       && ascii.length() > 0

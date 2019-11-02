@@ -51,9 +51,8 @@ void AlgorithmCommunicator::update() {
 
     if (message.getAddress() == "/control/emotion") {
       int uid = message.getArgAsInt32(0);
-      int age = message.getArgAsFloat(1);
-      bool isMale = message.getArgAsBool(2);
-      _pDisplayCommunicator->handleUserDemographic(uid, age, isMale);
+      std::string emotion = message.getArgAsString(1);
+      _pDisplayCommunicator->handleUserEmotion(uid, emotion);
     }
 
     if(message.getAddress() == "/control/ascii") {

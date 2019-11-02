@@ -28,7 +28,7 @@ void DisplayCommunicator::handleUserDetected(int uid, bool isNew) {
 void DisplayCommunicator::handleUserEmotion(int uid, std::string emotion) {
   ofLog() << "DisplayCommunicator::_handleUserEmotion(uid: " << uid << ", emotion: " << emotion << ");";
   _checkIfNewUid(uid);
-    _displayViewModel.emotion = emotion;
+  _displayViewModel.emotion = emotion;
   _trySendModelToDisplays();
 }
 

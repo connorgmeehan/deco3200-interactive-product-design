@@ -47,6 +47,9 @@ class EmotionCommunicator:
         except ValueError:
             print("ValueError when trying to read file, it's probably corrupted")
             pass
+        except Exception:
+            print("Other Exception")
+            pass
 
         # If successful
         if im is not None:

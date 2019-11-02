@@ -12,7 +12,7 @@ def write_txt(dat, pipe_dir="pipe", wait=False, rm=False):
 		if rm:
 			try:
 				os.system("rm "+pipe_dir)
-			except:
+			except Exception:
 				pass
 		if not os.path.exists(pipe_dir):
 			os.mkfifo(pipe_dir)
