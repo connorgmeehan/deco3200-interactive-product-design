@@ -84,5 +84,60 @@ void DisplayCommunicator::_trySendModelToDisplays() {
 
 void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "\n\n\nSending model to displays...";
+
+  std::vector<std::string> encodedFeatures(_displayViewModel.features.size());
+  for(int i = 0; i < encodedFeatures.size(); i++) {
+    encodedFeatures[i] = _encodePolyline(_displayViewModel.features[i]);
+  }
   
+  ofxOscMessage asciiMessage;
+  asciiMessage.setAddress("/display/ascii");
+  asciiMessage.addInt32Arg(_displayViewModel.uid);
+  asciiMessage.addStringArg(_displayViewModel.ascii);
+  _asciiDisplaySender.sendMessage(asciiMessage, false);
+  ofLog() << "_asciiDisplaySender.sendMessage() -> to " << _asciiDisplaySender.getHost() << ":" << _asciiDisplaySender.getPort();
+
+  ofxOscMessage faceMessage;
+  faceMessage.setAddress("/display/face");
+  faceMessage.addInt32Arg(_displayViewModel.uid);
+  faceMessage.addInt32Arg(_displayViewModel.age);
+  for(auto & feature : encodedFeatures) {
+    faceMessage.addStringArg(feature);
+  }
+  _faceDisplaySender.sendMessage(faceMessage, false);
+  ofLog() << "_faceDisplaySender.sendMessage() -> to " << _faceDisplaySender.getHost() << ":" << _faceDisplaySender.getPort();
+
+  ofxOscMessage genderMessage;
+  genderMessage.setAddress("/display/face");
+  genderMessage.addInt32Arg(_displayViewModel.uid);
+  genderMessage.addInt32Arg(_displayViewModel.isMale);
+  for(auto & feature : encodedFeatures) {
+    genderMessage.addStringArg(feature);
+  }
+  _genderDisplaySender.sendMessage(genderMessage, false);
+  ofLog() << "_genderDisplaySender.sendMessage() -> to " << _genderDisplaySender.getHost() << ":" << _genderDisplaySender.getPort();
+
+  ofxOscMessage emotionMessage;
+  emotionMessage.setAddress("/display/emotion");
+  emotionMessage.addInt32Arg(_displayViewModel.uid);
+  emotionMessage.addStringArg(_displayViewModel.emotion);
+  _emotionDisplaySender.sendMessage(emotionMessage, false);
+  ofLog() << "_emotionDisplaySender.sendMessage() -> to " << _emotionDisplaySender.getHost() << ":" << _emotionDisplaySender.getPort();
+
+  ofxOscMessage listMessage;
+  listMessage.setAddress("/display/list");
+  listMessage.addInt32Arg(_displayViewModel.uid);
+  _listDisplaySender.sendMessage(listMessage, false);
+  ofLog() << "_listDisplaySender.sendMessage() -> to " << _listDisplaySender.getHost() << ":" << _listDisplaySender.getPort();
+}
+
+std::string DisplayCommunicator::_encodePolyline(ofPolyline & polyline) {
+  std::string encodedPolyline;
+  encodedPolyline.resize(polyline.size() * sizeof(float) * 2);
+  for(int i = 0; i < polyline.size(); i++) {
+    auto & curVec = polyline.getVertices()[i];
+    memcpy(&curVec.x, &encodedPolyline[i * sizeof(float) * 2], sizeof(float));
+    memcpy(&curVec.y, &encodedPolyline[i * sizeof(float) * 2 + 1], sizeof(float));
+  }
+  return encodedPolyline;
 }
