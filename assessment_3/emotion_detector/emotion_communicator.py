@@ -54,9 +54,9 @@ class EmotionCommunicator:
             # im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
             grey = cv.cvtColor(im, cv.COLOR_RGB2GRAY)
             emotion, certainty = self.emotion_detector.handleNewRoi(grey)
-            self.pass_emotion_to_client(emotion, certainty)
+            self.pass_emotion_to_client(uid, emotion, certainty)
     
-    def pass_emotion_to_client(self, emotion, certainty):
-        print("EmotionCommunicator.pass_emotion_to_client() -> emotion: {0}, certainty: {1}".format(emotion, certainty))
-        msg = oscbuildparse.OSCMessage("/display/emotion", ",sf", [emotion, certainty])
+    def pass_emotion_to_client(self, uid, emotion, certainty):
+        print("EmotionCommunicator.pass_emotion_to_client() -> uid: {0}, emotion: {1}, certainty: {2}".format(uid, emotion, certainty))
+        msg = oscbuildparse.OSCMessage("/display/emotion", ",isf", [uid, emotion, certainty])
         osc_send(msg, "emotionclient")

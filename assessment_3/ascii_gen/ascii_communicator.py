@@ -13,7 +13,7 @@ from normalize_array import normalize
 
 class AsciiCommunicator:
   def __init__(self, video_out_dir, host, serverport, clientport):
-    print("OscManager(video_out_dir: {0}, host: {1}, serverport: {2}, clientport: {3})".format(video_out_dir, host, serverport, clientport))
+    print("AsciiCommunicator(video_out_dir: {0}, host: {1}, serverport: {2}, clientport: {3})".format(video_out_dir, host, serverport, clientport))
     print("Server running on {0}:{1}, sending results back to {0}:{2}".format(host, serverport, clientport))
     self.lastUid = -1
     self.video_out_dir = video_out_dir
@@ -34,7 +34,7 @@ class AsciiCommunicator:
     osc_method("/*/*", self.default_handler)
 
   def handle_new_roi(self, uid, width, height):
-    print("\nOscManager.handle_new_roi()")
+    print("\nAsciiCommunicator.handle_new_roi()")
     self.lastUid = uid
     im = None
     # Try to read the image
