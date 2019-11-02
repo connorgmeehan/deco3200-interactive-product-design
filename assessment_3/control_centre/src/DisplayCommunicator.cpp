@@ -39,10 +39,10 @@ void DisplayCommunicator::draw() {
 
 }
 
-void DisplayCommunicator::handleUserDetected(int uid, bool isNew) {
+void DisplayCommunicator::handleUserDetected(int uid, bool isNew, std::vector<ofPolyline> lines) {
   _checkIfNewUid(uid);
-
   _displayViewModel.detectedState = isNew ? DetectedState::NEW : DetectedState::OLD;
+  _displayViewModel.features = lines;
   _trySendModelToDisplays();
 }
 

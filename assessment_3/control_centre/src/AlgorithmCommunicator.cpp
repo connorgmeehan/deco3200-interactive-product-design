@@ -39,7 +39,7 @@ void AlgorithmCommunicator::update() {
       int isNew = message.getArgAsBool(1);
       ofLog() << "User Detected uid: " << uid;
       _handleUserDetected(uid, isNew);
-      _pDisplayCommunicator->handleUserDetected(uid, isNew);
+      _pDisplayCommunicator->handleUserDetected(uid, isNew, _getFaceTrackingFeatures());
     }
 
     if (message.getAddress() == "/control/demographic") {
@@ -94,6 +94,10 @@ void AlgorithmCommunicator::clearRois() {
 
 std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallback() {
   return std::bind(&AlgorithmCommunicator::sendRoi, this, std::placeholders::_1, std::placeholders::_2);
+}
+
+void AlgorithmCommunicator::setFaceTrackingFeaturesGetter(std::function<std::vector<ofPolyline>()> getter) {
+  _getFaceTrackingFeatures = getter;
 }
 
 void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {

@@ -19,7 +19,9 @@ class AlgorithmCommunicator {
 		void clearRois();
 		
 		std::function<void(uint64_t, ofImage&)> getSendRoiCallback();
+		void setFaceTrackingFeaturesGetter(std::function<std::vector<ofPolyline>()> getter);
 	private:
+		std::function<std::vector<ofPolyline>()> _getFaceTrackingFeatures;
 		DisplayCommunicator* _pDisplayCommunicator;
 		void _handleUserDetected(int uid, bool isNew);	
 		void _handleUserDemographic(int uid, int age, bool isMale);
