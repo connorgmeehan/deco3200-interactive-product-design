@@ -8,6 +8,7 @@ struct ThreadedFaceTrackerPayload {
   glm::vec2 position;
   glm::vec3 orientation;
   cv::Mat roi;
+  cv::Mat greyscale;
 };
 
 typedef std::function<void(ThreadedFaceTrackerPayload*)> ThreadedFaceTrackerCallback;

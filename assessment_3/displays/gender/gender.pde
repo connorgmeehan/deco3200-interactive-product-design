@@ -192,20 +192,33 @@ void oscEvent(OscMessage message) {
   print("### received an osc message.");
   print(" addrpattern: "+message.addrPattern());
   println(" typetag: "+message.typetag());
+  if(message.addrPattern().equals("/display/gender")) {
+    int uid = message.get(0).intValue();
+    println(" uid: "+uid);
+    boolean isMale = message.typetag().charAt(1) == 'T';
 
-  int uid = message.get(0).intValue();
-  println(" uid: "+uid);
-  boolean isMale = message.typetag().charAt(1) == 'T';
-
-  List<List<PVector>> points = new ArrayList<List<PVector>>();
-  for(int i = 0; i < 14; i++) {
-    String blob = message.get(i+2).stringValue();
-    points.add(new ArrayList<PVector>()); //<>//
-    String[] items = blob.split("\\s*,\\s*");
-    for(int j = 0; j < items.length; j+=2) {
-      PVector vec = new PVector(Integer.parseInt(items[j]), Integer.parseInt(items[j+1])); //<>//
-      points.get(i).add(vec); //<>//
+    List<List<PVector>> points = new ArrayList<List<PVector>>();
+    for(int i = 0; i < 14; i++) {
+      String blob = message.get(i+2).stringValue();
+      points.add(new ArrayList<PVector>()); //<>//
+      String[] items = blob.split("\\s*,\\s*");
+			for(int j = 0; j < items.length; j+=2) {
+				PVector vec = new PVector(Integer.parseInt(items[j]), Integer.parseInt(items[j+1])); //<>//
+        points.get(i).add(vec); //<>//
+      }
     }
+    genderDisplay.setup(uid, isMale, points);
   }
-  genderDisplay.setup(uid, isMale, points);
+  if(message.addrPattern().equals("/display/gender/img")){
+		byte[] greyscale = message.get(0).blobValue();
+		PImage newImage = createImage(100, 100, ALPHA);
+		for(int x = 0; x < 100; x++) {
+			for(int y = 0; y < 100; y++) {
+				int i = x * 100 + y;
+				newImage.pixels[i] = greyscale[i] & 0xFF;
+			}
+		}
+		newImage.updatePixels();
+		genderDisplay.setImage(newImage);
+  }
 }
