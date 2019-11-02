@@ -220,7 +220,6 @@ void draw() {
   //}
 
   int totalIndex = 0;
-  int linesIndex = 0;
 
   // create bounding box around face
   noFill();
@@ -244,8 +243,7 @@ void draw() {
 
   // display code line by line
   for (int i = 0; i < lines.length; i++) {
-    linesIndex++;
-    if (linesIndex < count) {
+    if (i < count) {
       fill(#F9FFFF);
       textFont(font, 10);
       text("" + lines[i] + "", xPosText+20, yPosText*i);

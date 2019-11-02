@@ -1,30 +1,43 @@
 class TextDrawer {
   String[] toDisplay;
-  int fontSize;
   int x, y;
   int lineSpacing;
   color c;
   PFont font;
-  
-  TextDrawer(String file, int _fontSize, int xPos, int yPos, color col, int inc, PFont pf) {
-    toDisplay = loadStrings("" + file + ".txt");
+  float fontSize;
+  //String typewrite;
+
+  int counter = 0;
+
+  TextDrawer(String _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
+    toDisplay = loadStrings( _toDisplay);
+    x = _x;
+    y = _y;
+    c = _c;
+    lineSpacing = _lineSpacing;
     fontSize = _fontSize;
-    x = xPos;
-    y = yPos;
-    c = col;
-    lineSpacing = inc;
-    font = pf; 
+    font = _font;
   }
-  
+
   void drawText() {
     int currentY = y;
     for (int i = 0; i < toDisplay.length; i++) {
-     if (i < count) {
-       fill(c);
-       textFont(font, fontSize);
-       text("" + toDisplay[i] + "", x, currentY); 
-     }
+      if (i < count) {
+        fill(c);
+        textFont(font, fontSize);
+        text("" + toDisplay[i] + "", x, currentY);
+      }
       currentY += lineSpacing;
-   }
+    }
+  }
+
+
+  void typewriter() {
+    fill(c);
+    textFont(font, fontSize);
+    if (counter < toDisplay[0].length() ) { 
+      counter++;
+      text(toDisplay[0].substring(0, counter), x, y);
+    }
   }
 }
