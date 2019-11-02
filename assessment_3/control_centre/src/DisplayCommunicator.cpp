@@ -15,19 +15,19 @@ void DisplayCommunicator::setup() {
   _asciiDisplaySender.setup(asciiDisplayAddr, asciiDisplayPort);
 
   std::string faceDisplayAddr = getenv("FACE_POINTS_DISPLAY_SERVER_ADDR");
-  int faceDisplayPort = ofToInt(getenv("ASCII_DISPLAY_SERVER_PORT"));
+  int faceDisplayPort = ofToInt(getenv("FACE_POINTS_DISPLAY_SERVER_PORT"));
   _faceDisplaySender.setup(faceDisplayAddr, faceDisplayPort);
 
   std::string genderDisplayAddr = getenv("GENDER_DISPLAY_SERVER_ADDR");
-  int genderDisplayPort = ofToInt(getenv("ASCII_DISPLAY_SERVER_PORT"));
+  int genderDisplayPort = ofToInt(getenv("GENDER_DISPLAY_SERVER_PORT"));
   _genderDisplaySender.setup(genderDisplayAddr, genderDisplayPort);
   
   std::string emotionDisplayAddr = getenv("EMOTION_DISPLAY_SERVER_ADDR");
-  int emotionDisplayPort = ofToInt(getenv("ASCII_DISPLAY_SERVER_PORT"));
+  int emotionDisplayPort = ofToInt(getenv("EMOTION_DISPLAY_SERVER_PORT"));
   _emotionDisplaySender.setup(emotionDisplayAddr, emotionDisplayPort);
   
   std::string listDisplayAddr = getenv("LIST_DISPLAY_SERVER_ADDR");
-  int listDisplayPort = ofToInt(getenv("ASCII_DISPLAY_SERVER_PORT"));
+  int listDisplayPort = ofToInt(getenv("LIST_DISPLAY_SERVER_PORT"));
   _listDisplaySender.setup(listDisplayAddr, listDisplayPort);
 }
 
@@ -108,9 +108,9 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "_faceDisplaySender.sendMessage() -> to " << _faceDisplaySender.getHost() << ":" << _faceDisplaySender.getPort();
 
   ofxOscMessage genderMessage;
-  genderMessage.setAddress("/display/face");
+  genderMessage.setAddress("/display/gender");
   genderMessage.addInt32Arg(_displayViewModel.uid);
-  genderMessage.addInt32Arg(_displayViewModel.isMale);
+  genderMessage.addBoolArg(_displayViewModel.isMale);
   for(auto & feature : encodedFeatures) {
     genderMessage.addStringArg(feature);
   }
