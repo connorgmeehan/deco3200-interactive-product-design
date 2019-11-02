@@ -1,8 +1,12 @@
+import java.util.Vector;
+
 class GenderDisplay {
     StateManager stateManager;
     int uid;
     boolean isMale;
     List<List<PVector>> features;
+    List<PShape> shapes;
+    DelaunayTriangulator delaunayTriangulator;
 
     GenderDisplay() {
       stateManager = new StateManager();
@@ -17,6 +21,38 @@ class GenderDisplay {
       uid = _uid;
       isMale = _isMale;
       features = _features;
+      shapes = new ArrayList<PShape>();
+
+      Vector<Vector2D> pointSet = new Vector<Vector2D>();
+      for(int i = 0; i < features.size(); i++) {
+        for(int j = 0; j < features.get(i).size(); j+=2) {
+          if(j != features.get(i).size()) {
+            PVector vec = features.get(i).get(j);
+            pointSet.add(new Vector2D(vec.x, vec.y));
+          }
+        }
+      }
+      println("pointSet size: " + pointSet.size());
+
+      try {
+        delaunayTriangulator = new DelaunayTriangulator(pointSet);
+        delaunayTriangulator.triangulate();
+      } catch (NotEnoughPointsException e) {
+        println("ERROR: Not enough points...");
+      }
+
+      List<Triangle2D> triangleSoup = delaunayTriangulator.getTriangles();
+      println("triangleSoup size: " + triangleSoup.size());
+      for(int i = 0; i < triangleSoup.size(); i++) {
+        Triangle2D triangle = triangleSoup.get(i);
+        PShape shape = createShape();
+        shape.beginShape();
+        shape.vertex((float)triangle.a.x, (float)triangle.a.y);
+        shape.vertex((float)triangle.b.x, (float)triangle.b.y);
+        shape.vertex((float)triangle.c.x, (float)triangle.c.y);
+        shape.endShape(CLOSE);
+        shapes.add(shape);
+      }
       println("GenderDisplay::setup(uid: "+uid+", isMale: "+isMale+", features.size(): " + features.size());
     }
 
@@ -32,7 +68,15 @@ class GenderDisplay {
       float featureProgress = stateManager.getProgressOfState("DRAW_FACE"); // progress of text ranging from 0.0 to 1.0
       if(featureProgress > 0.0f) {
         int featureIndex = int(float(features.size()) * featureProgress); // multiply it by length of all the texts that we want to draw
-        
+        int shapeIndex = int(float(shapes.size()) * featureProgress);
+        for ( int i = 0; i < shapes.size(); i++) {
+          if(shapeIndex > i) {
+            shape(shapes.get(i));
+          }
+        }
+
+        fill(0, 0, 255);
+
         for ( int i = 0; i < features.size(); i++) {
           if(featureIndex > i) {
             for(int j = 0; j < features.get(i).size(); j++) {
