@@ -69,6 +69,7 @@ class StateManager {
     }
     
     void reset() {
+      println("StateManager on " + getState() + " resetting to 0");
       curFrame = 0; 
     }
 }
