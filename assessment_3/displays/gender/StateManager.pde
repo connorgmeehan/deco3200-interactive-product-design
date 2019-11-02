@@ -7,6 +7,7 @@ class StateManager {
     
     StateManager() {
         states = new ArrayList<State>();
+        states.add(new State("INITIAL", 0));
     }
 
     void incrementFrame() {
@@ -43,6 +44,22 @@ class StateManager {
         }
         int stateLength = states.get(currentStateIndex + 1).frameStart - states.get(currentStateIndex).frameStart;
         return (float) (curFrame - states.get(currentStateIndex).frameStart) / (float) stateLength;
+    }
+    
+    float getProgressOfState(String state) {
+        for (int i = 0; i < states.size() - 1; i++) {
+          State iteratedState = states.get(i);
+          if (state.equals(iteratedState.name)) {
+            if(curFrame > iteratedState.frameStart) {
+                if(curFrame < states.get(i+1).frameStart) {
+                  return calculateStateProgress(); 
+                } else {
+                  return 1.0f;
+                }
+            }
+          }
+        }
+       return 0.0f;
     }
 
     float getProgress() {
