@@ -15,10 +15,9 @@ class AlgorithmCommunicator {
 		void update();
 		void draw();
 
-		void sendRoi(uint64_t uid, ofImage& rois);
+		void sendRoi(uint64_t uid, ofImage& roi, ofImage& greyscale);
 		void clearRois();
 		
-		std::function<void(uint64_t, ofImage&)> getSendRoiCallback();
 		void setFaceTrackingFeaturesGetter(std::function<std::vector<ofPolyline>()> getter);
 	private:
 		std::function<std::vector<ofPolyline>()> _getFaceTrackingFeatures;
@@ -40,6 +39,7 @@ class AlgorithmCommunicator {
 		ofxOscSender _demographicSender;
 
 		int _lastUid, _lastWidth, _lastHeight;
+		ofImage _lastGreyscale;
 };
 
 // TODO: add alert method to server so each algorithm can alert the http server of its function and where it's located and auto configure itself

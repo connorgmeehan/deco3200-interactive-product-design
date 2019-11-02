@@ -36,11 +36,14 @@ void DisplayCommunicator::update() {
 }
 
 void DisplayCommunicator::draw() {
-
+  if(_displayViewModel.greyscale.getHeight() > 0) {
+    _displayViewModel.greyscale.draw(500, 500);
+  }
 }
 
-void DisplayCommunicator::handleUserDetected(int uid, bool isNew, std::vector<ofPolyline> lines) {
+void DisplayCommunicator::handleUserDetected(int uid, bool isNew, std::vector<ofPolyline> lines, ofImage& greyscale) {
   _checkIfNewUid(uid);
+  _displayViewModel.greyscale = greyscale;
   _displayViewModel.detectedState = isNew ? DetectedState::NEW : DetectedState::OLD;
   _displayViewModel.features = lines;
   _trySendModelToDisplays();
@@ -89,6 +92,8 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   for(int i = 0; i < encodedFeatures.size(); i++) {
     encodedFeatures[i] = _encodePolyline(_displayViewModel.features[i]);
   }
+  ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size();
+  ofBuffer greyscaleBuffer((char *) &viewModel.greyscale.getPixels(),viewModel.greyscale.getPixels().size());
   
   ofxOscMessage asciiMessage;
   asciiMessage.setAddress("/display/ascii");
@@ -116,6 +121,12 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   }
   _genderDisplaySender.sendMessage(genderMessage, false);
   ofLog() << "_genderDisplaySender.sendMessage() -> to " << _genderDisplaySender.getHost() << ":" << _genderDisplaySender.getPort();
+
+  ofxOscMessage genderImageMessage;
+  genderImageMessage.setAddress("/display/gender/img");
+  genderImageMessage.addBlobArg(greyscaleBuffer);  
+  _genderDisplaySender.sendMessage(genderImageMessage, false);
+  ofLog() << "_genderDisplaySender.sendImageMessage() -> to " << _genderDisplaySender.getHost() << ":" << _genderDisplaySender.getPort();
 
   ofxOscMessage emotionMessage;
   emotionMessage.setAddress("/display/emotion");

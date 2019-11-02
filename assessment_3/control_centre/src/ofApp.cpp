@@ -29,6 +29,7 @@ void ofApp::draw(){
   ofBackground(20);
   tracker.draw();
   roiManager.draw();
+  displayCommunicator.draw();
 }
 
 //--------------------------------------------------------------

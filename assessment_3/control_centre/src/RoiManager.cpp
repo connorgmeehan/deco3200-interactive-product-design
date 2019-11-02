@@ -31,7 +31,11 @@ void RoiManager::handleFaceTrackerPayload(ThreadedFaceTrackerPayload* pPayload) 
   ofxCv::toOf(pPayload->roi, temp);
   temp.update();
   _rois.push_back(temp);
-  communicator->sendRoi(_currentId, temp);
+  
+  ofImage tempGrayscale;
+  ofxCv::toOf(pPayload->greyscale, tempGrayscale);
+  
+  communicator->sendRoi(_currentId, temp, tempGrayscale);
 }
 
 void RoiManager::clear() {

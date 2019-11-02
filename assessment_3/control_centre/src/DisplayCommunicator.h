@@ -11,7 +11,7 @@ class DisplayCommunicator {
     void update();
     void draw();
 
-    void handleUserDetected(int uid, bool isNew, std::vector<ofPolyline> lines);	
+    void handleUserDetected(int uid, bool isNew, std::vector<ofPolyline> lines, ofImage& greyscale);	
 		void handleUserDemographic(int uid, int age, bool isMale);
 		void handleUserEmotion(int uid, std::string emotion);
 		void handleUserASCII(int uid, std::string& asciiArt);

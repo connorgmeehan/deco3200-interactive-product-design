@@ -39,7 +39,7 @@ void AlgorithmCommunicator::update() {
       int isNew = message.getArgAsBool(1);
       ofLog() << "User Detected uid: " << uid;
       _handleUserDetected(uid, isNew);
-      _pDisplayCommunicator->handleUserDetected(uid, isNew, _getFaceTrackingFeatures());
+      _pDisplayCommunicator->handleUserDetected(uid, isNew, _getFaceTrackingFeatures(), _lastGreyscale);
     }
 
     if (message.getAddress() == "/control/demographic") {
@@ -67,9 +67,10 @@ void AlgorithmCommunicator::draw() {
 
 }
 
-void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi) {
+void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi, ofImage& greyscale) {
   ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ") to " << _host << ":" << _recogniserServerPort;
-  
+  _lastGreyscale = greyscale;
+
   // Save last roi's dimensions
   _lastWidth = roi.getWidth();
   _lastHeight = roi.getHeight();
@@ -90,10 +91,6 @@ void AlgorithmCommunicator::clearRois() {
   // Send OSC
   ofxOscMessage recogniserMessage;
   recogniserMessage.setAddress("/algorithm/clear_all");
-}
-
-std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallback() {
-  return std::bind(&AlgorithmCommunicator::sendRoi, this, std::placeholders::_1, std::placeholders::_2);
 }
 
 void AlgorithmCommunicator::setFaceTrackingFeaturesGetter(std::function<std::vector<ofPolyline>()> getter) {
