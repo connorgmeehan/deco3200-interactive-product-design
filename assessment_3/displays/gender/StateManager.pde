@@ -13,7 +13,6 @@ class StateManager {
     void incrementFrame() {
         curFrame++;
         currentStateIndex = getStateIndex();
-        currentStateProgress = calculateStateProgress();
     }
 
     void addState(String stateName, int startFrame) {
@@ -21,14 +20,12 @@ class StateManager {
     }
 
     int getStateIndex() {
-      println("curframe: " + curFrame);
-        for(int i = 0; i < states.size(); i++) {
-          println("state i name:" + states.get(i).name + ", startFrame: " + states.get(i).frameStart);
-          if(curFrame > states.get(i).frameStart) {
+        for(int i = 0; i < states.size()-1; i++) {
+          if(curFrame < states.get(i+1).frameStart) {
             return i;
           }
         }
-        return -1;
+        return states.size() - 1;
     }
 
     String getState() {
@@ -47,19 +44,24 @@ class StateManager {
     }
     
     float getProgressOfState(String state) {
-        for (int i = 0; i < states.size() - 1; i++) {
-          State iteratedState = states.get(i);
-          if (state.equals(iteratedState.name)) {
-            if(curFrame > iteratedState.frameStart) {
-                if(curFrame < states.get(i+1).frameStart) {
-                  return calculateStateProgress(); 
-                } else {
-                  return 1.0f;
-                }
-            }
-          }
+      int selectedStateIndex = -1;
+      for(int i = 0; i < states.size(); i++) {
+        if(states.get(i).name.equals(state)) {
+          selectedStateIndex = i;
+          break;
         }
-       return 0.0f;
+      }
+            
+      if(selectedStateIndex != -1) {
+        if(selectedStateIndex > currentStateIndex) {
+          return 0.0f;
+        } else if (selectedStateIndex < currentStateIndex) {
+          return 1.0f;
+        } else {
+          return map(curFrame, states.get(currentStateIndex).frameStart, states.get(currentStateIndex + 1).frameStart, 0.0f, 1.0f);
+        }
+      }
+      return 0.0f;
     }
 
     float getProgress() {
