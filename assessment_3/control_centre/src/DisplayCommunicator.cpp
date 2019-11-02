@@ -84,7 +84,7 @@ void DisplayCommunicator::_trySendModelToDisplays() {
 
 void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "\n\n\nSending model to displays...";
-
+  
   std::vector<std::string> encodedFeatures(_displayViewModel.features.size());
   for(int i = 0; i < encodedFeatures.size(); i++) {
     encodedFeatures[i] = _encodePolyline(_displayViewModel.features[i]);
@@ -132,12 +132,10 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
 }
 
 std::string DisplayCommunicator::_encodePolyline(ofPolyline & polyline) {
-  std::string encodedPolyline;
-  encodedPolyline.resize(polyline.size() * sizeof(float) * 2);
-  for(int i = 0; i < polyline.size(); i++) {
-    auto & curVec = polyline.getVertices()[i];
-    memcpy(&curVec.x, &encodedPolyline[i * sizeof(float) * 2], sizeof(float));
-    memcpy(&curVec.y, &encodedPolyline[i * sizeof(float) * 2 + 1], sizeof(float));
+  std::string polylineBuffer;
+  for(auto & vector3 : polyline) {
+    polylineBuffer += ofToString(roundf(vector3.x))+","+ofToString(roundf(vector3.y))+",";
   }
-  return encodedPolyline;
+  polylineBuffer.pop_back();
+  return polylineBuffer;
 }

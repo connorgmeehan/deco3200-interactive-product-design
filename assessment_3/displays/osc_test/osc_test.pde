@@ -8,7 +8,7 @@ int serverPort = Integer.parseInt(System.getenv("OSC_TEST_SERVER_PORT"));
 OscP5 oscP5;
 
 void setup() {
-  size(400,400);
+  size(1024,768);
   frameRate(25);
   oscP5 = new OscP5(this, serverPort);
 }
