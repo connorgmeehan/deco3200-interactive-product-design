@@ -28,13 +28,13 @@ int blinkTime;
 boolean blinkOn;
 String nextChar;
 
-
 void setup() {
   size(1440, 1024);
-
+  
   font = loadFont("Menlo-Regular-5.vlw");
   font2 = loadFont("IBMPlexMono-18.vlw");
   frameRate(20);
+  
   main_face = loadStrings("main_face.txt");
   starting = loadStrings("starting.txt");
   starting2 = loadStrings("starting2.txt");
@@ -60,6 +60,14 @@ void setup() {
 
 
 void draw() {
+  
+  if (keyPressed) {
+     count = 0;
+     counter = 0;
+     counter2 = 0;
+     counter3 = 0;
+  }
+  
   background(#06090B);
   println(frameRate);
   frameRate(20);
@@ -84,7 +92,6 @@ void draw() {
     //frameRate(10);
     linesIndex++;
     if (linesIndex < count) {
-      frameRate(10);
       fill(255);
       textFont(font2, 14);
       text("" + starting[i] + "", 275, ypos-400);
