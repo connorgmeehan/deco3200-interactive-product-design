@@ -19,10 +19,8 @@ class AlgorithmCommunicator {
 		void clearRois();
 		
 		std::function<void(uint64_t, ofImage&)> getSendRoiCallback();
-		void setSendModelCallback(std::function<void(DisplayVM&)> callback);
 	private:
 		DisplayCommunicator* _pDisplayCommunicator;
-		std::function<void(DisplayVM&)> _sendModelCallback;
 		void _handleUserDetected(int uid, bool isNew);	
 		void _handleUserDemographic(int uid, int age, bool isMale);
 		void _handleUserEmotion(int uid, std::string emotion);
@@ -40,7 +38,6 @@ class AlgorithmCommunicator {
 		ofxOscSender _demographicSender;
 
 		int _lastUid, _lastWidth, _lastHeight;
-		DisplayVM _displayViewModel;
 };
 
 // TODO: add alert method to server so each algorithm can alert the http server of its function and where it's located and auto configure itself

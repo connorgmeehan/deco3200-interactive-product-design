@@ -58,5 +58,5 @@ class EmotionCommunicator:
     
     def pass_emotion_to_client(self, uid, emotion, certainty):
         print("EmotionCommunicator.pass_emotion_to_client() -> uid: {0}, emotion: {1}, certainty: {2}".format(uid, emotion, certainty))
-        msg = oscbuildparse.OSCMessage("/display/emotion", ",isf", [uid, emotion, certainty])
+        msg = oscbuildparse.OSCMessage("/control/emotion", ",isf", [uid, emotion, certainty])
         osc_send(msg, "emotionclient")

@@ -55,7 +55,7 @@ class AsciiCommunicator:
       self.pass_result_to_client(ascii_string)
 
   def pass_result_to_client(self, ascii_string):
-    msg = oscbuildparse.OSCMessage("/display/ascii", ",is", [self.lastUid, ascii_string])
+    msg = oscbuildparse.OSCMessage("/control/ascii", ",is", [self.lastUid, ascii_string])
     osc_send(msg, "asciiclient")
 
   def default_handler(self, address, args):

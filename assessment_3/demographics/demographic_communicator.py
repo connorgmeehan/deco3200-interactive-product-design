@@ -61,7 +61,7 @@ class DemographicCommunicator:
     def pass_emotion_to_client(self, uid, age, isMale):
         print("EmotionCommunicator.pass_demographic_to_client() -> age: {0}, gender(isMale): {1}".format(age, isMale))
         if isMale:
-            msg = oscbuildparse.OSCMessage("/display/demographic", ",ifT", [uid, age, True])
+            msg = oscbuildparse.OSCMessage("/control/demographic", ",ifT", [uid, age, True])
         else:
-            msg = oscbuildparse.OSCMessage("/display/demographic", ",ifF", [uid, age, False])
+            msg = oscbuildparse.OSCMessage("/control/demographic", ",ifF", [uid, age, False])
         osc_send(msg, "demographicclient")

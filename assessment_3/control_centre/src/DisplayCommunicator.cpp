@@ -19,35 +19,48 @@ void DisplayCommunicator::draw() {
 
 }
 
-void DisplayCommunicator::sendModelToDisplays(DisplayVM& viewModel) {
-  
+void DisplayCommunicator::handleUserDetected(int uid, bool isNew) {
+  _checkIfNewUid(uid);
+  _displayViewModel.detectedState = isNew ? DetectedState::NEW : DetectedState::OLD;
+  _trySendModelToDisplays();
 }
 
 void DisplayCommunicator::handleUserEmotion(int uid, std::string emotion) {
   ofLog() << "DisplayCommunicator::_handleUserEmotion(uid: " << uid << ", emotion: " << emotion << ");";
-  if(_displayViewModel.uid == uid) {
+  _checkIfNewUid(uid);
     _displayViewModel.emotion = emotion;
-  }
   _trySendModelToDisplays();
 }
 
 void DisplayCommunicator::handleUserDemographic(int uid, int age, bool isMale) {
   ofLog() << "DisplayCommunicator::_handleUserDemographic(uid: " << uid << ", isMale: " << (isMale ? "true" : "false") << ", age: " << age << ");";
-  if(_displayViewModel.uid == uid) {
-    _displayViewModel.isMale = isMale;
-    _displayViewModel.age = age;
-  }
+  _checkIfNewUid(uid);
+  _displayViewModel.isMale = isMale;
+  _displayViewModel.age = age;
+  _trySendModelToDisplays();
 }
 
 void DisplayCommunicator::handleUserASCII(int uid, std::string& ascii) {
   ofLog() << "DisplayCommunicator::_handleUserASCII(uid: " << uid << ", ascii.size(): " << ascii.size() << ");";
+  _checkIfNewUid(uid);
+  _displayViewModel.ascii = ascii;
+  _trySendModelToDisplays();
+}
+
+bool DisplayCommunicator::_checkIfNewUid(int uid) {
   if(_displayViewModel.uid == uid) {
-    _displayViewModel.ascii = ascii;
+    return false;
+  } 
+  _displayViewModel = DisplayVM(uid);
+  return true;
+}
+
+void DisplayCommunicator::_trySendModelToDisplays() {
+  if(_displayViewModel.isReadyToBeSent()) {
+    _sendModel(_displayViewModel);
   }
 }
 
-void DisplayCommunicator::trySendModelToDisplays() {
-  if(_displayViewModel.isReadyToBeSent()) {
-    _sendModelCallback(_displayViewModel);
-  }
+void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
+  ofLog() << "\n\n\nSending model to displays...";
 }

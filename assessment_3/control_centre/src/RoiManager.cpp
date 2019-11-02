@@ -2,7 +2,6 @@
 
 void RoiManager::setup(AlgorithmCommunicator* pCommunicator, int triggerLimit) {
   communicator = pCommunicator;
-  communicator->setup();
   _triggerLimit = triggerLimit;
 }
 

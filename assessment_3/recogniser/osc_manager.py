@@ -95,12 +95,12 @@ class OscManager:
     msg = None
     if retrieved_uid is None:
       retrieved_uid = -1
-      msg = oscbuildparse.OSCMessage("/display/detected", ",iT", [retrieved_uid, True])
+      msg = oscbuildparse.OSCMessage("/control/detected", ",iT", [retrieved_uid, True])
     else:
-      msg = oscbuildparse.OSCMessage("/display/detected", ",iF", [retrieved_uid, False])
+      msg = oscbuildparse.OSCMessage("/control/detected", ",iF", [retrieved_uid, False])
 
     # Override decision for testing purposes
-    msg = oscbuildparse.OSCMessage("/display/detected", ",iT", [retrieved_uid, True])
+    msg = oscbuildparse.OSCMessage("/control/detected", ",iT", [retrieved_uid, True])
     osc_send(msg, "recogniserclient")
 
 

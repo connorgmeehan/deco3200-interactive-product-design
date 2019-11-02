@@ -8,7 +8,6 @@ void ofApp::setup(){
   displayCommunicator.setup();
 
   algorithmCommunicator.setup(&displayCommunicator);
-  algorithmCommunicator.setSendModelCallback(std::bind(&DisplayCommunicator::sendModelToDisplays, &displayCommunicator, std::placeholders::_1));
 
   roiManager.setup(&algorithmCommunicator, 3);
 

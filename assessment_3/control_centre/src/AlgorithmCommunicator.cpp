@@ -34,25 +34,32 @@ void AlgorithmCommunicator::update() {
     ofxOscMessage message;
     _reciever.getNextMessage(message);
     ofLog() << "Reciever() -> new message at address: " << message.getAddress();
-    if (message.getAddress() == "/display/detected") {
+    if (message.getAddress() == "/control/detected") {
       int uid = message.getArgAsInt32(0);
       int isNew = message.getArgAsBool(1);
       ofLog() << "User Detected uid: " << uid;
       _handleUserDetected(uid, isNew);
+      _pDisplayCommunicator->handleUserDetected(uid, isNew);
     }
 
-    if (message.getAddress() == "/display/demographic") {
+    if (message.getAddress() == "/control/demographic") {
       int uid = message.getArgAsInt32(0);
       int age = message.getArgAsFloat(1);
       bool isMale = message.getArgAsBool(2);
-      _handleUserDemographic(uid, age, isMale);
+      _pDisplayCommunicator->handleUserDemographic(uid, age, isMale);
     }
 
-    if(message.getAddress() == "/display/ascii") {
+    if (message.getAddress() == "/control/emotion") {
+      int uid = message.getArgAsInt32(0);
+      int age = message.getArgAsFloat(1);
+      bool isMale = message.getArgAsBool(2);
+      _pDisplayCommunicator->handleUserDemographic(uid, age, isMale);
+    }
+
+    if(message.getAddress() == "/control/ascii") {
       int uid = message.getArgAsInt32(0);
       std::string ascii = message.getArgAsString(1);
-      _pDisplayCommunicator->
-      _handleUserASCII(uid, ascii);
+      _pDisplayCommunicator->handleUserASCII(uid, ascii);
     }
   }
 }
@@ -84,21 +91,15 @@ void AlgorithmCommunicator::clearRois() {
   // Send OSC
   ofxOscMessage recogniserMessage;
   recogniserMessage.setAddress("/algorithm/clear_all");
-  _displayViewModel = DisplayVM();
 }
 
 std::function<void(uint64_t, ofImage&)> AlgorithmCommunicator::getSendRoiCallback() {
   return std::bind(&AlgorithmCommunicator::sendRoi, this, std::placeholders::_1, std::placeholders::_2);
 }
 
-void AlgorithmCommunicator::setSendModelCallback(std::function<void(DisplayVM&)> callback) {
-  _sendModelCallback = callback;
-}
-
 void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   ofLog() << "User Detected uid: " << uid << ", isNew: " << (isNew ? "true" : "false");
   if(isNew) {
-    _displayViewModel.uid = uid;
     _lastUid = uid;
     ofLog() << "\tSending ascii to " << _host << ":" << _asciiServerPort << "...";
     ofxOscMessage asciiMessage;
