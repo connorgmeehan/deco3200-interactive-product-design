@@ -22,7 +22,5 @@ class DisplayCommunicator {
 
 		DisplayVM _displayViewModel;
 
-    std::string _oscTestAddr;
-    int _oscTestPort;
-    ofxOscSender _oscTestSender;
+    ofxOscSender _oscTestSender, _asciiDisplaySender, _faceDisplaySender, _genderDisplaySender, _emotionDisplaySender, _listDisplaySender;
 };
