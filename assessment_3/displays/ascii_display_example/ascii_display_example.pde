@@ -73,14 +73,14 @@ void setup() {
   faceF = new TextDrawer("face_F.txt", 325, 605, GREEN, 2, font, 1.5);
   faceG = new TextDrawer("face_G.txt", 975, 605, GREEN, 2, font, 1.5);
   faceH = new TextDrawer("face_H.txt", 1200, 605, GREEN, 2, font, 1.5);
-  faceAWhite = new TextDrawer("face_A.txt", 100, 370, WHITE, 2, font, 1.5);
-  faceBWhite = new TextDrawer("face_B.txt", 325, 370, WHITE, 2, font, 1.5);
-  faceCWhite = new TextDrawer("face_C.txt", 975, 370, WHITE, 2, font, 1.5);
-  faceDWhite = new TextDrawer("face_D.txt", 1200, 370, WHITE, 2, font, 1.5);
-  faceEWhite = new TextDrawer("face_E.txt", 100, 605, WHITE, 2, font, 1.5);
-  faceFWhite = new TextDrawer("face_F.txt", 325, 605, WHITE, 2, font, 1.5);
-  faceGWhite = new TextDrawer("face_G.txt", 975, 605, WHITE, 2, font, 1.5);
-  faceHWhite = new TextDrawer("face_H.txt", 1200, 605, WHITE, 2, font, 1.5);
+  //faceAWhite = new TextDrawer("face_A.txt", 100, 370, WHITE, 2, font, 1.5);
+  //faceBWhite = new TextDrawer("face_B.txt", 325, 370, WHITE, 2, font, 1.5);
+  //faceCWhite = new TextDrawer("face_C.txt", 975, 370, WHITE, 2, font, 1.5);
+  //faceDWhite = new TextDrawer("face_D.txt", 1200, 370, WHITE, 2, font, 1.5);
+  //faceEWhite = new TextDrawer("face_E.txt", 100, 605, WHITE, 2, font, 1.5);
+  //faceFWhite = new TextDrawer("face_F.txt", 325, 605, WHITE, 2, font, 1.5);
+  //faceGWhite = new TextDrawer("face_G.txt", 975, 605, WHITE, 2, font, 1.5);
+  //faceHWhite = new TextDrawer("face_H.txt", 1200, 605, WHITE, 2, font, 1.5);
 
 
   blinkTime = millis();
@@ -122,14 +122,14 @@ void draw() {
   faceG.drawText();
   faceH.drawText();
   
-  faceAWhite.drawText();
-  faceBWhite.drawText();
-  faceCWhite.drawText();
-  faceDWhite.drawText();
-  faceEWhite.drawText();
-  faceFWhite.drawText();
-  faceGWhite.drawText();
-  faceHWhite.drawText();
+  //faceAWhite.drawText();
+  //faceBWhite.drawText();
+  //faceCWhite.drawText();
+  //faceDWhite.drawText();
+  //faceEWhite.drawText();
+  //faceFWhite.drawText();
+  //faceGWhite.drawText();
+  //faceHWhite.drawText();
   //count++;
 
 
