@@ -7,6 +7,7 @@ class StateManager {
     
     StateManager() {
         states = new ArrayList<State>();
+        states.add(new State("INITIAL", 0));
     }
 
     void incrementFrame() {
@@ -20,14 +21,12 @@ class StateManager {
     }
 
     int getStateIndex() {
-      println("curframe: " + curFrame);
-        for(int i = 0; i < states.size(); i++) {
-          println("state i name:" + states.get(i).name + ", startFrame: " + states.get(i).frameStart);
-          if(curFrame > states.get(i).frameStart) {
+        for(int i = 0; i < states.size()-1; i++) {
+          if(curFrame < states.get(i+1).frameStart) {
             return i;
           }
         }
-        return -1;
+        return states.size() - 1;
     }
 
     String getState() {
@@ -44,12 +43,46 @@ class StateManager {
         int stateLength = states.get(currentStateIndex + 1).frameStart - states.get(currentStateIndex).frameStart;
         return (float) (curFrame - states.get(currentStateIndex).frameStart) / (float) stateLength;
     }
+    
+    float getProgressOfState(String state) {
+      int selectedStateIndex = -1;
+      for(int i = 0; i < states.size(); i++) {
+        if(states.get(i).name.equals(state)) {
+          selectedStateIndex = i;
+          break;
+        }
+      }
+            
+      if(selectedStateIndex != -1) {
+        if(selectedStateIndex > currentStateIndex) {
+          return 0.0f;
+        } else if (selectedStateIndex < currentStateIndex) {
+          return 1.0f;
+        } else {
+          return map(curFrame, states.get(currentStateIndex).frameStart, states.get(currentStateIndex + 1).frameStart, 0.0f, 1.0f);
+        }
+      }
+      return 0.0f;
+    }
 
     float getProgress() {
         return currentStateProgress;
     }
     
     void reset() {
+      println("StateManager on " + getState() + " resetting to 0");
       curFrame = 0; 
+    }
+
+    void drawDebug() {
+      textSize(12);
+      fill(0);
+      rect(0, 0, 50, 25);
+      fill(255);
+      text(currentStateIndex, 0, 12);
+      if(currentStateIndex >= 0) {
+        text(states.get(currentStateIndex).name, 12, 12);
+        text(currentStateProgress, 12, 24);
+      }
     }
 }
