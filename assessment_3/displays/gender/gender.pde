@@ -1,3 +1,15 @@
+  
+import java.awt.image.BufferedImage;
+
+import javax.imageio.plugins.jpeg.*;
+import javax.imageio.*;
+import javax.imageio.stream.*;
+
+import java.util.Iterator;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -178,26 +190,26 @@ void setup() {
   serverPort = 8012;
   println("Hosting on " + host + ":" + serverPort);
   frameRate(25);
-  oscP5 = new OscP5(this, serverPort);
+  oscP5 = new OscP5(this, serverPort); //<>//
 }
 
 void draw() {
   background(0);
   genderDisplay.draw();
 }
-
+ //<>//
 /* incoming osc message are forwarded to the oscEvent method. */
 void oscEvent(OscMessage message) {
   /* print the address pattern and the typetag of the received OscMessage */
   print("### received an osc message.");
-  print(" addrpattern: "+message.addrPattern());
+  print(" addrpattern: "+message.addrPattern()); //<>//
   println(" typetag: "+message.typetag());
   if(message.addrPattern().equals("/display/gender")) {
     int uid = message.get(0).intValue();
     println(" uid: "+uid);
-    boolean isMale = message.typetag().charAt(1) == 'T';
+    boolean isMale = message.typetag().charAt(1) == 'T'; //<>//
 
-    List<List<PVector>> points = new ArrayList<List<PVector>>();
+    List<List<PVector>> points = new ArrayList<List<PVector>>(); //<>// //<>//
     for(int i = 0; i < 14; i++) {
       String blob = message.get(i+2).stringValue();
       points.add(new ArrayList<PVector>()); //<>//
@@ -207,18 +219,24 @@ void oscEvent(OscMessage message) {
         points.get(i).add(vec); //<>//
       }
     }
+	println("resetting display... done!"); //<>//
     genderDisplay.setup(uid, isMale, points);
+	println("resetting display... done!"); //<>//
   }
-  if(message.addrPattern().equals("/display/gender/img")){
+  if(message.addrPattern().equals("/display/img")){
+	  	println("addr patten /display/gender/img");
 		byte[] greyscale = message.get(0).blobValue();
-		PImage newImage = createImage(100, 100, ALPHA);
-		for(int x = 0; x < 100; x++) {
-			for(int y = 0; y < 100; y++) {
-				int i = x * 100 + y;
-				newImage.pixels[i] = greyscale[i] & 0xFF;
-			}
-		}
-		newImage.updatePixels();
-		genderDisplay.setImage(newImage);
+     println("got blob of size " + greyscale.length);
+		PImage greyscaleImage = decompressImage(greyscale);
+		// println("new blob of greyscale image size: " + greyscale.length);
+		// PImage newImage = createImage(100, 100, ALPHA);
+		// for(int x = 0; x < 100; x++) {
+		// 	for(int y = 0; y < 100; y++) {
+		// 		int i = x * 100 + y;
+		// 		newImage.pixels[i] = greyscale[i] & 0xFF;
+		// 	}
+		// }
+		// newImage.updatePixels();
+		genderDisplay.setImage(greyscaleImage);
   }
 }

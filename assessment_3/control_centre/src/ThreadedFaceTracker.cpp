@@ -61,7 +61,7 @@ void ThreadedFaceTracker::update() {
         cv::Mat greyscaleCvFrame(cvFrame, ofxCv::toCv(_activeRoi));
         payload->greyscale = greyscaleCvFrame.clone();
         cv::cvtColor(payload->greyscale, payload->greyscale, CV_RGB2GRAY);
-        cv::resize(payload->greyscale, payload->greyscale, cv::Size(100, 100));
+        cv::resize(payload->greyscale, payload->greyscale, cv::Size(150, 150));
         payload->position = _tracker.getPosition();
         payload->orientation = _tracker.getOrientation();
 

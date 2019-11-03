@@ -7,7 +7,8 @@ class GenderDisplay {
     List<List<PVector>> features;
     List<PShape> shapes;
     DelaunayTriangulator delaunayTriangulator;
-    PImage greyscale;
+    PImage image;
+    boolean hasImage;
 
     GenderDisplay() {
       stateManager = new StateManager();
@@ -23,7 +24,8 @@ class GenderDisplay {
       isMale = _isMale;
       features = _features;
       shapes = new ArrayList<PShape>();
-      greyscale = new PImage();
+      image = new PImage();
+      hasImage = false;
 
       Vector<Vector2D> pointSet = new Vector<Vector2D>();
       for(int i = 0; i < features.size(); i++) {
@@ -98,9 +100,15 @@ class GenderDisplay {
           text("FEMALE", 20, 20);
         }
       }
+
+      if(hasImage) {
+        image(image, 0, 0);
+      }
+
     }
 
-    void setImage(PImage _greyscale) {
-      greyscale = _greyscale;
+    void setImage(PImage _image) {
+      image = _image;
+      hasImage = true;
     }
 }

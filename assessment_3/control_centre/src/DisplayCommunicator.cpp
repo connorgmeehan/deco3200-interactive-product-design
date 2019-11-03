@@ -39,6 +39,9 @@ void DisplayCommunicator::draw() {
   if(_displayViewModel.greyscale.getHeight() > 0) {
     _displayViewModel.greyscale.draw(500, 500);
   }
+  if(lastGreyscale.getHeight() > 0) {
+    lastGreyscale.draw(600, 500);
+  }
 }
 
 void DisplayCommunicator::handleUserDetected(int uid, bool isNew, std::vector<ofPolyline> lines, ofImage& greyscale) {
@@ -92,8 +95,12 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   for(int i = 0; i < encodedFeatures.size(); i++) {
     encodedFeatures[i] = _encodePolyline(_displayViewModel.features[i]);
   }
-  ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size();
-  ofBuffer greyscaleBuffer((char *) &viewModel.greyscale.getPixels(),viewModel.greyscale.getPixels().size());
+  ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size() << " pixelSize: " << viewModel.greyscale.getPixels().getBytesPerPixel();
+  ofBuffer greyscaleBuffer;
+  ofSaveImage(viewModel.greyscale.getPixels(), greyscaleBuffer, ofImageFormat::OF_IMAGE_FORMAT_JPEG, ofImageQualityType::OF_IMAGE_QUALITY_WORST);
+  
+  lastGreyscale.setFromPixels((const unsigned char *) greyscaleBuffer.getData(), 150, 150, ofImageType::OF_IMAGE_GRAYSCALE);
+  lastGreyscale.update();
   
   ofxOscMessage asciiMessage;
   asciiMessage.setAddress("/display/ascii");
@@ -123,7 +130,8 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "_genderDisplaySender.sendMessage() -> to " << _genderDisplaySender.getHost() << ":" << _genderDisplaySender.getPort();
 
   ofxOscMessage genderImageMessage;
-  genderImageMessage.setAddress("/display/gender/img");
+  genderImageMessage.setAddress("/display/img");
+  genderMessage.addInt32Arg(_displayViewModel.uid);
   genderImageMessage.addBlobArg(greyscaleBuffer);  
   _genderDisplaySender.sendMessage(genderImageMessage, false);
   ofLog() << "_genderDisplaySender.sendImageMessage() -> to " << _genderDisplaySender.getHost() << ":" << _genderDisplaySender.getPort();
