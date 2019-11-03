@@ -24,4 +24,6 @@ class DisplayCommunicator {
 		DisplayVM _displayViewModel;
 
     ofxOscSender _oscTestSender, _asciiDisplaySender, _faceDisplaySender, _genderDisplaySender, _emotionDisplaySender, _listDisplaySender;
+
+    ofImage lastGreyscale;
 };
