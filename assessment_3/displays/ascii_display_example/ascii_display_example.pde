@@ -139,18 +139,6 @@ void draw() {
     rect(faceA.x, faceA.y - 2 + subfaceWhite1Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
     rect(faceH.x, faceH.y - 2 + subfaceWhite1Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
   }
-
-  startingText.drawText();
-  startingTextOK.drawText();
-  mainFace.drawText();
-  faceA.drawText();
-  faceB.drawText();
-  faceC.drawText();
-  faceD.drawText();
-  faceE.drawText();
-  faceF.drawText();
-  faceG.drawText();
-  faceH.drawText();
   
   if(!stateManager.getState().equals("SUB_FACES_WHITE_2")) {
     rect(faceB.x, faceB.y - 2, 200, 200);
