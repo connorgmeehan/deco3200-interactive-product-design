@@ -8,8 +8,8 @@ class TextDrawer {
   //String typewrite;
   color secondColor = color(255, 255);
 
-  TextDrawer(String _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
-    toDisplay = loadStrings( _toDisplay);
+  TextDrawer(String[] _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
+    toDisplay = _toDisplay;
     x = _x;
     y = _y;
     c = _c;
