@@ -30,19 +30,27 @@ int blinkTime;
 boolean blinkOn;
 String nextChar;
 
-
-
 TextDrawer firstLines, startingText, startingTextOK, mainFace, 
 faceA, faceB, faceC, faceD, faceE, faceF, faceG, faceH,
 faceAWhite, faceBWhite, faceCWhite, faceDWhite, faceEWhite, faceFWhite, faceGWhite, faceHWhite;
 
+StateManager stateManager;
+
 void setup() {
   size(1440, 1024);
-
   font = loadFont("Menlo-Regular-5.vlw");
   font2 = loadFont("IBMPlexMono-18.vlw");
   frameRate(20);
-
+  stateManager = new StateManager();
+  stateManager.addState("INITIAL", 0);
+  stateManager.addState("STARTING_LINES", 50);
+  stateManager.addState("MAIN_FACE", 100);
+  stateManager.addState("SUB_FACES_TOP", 150);
+  stateManager.addState("SUB_FACES_BOTTOM", 200);
+  stateManager.addState("SUB_FACES_WHITE_1", 220);
+  stateManager.addState("SUB_FACES_WHITE_2", 240);
+  stateManager.addState("SUB_FACES_WHITE_3", 280);
+  stateManager.addState("END", 300);
 
   //main_face = loadStrings("main_face.txt");
   //starting = loadStrings("starting.txt");
@@ -50,37 +58,20 @@ void setup() {
   starting_fail = loadStrings("starting_fail.txt");
   starting3 = loadStrings("starting3.txt");
 
-  //face_A = loadStrings("face_A.txt");
-  //face_B = loadStrings("face_B.txt");
-  //face_C = loadStrings("face_C.txt");
-  //face_D = loadStrings("face_D.txt");
-  //face_E = loadStrings("face_E.txt");
-  //face_F = loadStrings("face_F.txt");
-  //face_G = loadStrings("face_G.txt");
-  //face_H = loadStrings("face_H.txt");
-
   smooth();
 
   firstLines = new TextDrawer("firstLine.txt", 75, 50, #6FCF97, 0, font2, 14);
   startingText = new TextDrawer("starting.txt", 70, 100, 255, 10, font2, 14);
   startingTextOK = new TextDrawer("starting2.txt", 70, 100, GREEN, 10, font2, 14);
   mainFace = new TextDrawer("main_face.txt", 525, 370, 255, 5, font, 4);
-  faceA = new TextDrawer("face_A.txt", 100, 370, GREEN, 2, font, 1.5);
-  faceB = new TextDrawer("face_B.txt", 325, 370, GREEN, 2, font, 1.5);
-  faceC = new TextDrawer("face_C.txt", 975, 370, GREEN, 2, font, 1.5);
-  faceD = new TextDrawer("face_D.txt", 1200, 370, GREEN, 2, font, 1.5);
-  faceE = new TextDrawer("face_E.txt", 100, 605, GREEN, 2, font, 1.5);
-  faceF = new TextDrawer("face_F.txt", 325, 605, GREEN, 2, font, 1.5);
-  faceG = new TextDrawer("face_G.txt", 975, 605, GREEN, 2, font, 1.5);
-  faceH = new TextDrawer("face_H.txt", 1200, 605, GREEN, 2, font, 1.5);
-  faceAWhite = new TextDrawer("face_A.txt", 100, 370, WHITE, 2, font, 1.5);
-  faceBWhite = new TextDrawer("face_B.txt", 325, 370, WHITE, 2, font, 1.5);
-  faceCWhite = new TextDrawer("face_C.txt", 975, 370, WHITE, 2, font, 1.5);
-  faceDWhite = new TextDrawer("face_D.txt", 1200, 370, WHITE, 2, font, 1.5);
-  faceEWhite = new TextDrawer("face_E.txt", 100, 605, WHITE, 2, font, 1.5);
-  faceFWhite = new TextDrawer("face_F.txt", 325, 605, WHITE, 2, font, 1.5);
-  faceGWhite = new TextDrawer("face_G.txt", 975, 605, WHITE, 2, font, 1.5);
-  faceHWhite = new TextDrawer("face_H.txt", 1200, 605, WHITE, 2, font, 1.5);
+  faceA = new TextDrawer("face_A.txt", 100,  370, WHITE, 2, font, 1.5);
+  faceB = new TextDrawer("face_B.txt", 325,  370, WHITE, 2, font, 1.5);
+  faceC = new TextDrawer("face_C.txt", 975,  370, WHITE, 2, font, 1.5);
+  faceD = new TextDrawer("face_D.txt", 1200, 370, WHITE, 2, font, 1.5);
+  faceE = new TextDrawer("face_E.txt", 100,  605, WHITE, 2, font, 1.5);
+  faceF = new TextDrawer("face_F.txt", 325,  605, WHITE, 2, font, 1.5);
+  faceG = new TextDrawer("face_G.txt", 975,  605, WHITE, 2, font, 1.5);
+  faceH = new TextDrawer("face_H.txt", 1200, 605, WHITE, 2, font, 1.5);
 
 
   blinkTime = millis();
@@ -89,6 +80,10 @@ void setup() {
 
 
 void draw() {
+
+  stateManager.incrementFrame();
+
+
   if (keyPressed) {
     count = 0;
     counter = 0;
@@ -108,30 +103,59 @@ void draw() {
   //xPos_other = width/4;
   //ypos = 0;
   //translate(-200, -100);
+  blendMode(BLEND);
 
+  float startingLinesProgress = stateManager.getProgressOfState("STARTING_LINES");
+  startingText.drawTextByLine(startingLinesProgress);
+  startingTextOK.drawTextByLine(startingLinesProgress);
+  float mainFaceProgress = stateManager.getProgressOfState("MAIN_FACE");
+  mainFace.drawTextByLine(mainFaceProgress);
 
-  startingText.drawText();
-  startingTextOK.drawText();
-  mainFace.drawText();
-  faceA.drawText();
-  faceB.drawText();
-  faceC.drawText();
-  faceD.drawText();
-  faceE.drawText();
-  faceF.drawText();
-  faceG.drawText();
-  faceH.drawText();
-  
-  faceAWhite.drawText();
-  faceBWhite.drawText();
-  faceCWhite.drawText();
-  faceDWhite.drawText();
-  faceEWhite.drawText();
-  faceFWhite.drawText();
-  faceGWhite.drawText();
-  faceHWhite.drawText();
-  //count++;
+  float subfaceWhite1Progress = stateManager.getProgressOfState("SUB_FACES_WHITE_1");
+  float subfaceWhite2Progress = stateManager.getProgressOfState("SUB_FACES_WHITE_2");
+  float subfaceWhite3Progress = stateManager.getProgressOfState("SUB_FACES_WHITE_3");
+  float subfaceWhite4Progress = stateManager.getProgressOfState("SUB_FACES_WHITE_4");
 
+  float subfaceTopProgress = stateManager.getProgressOfState("SUB_FACES_TOP");
+  faceA.drawTextByLine(subfaceTopProgress);
+  faceB.drawTextByLine(subfaceTopProgress);
+  faceC.drawTextByLine(subfaceTopProgress);
+  faceD.drawTextByLine(subfaceTopProgress);
+
+  float subfaceBottomProgress = stateManager.getProgressOfState("SUB_FACES_BOTTOM");
+  faceE.drawTextByLine(subfaceBottomProgress);
+  faceF.drawTextByLine(subfaceBottomProgress);
+  faceG.drawTextByLine(subfaceBottomProgress);
+  faceH.drawTextByLine(subfaceBottomProgress);
+
+  blendMode(MULTIPLY);
+  fill(GREEN);
+
+  if(!stateManager.getState().equals("SUB_FACES_WHITE_1")) {
+    rect(faceA.x, faceA.y - 2, 200, 200);
+    rect(faceH.x, faceH.y - 2, 200, 200);
+  } else {
+    rect(faceA.x, faceA.y - 2 + subfaceWhite1Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
+    rect(faceH.x, faceH.y - 2 + subfaceWhite1Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
+  }
+
+  if(!stateManager.getState().equals("SUB_FACES_WHITE_2")) {
+    rect(faceB.x, faceB.y - 2, 200, 200);
+    rect(faceG.x, faceG.y - 2, 200, 200);
+  } else {
+    rect(faceB.x, faceB.y - 2 + subfaceWhite2Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
+    rect(faceG.x, faceG.y - 2 + subfaceWhite2Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
+  }
+
+  if(!stateManager.getState().equals("SUB_FACES_WHITE_3")) {
+    rect(faceC.x, faceC.y - 2, 200, 200);
+    rect(faceF.x, faceF.y - 2, 200, 200);
+  } else {
+    rect(faceC.x, faceC.y - 2 + subfaceWhite3Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
+    rect(faceC.x, faceC.y - 2 + subfaceWhite3Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
+  }
+
+  blendMode(NORMAL);
 
   // All timed blinking cursors
   fill(GREEN);
@@ -291,6 +315,8 @@ void draw() {
   textFont(font2, 60);
   fill(255);
   text("*", width/2+205, 1000);
+
+  stateManager.drawDebug();
 }
 
 void typewriteText(String lines, int w, int h) {
