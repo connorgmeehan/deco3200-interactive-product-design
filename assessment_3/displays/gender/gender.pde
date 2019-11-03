@@ -184,7 +184,7 @@ void setup() {
   for (PVector[] array : features) {
       featuresList.add(Arrays.asList(array));
   }
-  genderDisplay.setup(20, true, featuresList);
+  genderDisplay.setup(-1, "", true, featuresList);
  
   host = "localhost";
   serverPort = 8012;
@@ -206,12 +206,13 @@ void oscEvent(OscMessage message) {
   println(" typetag: "+message.typetag());
   if(message.addrPattern().equals("/display/gender")) {
     int uid = message.get(0).intValue();
+	String fakeId = message.get(1).stringValue();
     println(" uid: "+uid);
-    boolean isMale = message.typetag().charAt(1) == 'T'; //<>//
+    boolean isMale = message.typetag().charAt(2) == 'T'; //<>//
 
     List<List<PVector>> points = new ArrayList<List<PVector>>(); //<>// //<>//
     for(int i = 0; i < 14; i++) {
-      String blob = message.get(i+2).stringValue();
+      String blob = message.get(i+3).stringValue();
       points.add(new ArrayList<PVector>()); //<>//
       String[] items = blob.split("\\s*,\\s*");
 			for(int j = 0; j < items.length; j+=2) {
@@ -220,23 +221,18 @@ void oscEvent(OscMessage message) {
       }
     }
 	println("resetting display... done!"); //<>//
-    genderDisplay.setup(uid, isMale, points);
+    genderDisplay.setup(uid, fakeId, isMale, points);
 	println("resetting display... done!"); //<>//
   }
   if(message.addrPattern().equals("/display/img")){
 	  	println("addr patten /display/gender/img");
-		byte[] greyscale = message.get(0).blobValue();
-     println("got blob of size " + greyscale.length);
-		PImage greyscaleImage = decompressImage(greyscale);
-		// println("new blob of greyscale image size: " + greyscale.length);
-		// PImage newImage = createImage(100, 100, ALPHA);
-		// for(int x = 0; x < 100; x++) {
-		// 	for(int y = 0; y < 100; y++) {
-		// 		int i = x * 100 + y;
-		// 		newImage.pixels[i] = greyscale[i] & 0xFF;
-		// 	}
-		// }
-		// newImage.updatePixels();
+		
+		String fakeId = message.get(0).stringValue();
+		byte[] greyscale = message.get(1).blobValue();
+		println("got blob of size " + greyscale.length);
+
+		PImage greyscaleImage = decompressImage(greyscale); // Decompress JPEG
+		
 		genderDisplay.setImage(greyscaleImage);
   }
 }

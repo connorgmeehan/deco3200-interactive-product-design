@@ -3,6 +3,7 @@ import java.util.Vector;
 class GenderDisplay {
     StateManager stateManager;
     int uid;
+    String fakeId;
     boolean isMale;
     List<List<PVector>> features;
     List<PShape> shapes;
@@ -18,9 +19,10 @@ class GenderDisplay {
       stateManager.addState("FINISH", 170);
     }
 
-    void setup(int _uid, boolean _isMale, List<List<PVector>> _features) {
+    void setup(int _uid, String _fakeId, boolean _isMale, List<List<PVector>> _features) {
       stateManager.reset();
       uid = _uid;
+      fakeId = _fakeId;
       isMale = _isMale;
       features = _features;
       shapes = new ArrayList<PShape>();
