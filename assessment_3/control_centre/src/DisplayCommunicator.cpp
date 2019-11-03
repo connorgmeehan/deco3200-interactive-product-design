@@ -103,6 +103,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   lastGreyscale.update();
 
   std::string fakeId = _generateRandomString(16);
+  ofLog() << "Fake ID: " << fakeId;
   
   ofxOscMessage asciiMessage;
   asciiMessage.setAddress("/display/ascii");
@@ -151,8 +152,8 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
 
   ofxOscMessage listMessage;
   listMessage.setAddress("/display/list");
-  listMessage.addStringArg(fakeId);
   listMessage.addInt32Arg(_displayViewModel.uid);
+  listMessage.addStringArg(fakeId);
   _listDisplaySender.sendMessage(listMessage, false);
   ofLog() << "_listDisplaySender.sendMessage() -> to " << _listDisplaySender.getHost() << ":" << _listDisplaySender.getPort();
 }
