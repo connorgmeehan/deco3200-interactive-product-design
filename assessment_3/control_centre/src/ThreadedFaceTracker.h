@@ -8,6 +8,7 @@ struct ThreadedFaceTrackerPayload {
   glm::vec2 position;
   glm::vec3 orientation;
   cv::Mat roi;
+  cv::Mat greyscale;
 };
 
 typedef std::function<void(ThreadedFaceTrackerPayload*)> ThreadedFaceTrackerCallback;
@@ -23,6 +24,8 @@ class ThreadedFaceTracker {
     void setDeliverPayloadCallback(ThreadedFaceTrackerCallback callback);
     void setClearRoiTrackerCallback(std::function<void()> callback);
     void setPadding(int padding);
+    std::vector<ofPolyline> getFaceTrackingFeatures();
+
   private:
     static int _padding;
     static float _maxOrientationDifference;

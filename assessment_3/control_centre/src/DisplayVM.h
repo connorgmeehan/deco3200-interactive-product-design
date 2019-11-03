@@ -18,19 +18,25 @@ struct DisplayVM {
     detectedState(DetectedState::UNKNOWN) { }
 
   bool isReadyToBeSent() {
+    // bool isReady = uid != -1
+    //   && age != -1
+    //   && ascii.length() > 0
+    //   && features.size() > 0
+    //   && emotion.length() > 0
+    //   && detectedState != DetectedState::UNKNOWN
+    //   && greyscale.getHeight() > 0;
+
+    bool isReady = true;
+
     ofLog() << "isReadyToBeSend() " << std::endl
-      << "age: " << age << std::endl
-      << "ascii.length(): " << ascii.length() << std::endl
-      << "features.size(): " << features.size() << std::endl
-      << "emotion.length(): " << emotion.length() << std::endl
-      << "detectedState: " << (detectedState == DetectedState::UNKNOWN ? "UNKOWN"
-        : detectedState == DetectedState::NEW ? "NEW" : "OLD");
-    return uid != -1
-      && age != -1
-      && ascii.length() > 0
-      && features.size() > 0
-      && emotion.length() > 0
-      && detectedState != DetectedState::UNKNOWN;
+      << "\tage: " << age << std::endl
+      << "\tascii.length(): " << ascii.length() << std::endl
+      << "\tfeatures.size(): " << features.size() << std::endl
+      << "\temotion.length(): " << emotion.length() << std::endl
+      << "\tdetectedState: " << (detectedState == DetectedState::UNKNOWN ? "UNKOWN"
+        : detectedState == DetectedState::NEW ? "NEW" : "OLD") << std::endl
+      << "\tisReady: " << ofToString(isReady);
+    return isReady;
   }
 
   DetectedState detectedState;
@@ -40,4 +46,5 @@ struct DisplayVM {
   bool isMale;
   std::string ascii;
   std::string emotion;
+  ofImage greyscale;
 };

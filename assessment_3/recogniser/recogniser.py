@@ -76,7 +76,7 @@ class Recogniser:
 
   def ready_to_decide(self):
     length = len(self.current_metadatas)
-    print("Recogniser.ready_to_decide() -> {0} (length: {1})".format(length >= 3, length))
+    print("Recogniser.ready_to_decide() -> has enough rois: {0} (length: {1})".format(length >= 3, length))
     return length >= 3
 
   def handle_is_new_decision(self):

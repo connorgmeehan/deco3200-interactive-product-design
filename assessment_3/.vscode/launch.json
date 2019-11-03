@@ -2,6 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "env": {
+                "CONTROL_CENTRE_RECIEVER_PORT": "8001",
+                "RECOGNISER_SERVER_PORT": "8002",
+                "RECOGNISER_CLIENT_PORT": "8003",
+                "ASCII_SERVER_PORT": "8004",
+                "ASCII_CLIENT_PORT": "8005",
+                "EMOTION_SERVER_PORT": "8006",
+                "DEMOGRAPHIC_SERVER_PORT": "8007",
+                "VID_OUT_DIR": "/home/connorgm/deco3200-interactive-product-design/assessment_3/webcam_out",
+            }
+        },
+        {
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
@@ -10,9 +27,26 @@
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [
-                {"name": "VID_OUT_DIR", "value": "/home/connorgm/deco3200-interactive-product-design/assessment_3/control_centre/webcam_out"},
-                {"name": "CONTROL_CENTRE_RECIEVER_PORT", "value": "8001"},
-                {"name": "RECOGNISER_SERVER_PORT", "value": "8002"},
+                {
+                    "name": "VID_OUT_DIR",
+                    "value": "/home/connorgm/workspace/deco3200-interactive-product-design/assessment_3/webcam_out"
+                },
+                {
+                    "name": "CONTROL_CENTRE_RECIEVER_PORT",
+                    "value": "8001"
+                },
+                {
+                    "name": "RECOGNISER_SERVER_PORT",
+                    "value": "8002"
+                },
+                {
+                    "name": "ASCII_SERVER_PORT",
+                    "value": "8004"
+                },
+                {
+                    "name": "EMOTION_SERVER_PORT",
+                    "value": "8006"
+                },
             ],
             "externalConsole": false,
             "linux": {

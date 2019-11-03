@@ -23,6 +23,18 @@ void ThreadedFaceTracker::setClearRoiTrackerCallback(std::function<void()> cb) {
   _clearRoiTrackerCallback = cb;
 }
 
+std::vector<ofPolyline> ThreadedFaceTracker::getFaceTrackingFeatures() {
+  std::vector<ofPolyline> retval;
+  retval.resize(ofxFaceTracker::Feature::ALL_FEATURES);
+
+  for(int featureInt = ofxFaceTracker::Feature::LEFT_EYE_TOP; featureInt < ofxFaceTracker::Feature::ALL_FEATURES; featureInt++) {
+    ofxFaceTracker::Feature feature = static_cast<ofxFaceTracker::Feature>(featureInt);
+    retval[featureInt] = _tracker.getImageFeature(feature);
+  }
+
+  return retval;
+}
+
 void ThreadedFaceTracker::setPadding(int padding) {
   _padding = padding;
 }
@@ -46,6 +58,10 @@ void ThreadedFaceTracker::update() {
         
         auto payload = new ThreadedFaceTrackerPayload();
         cvFrame(ofxCv::toCv(_activeRoi)).copyTo(payload->roi);
+        cv::Mat greyscaleCvFrame(cvFrame, ofxCv::toCv(_activeRoi));
+        payload->greyscale = greyscaleCvFrame.clone();
+        cv::cvtColor(payload->greyscale, payload->greyscale, CV_RGB2GRAY);
+        cv::resize(payload->greyscale, payload->greyscale, cv::Size(150, 150));
         payload->position = _tracker.getPosition();
         payload->orientation = _tracker.getOrientation();
 

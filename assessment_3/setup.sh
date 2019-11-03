@@ -18,7 +18,9 @@ echo "Building project..."
 
 echo "1.  Building openFrameworks - creative coding toolkit used for webcam processing / display"
 echo "1a. Cloning openframeworks 0.10.0..."
-git clone --single-branch --branch 0.10.0 --depth 1 --recursive https://github.com/openframeworks/openFrameworks.git --recursive
+wget https://openframeworks.cc/versions/v0.10.1/of_v0.10.1_linux64gcc6_release.tar.gz
+mkdir openFrameworks && tar xfz of_v0.10.1_linux64gcc6_release.tar -C openFrameworks --strip-components 1
+rm ./of_v0.10.1_linux64gcc6_release.tar.gz
 echo "1b. Downloading dependencies"
 if [ $machine == Linux ]; then
   echo "  Patching openFrameworks/libs/openFrameworks/utils/ofConstants.h"
@@ -31,14 +33,6 @@ if [ $machine == Linux ]; then
   /bin/bash ./openFrameworks/scripts/linux/archlinux/install_dependencies.sh
   echo "  Downloading locally dependant libraries..."
   /bin/bash ./openFrameworks/scripts/linux/download_libs.sh
-  echo "  Recompiling POCO libs for OFX Poco..."  
-  cd openFrameworks/scripts/
-  git clone https://github.com/openframeworks/apothecary.git
-  cd apothecary/apothecary
-  ./apothecary update poco
-  cd "$PROJECT_ROOT"
-  rm -rf ./openFrameworks/addons/ofxPoco/libs/poco
-  cp -r ./openFrameworks/scripts/apothecary/poco ./openFrameworks/addons/ofxPoco/libs/poco
 fi
 if [ $machine == Mac ]; then 
   /bin/bash ./openFrameworks/scripts/osx/download_libs.sh
@@ -73,7 +67,7 @@ echo "2c. Installing opencv 3.4 into ./control_centre/bin/libs"
 make install
 echo "2d. Copying shared objects to project"
 cd "$PROJECT_ROOT"
-cp ./openFrameworks/addons/ofxOpenCv/libs/lib ./control_centre/bin/lib
+cp ./openFrameworks/addons/ofxOpenCv/libs/opencv/lib ./control_centre/bin/lib
 echo "2e. Replacing ofxOpenCv config makefile to use locally installed openCV version"
 cp ./custom_addon_config.mk ./openFrameworks/addons/ofxOpenCv/addon_config.mk
 cp -r ./openFrameworks/addons/ofxOpenCv/libs/opencv/lib ./control_centre/bin/lib
@@ -108,7 +102,56 @@ source env/bin/activate
 
 pip install face_recognition
 pip install pillow
-echo "5b. Done, leaving Recogniser venv"
+pip install python-osc
+echo "4x. Done, leaving Recogniser environment..."
+deactivate
+cd "$PROJECT_ROOT"
+
+echo "5. pyasciigen - Converts images into ASCII art"
+cd ascii_gen
+echo "5a. Cloning asciigen..."
+git clone https://github.com/ajalt/pyasciigen
+echo "5b. Building virtual environment..."
+python -m venv env
+source env/bin/activate
+echo "5c. Downloading dependencies for virtual environment..."
+pip install numpy
+pip install pillow
+pip install python-osc
+echo "5d. Done, leaving pyascii gen environment..."
+deactivate
+
+cd "$PROJECT_ROOT"
+
+
+
+
+echo "6. Emotion detector"
+echo "6a. Building venv (virtual python environment to install modules locally)..."
+cd emotion_detector
+python -m venv env
+source env/bin/activate
+pip install keras numpy 
+
+echo "6b. Done, leaving Emotion detector venv"
+deactivate
+cd "$PROJECT_ROOT"
+
+echo "6. Demographic detector"
+echo "6a. Building venv (virtual python environment to install modules locally)..."
+cd demographics
+python3.6 -m venv env
+source env/bin/activate
+pip install -r requirements.txt 
+git clone https://github.com/dandynaufaldi/Agendernet
+cd Agendernet
+patch -p1 < ../patch.diff
+cd model/weight
+wget https://github.com/JonathanCMitchell/mobilenet_v2_keras/releases/download/v1.1/mobilenet_v2_weights_tf_dim_ordering_tf_kernels_1.0_96_no_top.h5
+cd "$PROJECT_ROOT/demographics"
+cp -r Agendernet/model ./model
+cp -r Agendernet/utils ./utils
+echo "6b. Done, leaving Demographic detector venv"
 deactivate
 cd "$PROJECT_ROOT"
 
