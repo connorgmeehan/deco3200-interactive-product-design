@@ -30,6 +30,7 @@ class DemographicCommunicator:
 
         finished = False
         while not finished:
+            sleep(0.002)
             osc_process()    
         osc_terminate()
 

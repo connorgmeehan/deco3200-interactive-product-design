@@ -1,3 +1,4 @@
+from time import sleep
 
 from osc4py3.as_eventloop import *
 from osc4py3 import oscmethod as osm
@@ -24,6 +25,7 @@ class AsciiCommunicator:
     self.map_handlers()
     finished = False
     while not finished:
+      sleep(0.002)
       osc_process()
     osc_terminate()
 
