@@ -4,7 +4,7 @@ class BoxVisual {
     int lineWidth = 1;
     color lineColor = color(255, 255);
     color fillColor = color(0, 0);
-    float sideLength = 0.0f;
+    float sideLength = 1.0f;
     
     BoxVisual(int _x, int _y, int _width, int _height) {
         v1 = new PVector(_x, _y);
