@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 int count = 0;
-String f = "main_fasce.txt";
+String f = "main_face.txt";
 PFont font;
 
 int facesNum = 8;
@@ -51,7 +51,7 @@ void setup() {
 void draw() {
   count++;
   for (int i = 0; i < faces.length; i++) {
-    faces[i].drawText();
+    faces[i].drawTextByLine(1.0f);
   }
 }
 

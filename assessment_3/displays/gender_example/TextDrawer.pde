@@ -5,10 +5,7 @@ class TextDrawer {
   color c;
   PFont font;
   float fontSize;
-  //String typewrite;
-
-  int counter = 0;
-
+  
   TextDrawer(String[] _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
     toDisplay = _toDisplay;
     x = _x;
@@ -19,25 +16,12 @@ class TextDrawer {
     font = _font;
   }
 
-  void drawText() {
-    int currentY = y;
+  void drawTextByLine(float progress) {
+    int progressIndex = int(float(toDisplay.length) * progress);
     fill(c);
     textFont(font, fontSize);
-    for (int i = 0; i < toDisplay.length; i++) {
-      if (i < count) {
-        text("" + toDisplay[i] + "", x, currentY);
-      }
-      currentY += lineSpacing;
-    }
-  }
-
-
-  void typewriter() {
-    fill(c);
-    textFont(font, fontSize);
-    if (counter < toDisplay[0].length() ) { 
-      counter++;
-      text(toDisplay[0].substring(0, counter), x, y);
+    for (int i = 0; i < progressIndex; i++) {
+      text("" + toDisplay[i] + "", x, y + i * lineSpacing);
     }
   }
 }

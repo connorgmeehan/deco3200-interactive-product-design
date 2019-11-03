@@ -5,9 +5,7 @@ class TextDrawer {
   color c;
   PFont font;
   float fontSize;
-  //String typewrite;
-  color secondColor = color(255, 255);
-
+  
   TextDrawer(String _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
     toDisplay = loadStrings( _toDisplay);
     x = _x;
@@ -16,10 +14,6 @@ class TextDrawer {
     lineSpacing = _lineSpacing;
     fontSize = _fontSize;
     font = _font;
-  }
-
-  void setSecondColor(color _color) {
-    secondColor = _color;
   }
 
   void drawTextByLine(float progress) {
