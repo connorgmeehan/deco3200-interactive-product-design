@@ -1,12 +1,12 @@
 #include "RoiManager.h"
 
-void RoiManager::setup(int triggerLimit) {
-  communicator.setup();
+void RoiManager::setup(AlgorithmCommunicator* pCommunicator, int triggerLimit) {
+  communicator = pCommunicator;
   _triggerLimit = triggerLimit;
 }
 
 void RoiManager::update() {
-  communicator.update();
+  communicator->update();
   if(_rois.size() > _triggerLimit) {
     clear();
   }
@@ -31,12 +31,16 @@ void RoiManager::handleFaceTrackerPayload(ThreadedFaceTrackerPayload* pPayload) 
   ofxCv::toOf(pPayload->roi, temp);
   temp.update();
   _rois.push_back(temp);
-  communicator.sendRoi(_currentId, temp);
+  
+  ofImage tempGrayscale;
+  ofxCv::toOf(pPayload->greyscale, tempGrayscale);
+  
+  communicator->sendRoi(_currentId, temp, tempGrayscale);
 }
 
 void RoiManager::clear() {
   if(_rois.size() > 0) {
-    communicator.clearRois();
+    communicator->clearRois();
     _currentId++; // update ID so each batch of images has a unique identifier
   }
   _rois.clear();

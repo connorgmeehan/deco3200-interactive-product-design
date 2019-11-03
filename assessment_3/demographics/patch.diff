@@ -1,0 +1,26 @@
+diff --git a/model/mobilenetv2.py b/model/mobilenetv2.py
+index c23b8fe..25317c0 100644
+--- a/model/mobilenetv2.py
++++ b/model/mobilenetv2.py
+@@ -2,7 +2,7 @@ import numpy as np
+ import os
+ from keras.models import Model
+ from keras.layers import Dense, GlobalAveragePooling2D
+-from keras.applications.mobilenetv2 import MobileNetV2
++from keras.applications.mobilenet_v2 import MobileNetV2
+ from keras.utils import plot_model
+ 
+ 
+diff --git a/video.py b/video.py
+index aa391a6..83cd93a 100644
+--- a/video.py
++++ b/video.py
+@@ -66,7 +66,7 @@ def main():
+             age = tracker.smooth_age()
+             gender = 'M' if tracker.smooth_gender() == 1 else 'F'
+             cv2.putText(frame, "id: {} {} {}".format(tracker.id, gender, age),
+-                        (left - 10, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 255, 0), 2)
++                        (left - 10, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+         cv2.putText(frame, "{:.1f} FPS".format(fps.fps()), (1100, 50),
+                     cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+         cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)

@@ -8,7 +8,7 @@
 
 class RoiManager {
   public:
-    void setup(int triggerLimit);
+    void setup(AlgorithmCommunicator* pCommunicator, int triggerLimit);
     void update();
     void draw();
     
@@ -19,7 +19,7 @@ class RoiManager {
     ThreadedFaceTrackerCallback getFaceTrackerCallback();
     std::function<void()> getClearRoiCallback();
   private:
-		AlgorithmCommunicator communicator;
+		AlgorithmCommunicator* communicator;
 
     std::function<void(uint64_t, ofImage&)> sendRoiCallback;
     uint64_t _currentId = 0;  // Stores unique identifier for each user (to remember their face by)
