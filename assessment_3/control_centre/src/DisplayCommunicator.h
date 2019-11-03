@@ -20,6 +20,7 @@ class DisplayCommunicator {
 		void _trySendModelToDisplays();
     void _sendModel(DisplayVM& viewModel);
     std::string _encodePolyline(ofPolyline & polyline);
+    std::string _generateRandomString(int length);
 
 		DisplayVM _displayViewModel;
 

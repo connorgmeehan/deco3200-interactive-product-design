@@ -101,10 +101,13 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   
   lastGreyscale.setFromPixels((const unsigned char *) greyscaleBuffer.getData(), 150, 150, ofImageType::OF_IMAGE_GRAYSCALE);
   lastGreyscale.update();
+
+  std::string fakeId = _generateRandomString(16);
   
   ofxOscMessage asciiMessage;
   asciiMessage.setAddress("/display/ascii");
   asciiMessage.addInt32Arg(_displayViewModel.uid);
+  asciiMessage.addStringArg(fakeId);
   asciiMessage.addStringArg(_displayViewModel.ascii);
   _asciiDisplaySender.sendMessage(asciiMessage, false);
   ofLog() << "_asciiDisplaySender.sendMessage() -> to " << _asciiDisplaySender.getHost() << ":" << _asciiDisplaySender.getPort();
@@ -112,6 +115,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofxOscMessage faceMessage;
   faceMessage.setAddress("/display/face");
   faceMessage.addInt32Arg(_displayViewModel.uid);
+  faceMessage.addStringArg(fakeId);
   faceMessage.addInt32Arg(_displayViewModel.age);
   for(auto & feature : encodedFeatures) {
     faceMessage.addStringArg(feature);
@@ -122,6 +126,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofxOscMessage genderMessage;
   genderMessage.setAddress("/display/gender");
   genderMessage.addInt32Arg(_displayViewModel.uid);
+  genderMessage.addStringArg(fakeId);
   genderMessage.addBoolArg(_displayViewModel.isMale);
   for(auto & feature : encodedFeatures) {
     genderMessage.addStringArg(feature);
@@ -131,7 +136,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
 
   ofxOscMessage genderImageMessage;
   genderImageMessage.setAddress("/display/img");
-  genderMessage.addInt32Arg(_displayViewModel.uid);
+  genderImageMessage.addInt32Arg(_displayViewModel.uid);
   genderImageMessage.addBlobArg(greyscaleBuffer);  
   _genderDisplaySender.sendMessage(genderImageMessage, false);
   ofLog() << "_genderDisplaySender.sendImageMessage() -> to " << _genderDisplaySender.getHost() << ":" << _genderDisplaySender.getPort();
@@ -139,12 +144,14 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofxOscMessage emotionMessage;
   emotionMessage.setAddress("/display/emotion");
   emotionMessage.addInt32Arg(_displayViewModel.uid);
+  emotionMessage.addStringArg(fakeId);
   emotionMessage.addStringArg(_displayViewModel.emotion);
   _emotionDisplaySender.sendMessage(emotionMessage, false);
   ofLog() << "_emotionDisplaySender.sendMessage() -> to " << _emotionDisplaySender.getHost() << ":" << _emotionDisplaySender.getPort();
 
   ofxOscMessage listMessage;
   listMessage.setAddress("/display/list");
+  listMessage.addStringArg(fakeId);
   listMessage.addInt32Arg(_displayViewModel.uid);
   _listDisplaySender.sendMessage(listMessage, false);
   ofLog() << "_listDisplaySender.sendMessage() -> to " << _listDisplaySender.getHost() << ":" << _listDisplaySender.getPort();
@@ -157,4 +164,17 @@ std::string DisplayCommunicator::_encodePolyline(ofPolyline & polyline) {
   }
   polylineBuffer.pop_back();
   return polylineBuffer;
+}
+
+std::string DisplayCommunicator::_generateRandomString(int length) {
+  static const char alphanum[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+  std::string retval;
+  retval.resize(length);
+  for(int i = 0; i < length; i++) {
+    retval[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+  }
+  return retval;
 }
