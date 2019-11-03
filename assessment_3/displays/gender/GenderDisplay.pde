@@ -11,12 +11,17 @@ class GenderDisplay {
     PImage image;
     boolean hasImage;
 
+    BoxVisual faceBox;
+
     GenderDisplay() {
       stateManager = new StateManager();
       stateManager.addState("START_UID", 50);
       stateManager.addState("DRAW_FACE", 70);
       stateManager.addState("DRAW_GENDER", 150);
       stateManager.addState("FINISH", 170);
+
+      faceBox = new BoxVisual(200, 200, 400, 400);
+      faceBox.setGap(0.0);
     }
 
     void setup(int _uid, String _fakeId, boolean _isMale, List<List<PVector>> _features) {
@@ -67,8 +72,8 @@ class GenderDisplay {
 
       float rectangleProgress = stateManager.getProgressOfState("START_UID");
       if(rectangleProgress > 0.0f) {
-        fill(255, 0, 0);
-        rect(0, 0, 50, float(250) * rectangleProgress);
+        faceBox.setGap(1.0f - rectangleProgress);
+        faceBox.draw();
       }
       
       float featureProgress = stateManager.getProgressOfState("DRAW_FACE"); // progress of text ranging from 0.0 to 1.0
