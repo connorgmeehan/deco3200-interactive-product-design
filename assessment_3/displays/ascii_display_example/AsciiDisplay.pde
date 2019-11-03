@@ -1,77 +1,95 @@
+import java.util.Arrays;
+import java.util.List;
+
 class AsciiDisplay {
+    List<List<String>> faces = new ArrayList<List<String>>();
 
     TextDrawer firstLines, startingText, startingTextOK, mainFace, 
-    faceA, faceB, faceC, faceD, faceE, faceF, faceG, faceH;
+    faceA, faceB, faceC, faceD, faceE, faceF, faceG, faceH,
+    personDetect, personDetectOk, confidenceCheck;
 
     StateManager stateManager;
 
-    String firstLine = "sudo /etc/init.d/dbus restart";
     PFont font, font2;
-    //String f, f2 = "starting.txt";
-    //String f2 = "starting2.txt";
-
-    int count = 0;
-
-    int yPos_main = 200, xPos_main;
-    int yPos_other, xPos_other;
 
     String[] cursor = {"/", "+", "."}; 
-
-    int counter = 0;
-    int counter2 = 0;
-    int counter3 = 0;
-
-    int reverseCounter;
-    int stringCount;
-    int ypos;
 
     color BLACK = 0;
     color GREEN = #6FCF97;
     color BLUE = #0029F3;
     color WHITE = 255;
 
-    boolean blinkOn;
-    String nextChar;
-
     AsciiDisplay() {
+        String[][] facesArray = new String[][] {
+            loadStrings("main_face.txt"),
+            loadStrings("face_A.txt"),
+            loadStrings("face_B.txt"),
+            loadStrings("face_C.txt"),
+            loadStrings("face_D.txt"),
+            loadStrings("face_E.txt"),
+            loadStrings("face_F.txt"),
+            loadStrings("face_G.txt"),
+            loadStrings("face_H.txt"),
+        };
+
+        for (int i = 0; i < facesArray.length; i++) {
+            faces.add(Arrays.asList(facesArray[i]));
+        }
+
         font = loadFont("Menlo-Regular-5.vlw");
         font2 = loadFont("IBMPlexMono-18.vlw");
         frameRate(20);
         stateManager = new StateManager();
         stateManager.addState("INITIAL", 0);
-        stateManager.addState("STARTING_LINES", 50);
-        stateManager.addState("MAIN_FACE", 100);
-        stateManager.addState("SUB_FACES_TOP", 150);
-        stateManager.addState("SUB_FACES_BOTTOM", 170);
-        stateManager.addState("SUB_FACES_WHITE_1", 190);
-        stateManager.addState("SUB_FACES_WHITE_2", 195);
-        stateManager.addState("SUB_FACES_WHITE_3", 200);
-        stateManager.addState("SUB_FACES_WHITE_4", 205);
-        stateManager.addState("END", 210);
+        stateManager.addState("FIRST_LINE", 5);
+        stateManager.addState("STARTING_LINES", 10);
+        stateManager.addState("MAIN_FACE", 15);
+        stateManager.addState("SUB_FACES_TOP", 20);
+        stateManager.addState("SUB_FACES_BOTTOM", 25);
+        stateManager.addState("SUB_FACES_WHITE_1", 30);
+        stateManager.addState("SUB_FACES_WHITE_2", 35);
+        stateManager.addState("SUB_FACES_WHITE_3", 40);
+        stateManager.addState("SUB_FACES_WHITE_4", 45);
+        stateManager.addState("PERSON_DETECT", 50);
+        stateManager.addState("PAUSE", 60);
+        stateManager.addState("CONFIDENCE_CHECK", 70);
+        stateManager.addState("END", 80);
 
-        
-        firstLines = new TextDrawer(loadStrings("firstLine.txt"), 75, 50, #6FCF97, 0, font2, 14);
+        firstLines = new TextDrawer(loadStrings("firstLine.txt"), 70, 75, WHITE, 10, font2, 14);
+        firstLines.setCaretColor(#6FCF97);
         startingText = new TextDrawer(loadStrings("starting.txt"), 70, 100, 255, 10, font2, 14);
         startingTextOK = new TextDrawer(loadStrings("starting2.txt"), 70, 100, GREEN, 10, font2, 14);
-        mainFace = new TextDrawer(loadStrings("main_face.txt"), 525, 370, 255, 5, font, 4);
-        faceA = new TextDrawer(loadStrings("face_A.txt"), 100,  370, WHITE, 2, font, 1.5);
-        faceB = new TextDrawer(loadStrings("face_B.txt"), 325,  370, WHITE, 2, font, 1.5);
-        faceC = new TextDrawer(loadStrings("face_C.txt"), 975,  370, WHITE, 2, font, 1.5);
-        faceD = new TextDrawer(loadStrings("face_D.txt"), 1200, 370, WHITE, 2, font, 1.5);
-        faceE = new TextDrawer(loadStrings("face_E.txt"), 100,  605, WHITE, 2, font, 1.5);
-        faceF = new TextDrawer(loadStrings("face_F.txt"), 325,  605, WHITE, 2, font, 1.5);
-        faceG = new TextDrawer(loadStrings("face_G.txt"), 975,  605, WHITE, 2, font, 1.5);
-        faceH = new TextDrawer(loadStrings("face_H.txt"), 1200, 605, WHITE, 2, font, 1.5);
+        mainFace = new TextDrawer(faces.get(0), 525, 370, 255, 5, font, 4);
+        faceA = new TextDrawer(faces.get(1), 100,  370, WHITE, 2, font, 1.5);
+        faceB = new TextDrawer(faces.get(2), 325,  370, WHITE, 2, font, 1.5);
+        faceC = new TextDrawer(faces.get(3), 975,  370, WHITE, 2, font, 1.5);
+        faceD = new TextDrawer(faces.get(4), 1200, 370, WHITE, 2, font, 1.5);
+        faceE = new TextDrawer(faces.get(5), 100,  605, WHITE, 2, font, 1.5);
+        faceF = new TextDrawer(faces.get(6), 325,  605, WHITE, 2, font, 1.5);
+        faceG = new TextDrawer(faces.get(7), 975,  605, WHITE, 2, font, 1.5);
+        faceH = new TextDrawer(faces.get(8), 1200, 605, WHITE, 2, font, 1.5);
+        personDetect = new TextDrawer(loadStrings("newPersonDetect.txt"), 70, 300, WHITE, 10, font2, 14);
+        personDetect.setCaretColor(GREEN);
+        personDetectOk = new TextDrawer(loadStrings("newPersonDetect_OK.txt"), 70, 300, GREEN, 10, font2, 14);
 
-        blinkOn = true;
+        confidenceCheck = new TextDrawer(loadStrings("confidenceCheck.txt"), 70, 312, WHITE, 10, font2, 14);
+        confidenceCheck.setCaretColor(GREEN);
+
+    }
+
+    void setup(String fakeId, String[] newFace) {
+        faces.add(0, Arrays.asList(newFace));
+        faces.remove(faces.size() - 1);
+        stateManager.reset();
     }
 
     void draw() {
         background(#06090B);
         stateManager.incrementFrame();
 
-        // typewriteText(firstLine, 75, 50); 
         blendMode(BLEND);
+        float firstLinesProgress = stateManager.getProgressOfState("FIRST_LINE");
+        firstLines.drawTextByChar(firstLinesProgress, stateManager.getState().equals("FIRST_LINE")); 
         // Starting lines
         float startingLinesProgress = stateManager.getProgressOfState("STARTING_LINES");
         startingText.drawTextByLine(startingLinesProgress);
@@ -133,6 +151,19 @@ class AsciiDisplay {
             rect(faceE.x, faceE.y - 2 + subfaceWhite4Progress * 200, 200, 200 - subfaceWhite4Progress * 200);
         }
 
+        blendMode(BLEND);
+
+        float personDetectProgress = stateManager.getProgressOfState("PERSON_DETECT");
+        personDetect.drawTextByChar(personDetectProgress, stateManager.getState().equals("PERSON_DETECT"));
+        personDetectOk.drawTextByChar(personDetectProgress, false);
+        
+        float confidenceCheckProgress = stateManager.getProgressOfState("CONFIDENCE_CHECK");
+        if(confidenceCheckProgress > 0.89) {
+            fill(BLUE);
+            rect(confidenceCheck.x + 49 * 12 * 0.628, confidenceCheck.y - 12, 12 * 0.62 * 4, 15);
+        }
+        confidenceCheck.drawTextByChar(confidenceCheckProgress, stateManager.getState().equals("CONFIDENCE_CHECK"));
+        
         stateManager.drawDebug();
     }
 }
