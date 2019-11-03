@@ -15,19 +15,16 @@ class EllipseDrawer {
   }
 
   void draw() {
-    // void draw(float progress) {
-    // int progressIndex = int(float(toDisplay.length) * progress);
     fill(#DC3F36);
-    textFont(font, 10);
+    textFont(font2, 16);
     if (drawAbove) {
         text(label, x, y-50);
     } else {
         text(label, x, y+50);
     }
-    // for (int i = 0; i < 1; i++) {
       noFill();
+      strokeWeight(4);
       stroke(c);
-      dash.ellipse(x, y, 50, 50);
-    // }
+      dash.ellipse(x, y, 30, 30);
   }
 }
