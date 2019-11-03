@@ -103,10 +103,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   lastGreyscale.update();
 
   std::string fakeId = _generateRandomString(16);
-<<<<<<< HEAD
-=======
   ofLog() << "Fake ID: " << fakeId;
->>>>>>> master
   
   ofxOscMessage asciiMessage;
   asciiMessage.setAddress("/display/ascii");
