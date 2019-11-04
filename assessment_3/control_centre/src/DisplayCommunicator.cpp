@@ -111,7 +111,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   asciiMessage.addStringArg(fakeId);
   asciiMessage.addStringArg(_displayViewModel.ascii);
   _asciiDisplaySender.sendMessage(asciiMessage, false);
-  ofLog() << "_asciiDisplaySender.sendMessage() -> to " << _asciiDisplaySender.getHost() << ":" << _asciiDisplaySender.getPort();
+  ofLog() << "_asciiDisplaySender.sendMessage() -> to " << _asciiDisplaySender.getHost() << ":" << _asciiDisplaySender.getPort() << " ascii.length() " << _displayViewModel.ascii.length();
 
   ofxOscMessage faceMessage;
   faceMessage.setAddress("/display/face");
