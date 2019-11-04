@@ -1,5 +1,5 @@
 class ListDisplayElement {
-    int id = 23456789;
+    String id = "1234567890";
     String location = "rdtgvhbjknml";
     String datetime = "02-02-2019 06:11";
     int age = 26;
@@ -39,13 +39,13 @@ class ListDisplayElement {
         text(socialScore, x+750, y);     
     }
 
-    void setData(int _id, String _location, String _datetime, int _age, String _sex, String _emotion, float _socialScore) {
-        id = _id;
-        location = _location;
-        datetime = _datetime;
+    void setData(String _fakeId, int _age, String _sex, String _emotion) {
+        id = _fakeId;
+        location = "4RRH456R+HR";
+        datetime = year() + "" + month() + "" + day() + " " + hour() + ":" + minute();
         age = _age;
         sex = _sex;
         emotion = _emotion;
-        socialScore = _socialScore;
+        socialScore = float(round(random(0, 100) * 10))/10 ;
     }
 }

@@ -13,11 +13,9 @@ class ListDisplay {
         font = loadFont("IBMPlexMono-18.vlw");
     }
 
-    void setup() {
-         
-        
+    void setup(int _uid, String _fakeId, int _age, String _sex, String _emotion) {
         ListDisplayElement el = new ListDisplayElement(50, 300, 50, font, 16, 200, 255);
-        
+        el.setData(_fakeId, _age, _sex, _emotion);
         listElements.add(el);
         while(listElements.size() > maxSize) {
             listElements.remove(0);
@@ -36,10 +34,5 @@ class ListDisplay {
         for(int i = 0; i < listElements.size(); i++) {
             listElements.get(i).draw(i);
         }
-    }
-
-    void addNewListElement() {
-
-        
     }
 }

@@ -153,9 +153,11 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
 
   ofxOscMessage listMessage;
   listMessage.setAddress("/display/list");
-  listMessage.addStringArg(fakeId);
   listMessage.addInt32Arg(_displayViewModel.uid);
   listMessage.addStringArg(fakeId);
+  listMessage.addInt32Arg(_displayViewModel.age);
+  listMessage.addBoolArg(_displayViewModel.isMale);
+  listMessage.addStringArg(_displayViewModel.emotion);
   _listDisplaySender.sendMessage(listMessage, false);
   ofLog() << "_listDisplaySender.sendMessage() -> to " << _listDisplaySender.getHost() << ":" << _listDisplaySender.getPort();
 }

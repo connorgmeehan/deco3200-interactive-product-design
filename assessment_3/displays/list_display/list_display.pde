@@ -23,8 +23,8 @@ void draw() {
     background(0);
 
     tempCount++;
-    if(tempCount > 50) {
-        listDisplay.setup();
+    if(tempCount > 500) {
+        listDisplay.setup(int(random(5000, 10000)), "1234567890", 21, "MALE", "SAD");
     }
 
     listDisplay.draw();
@@ -39,6 +39,11 @@ void oscEvent(OscMessage message) {
     if(message.addrPattern().equals("/display/list")) {
         int uid = message.get(0).intValue();
         String fakeId = message.get(1).stringValue();
-        // listDisplay.setup(uid, fakeId);
+        int age = message.get(2).intValue();
+        String sex = message.addrPattern().charAt(3) == 'T'
+            ? "MALE"
+            : "FEMALE";
+        String emotion = message.get(4).stringValue();
+        listDisplay.setup(uid, fakeId, age, sex, emotion);
     }    
 }
