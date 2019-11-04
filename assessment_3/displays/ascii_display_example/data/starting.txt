@@ -1,0 +1,13 @@
+* Starting system message bus dbus [    ]
+
+* Starting network connection manager NetworkManager [    ]
+
+* Starting network events dispatcher NetworkManagerDispatcher [    ]
+
+* Starting System Tools Backends system-tools-backends [    ]
+
+* Starting Avahi mDNS/DNS-SD Daemon avahi-daemon [    ]
+
+* Starting DHCP D-Bus daemon dhcdbd [    ]
+
+* Starting Hardware abstraction layer haldinvoke-rc.d: initscript hal, action "face_analysis" init

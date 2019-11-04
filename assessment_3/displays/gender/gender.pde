@@ -217,7 +217,7 @@ void oscEvent(OscMessage message) {
       String[] items = blob.split("\\s*,\\s*");
 			for(int j = 0; j < items.length; j+=2) {
 				PVector vec = new PVector(Integer.parseInt(items[j]), Integer.parseInt(items[j+1])); //<>//
-        points.get(i).add(vec); //<>//
+				points.get(i).add(vec); //<>//
       }
     }
 	println("resetting display... done!"); //<>//
