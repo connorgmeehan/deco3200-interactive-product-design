@@ -1,0 +1,4 @@
+sudo /etc/init.d/emotion defragment init
+
+* Get subject obj id [ 601078* ]
+* Map subject obj co-ord /
