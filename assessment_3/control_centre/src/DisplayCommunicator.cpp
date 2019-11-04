@@ -147,6 +147,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   emotionMessage.addInt32Arg(_displayViewModel.uid);
   emotionMessage.addStringArg(fakeId);
   emotionMessage.addStringArg(_displayViewModel.emotion);
+  emotionMessage.addStringArg(_displayViewModel.ascii);
   _emotionDisplaySender.sendMessage(emotionMessage, false);
   ofLog() << "_emotionDisplaySender.sendMessage() -> to " << _emotionDisplaySender.getHost() << ":" << _emotionDisplaySender.getPort();
 
