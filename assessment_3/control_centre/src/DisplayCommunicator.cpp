@@ -153,6 +153,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
 
   ofxOscMessage listMessage;
   listMessage.setAddress("/display/list");
+  listMessage.addStringArg(fakeId);
   listMessage.addInt32Arg(_displayViewModel.uid);
   listMessage.addStringArg(fakeId);
   _listDisplaySender.sendMessage(listMessage, false);

@@ -175,7 +175,7 @@ GenderDisplay genderDisplay;
 OscP5 oscP5;
 
 void setup() {
-  size(400,400);
+  size(1024,768);
   genderDisplay = new GenderDisplay();
   //host = System.getenv("GENDER_DISPLAY_SERVER_ADDR");
   //serverPort = Integer.parseInt(System.getenv("GENDER_DISPLAY_SERVER_PORT"));
