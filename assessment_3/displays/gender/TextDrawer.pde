@@ -56,7 +56,7 @@ class TextDrawer {
     }
   }
 
-  void gettingFeaturesText(float progress) {
+  void drawTextByChar(float progress) {
     drawTextByChar(progress, false);
   }
 

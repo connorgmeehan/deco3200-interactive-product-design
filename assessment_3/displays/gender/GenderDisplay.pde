@@ -14,16 +14,22 @@ class GenderDisplay {
     BoxVisual faceBox;
 
     int terminalFontSize = 12, terminalLineHeight = 18;
-    TextDrawer initTextDrawer;
 
     // Beth
     PFont font;
     AnalysisBar analysisBar1, analysisBar2, analysisBar3;
     color GREEN = #6FCF97;
     color OPAQUE_GREEN = color(111, 207, 151, 51);
+    color BLUE = #0029F3;
 
     int idFontSize = 24;
     int idLineHeight = 32;
+    TextDrawer line1, line2, line3, fakeIdDrawer;
+    String firstLine = "sex(lowconfidence_est) = ";
+    String sexF = "female;";
+    String sexM = "male;";
+    int concatLength = 5;
+    String concatenatedId;
 
     GenderDisplay() {
       stateManager = new StateManager();
@@ -40,19 +46,26 @@ class GenderDisplay {
       faceBox = new BoxVisual(125, 200, 400, 400);
       faceBox.setGap(0.0);
 
-      font = loadFont("IBMPlexMono-18.vlw");
-      initTextDrawer = new TextDrawer(loadStrings("init_text.txt"), 50, 50, 255, terminalLineHeight, font, terminalFontSize);
+      
     }
 
     void setup(int _uid, String _fakeId, boolean _isMale, List<List<PVector>> _features) {
       stateManager.reset();
       uid = _uid;
       fakeId = _fakeId;
+      concatenatedId = fakeId.substring(0, concatLength);
+      
       isMale = _isMale;
       features = _features;
       shapes = new ArrayList<PShape>();
       image = new PImage();
       hasImage = false;
+
+      font = loadFont("IBMPlexMono-18.vlw");
+      line1 = new TextDrawer(firstLine, 150, 175, 255, 0, font, 14);
+      line2 = new TextDrawer(sexF, 365, 175, GREEN, 0, font, 14);
+      line3 = new TextDrawer(sexM, 365, 175, GREEN, 0, font, 14);
+      fakeIdDrawer = new TextDrawer(concatenatedId, 275, 660, 255, 28, font, 28);
 
       float minY = height, maxY = 0, minX = width, maxX = 0;
       // get position of verts
@@ -127,9 +140,6 @@ class GenderDisplay {
     void draw() {
       stateManager.incrementFrame();
 
-      float initTextProgress = stateManager.getProgressOfState("INIT_TEXT");
-      initTextDrawer.drawTextByLine(initTextProgress);
-
       // Drawing box
       float rectangleProgress = stateManager.getProgressOfState("BOX");
       if(rectangleProgress > 0.0f) {
@@ -163,7 +173,7 @@ class GenderDisplay {
         if (bar1Progress > 0.0f && bar1Progress < 1.0f) {
           analysisBar1.setRandomizeBar(true);
           fill(111, 207, 151, random(100, 255));
-          rect(random(125, 450), random(200, 300), random(20, 150), random(20, 80));
+          rect(random(125, 430), random(200, 300), random(20, 150), random(20, 80));
         } else {
           analysisBar1.setRandomizeBar(false);
         }
@@ -172,7 +182,7 @@ class GenderDisplay {
         if (bar2Progress > 0.0f && bar2Progress < 1.0f) {
           analysisBar2.setRandomizeBar(true);
           fill(111, 207, 151, random(100, 255));
-          rect(random(125, 450), random(300, 400), random(20, 150), random(20, 80));
+          rect(random(125, 430), random(300, 400), random(20, 150), random(20, 80));
         } else {
           analysisBar2.setRandomizeBar(false);
         }
@@ -181,7 +191,7 @@ class GenderDisplay {
         if (bar3Progress > 0.0f && bar3Progress < 1.0f) {
           analysisBar3.setRandomizeBar(true);
           fill(111, 207, 151, random(100, 255));
-          rect(random(125, 450), random(400, 500), random(20, 150), random(20, 80));   
+          rect(random(125, 430), random(400, 500), random(20, 150), random(20, 80));   
         } else {
           analysisBar3.setRandomizeBar(false);
         }
@@ -199,14 +209,28 @@ class GenderDisplay {
         }
 
       }
+      
 
       fill(0, 255, 0);
       float emotionProgress = stateManager.getProgressOfState("DRAW_GENDER");
-      if(emotionProgress > 0.5f) {
+      if(emotionProgress > 0.0f) {
+        fill(BLUE);
+        rect(267, 630, 100, 40);
+        fakeIdDrawer.drawTextByChar(triangulateProgress);
+        line1.setCaretColor(GREEN);
+        line1.drawTextByChar(emotionProgress, stateManager.getState().equals("DRAW_GENDER"));    
+      }
+      if(emotionProgress > 0.9f) {
+        
+        
         if(isMale) {
-          text("MALE", 20, 20);
+          // text("MALE", 20, 20);
+          line3.setCaretColor(GREEN);
+          line3.drawTextByChar(emotionProgress, stateManager.getState().equals("DRAW_GENDER"));
         } else {
-          text("FEMALE", 20, 20);
+          line2.setCaretColor(GREEN);
+          line2.drawTextByChar(emotionProgress, stateManager.getState().equals("DRAW_GENDER"));
+          // text("FEMALE", 20, 20);
         }
       }
 
