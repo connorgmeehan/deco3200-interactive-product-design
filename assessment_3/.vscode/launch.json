@@ -27,26 +27,24 @@
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [
-                {
-                    "name": "VID_OUT_DIR",
-                    "value": "/home/connorgm/workspace/deco3200-interactive-product-design/assessment_3/webcam_out"
-                },
-                {
-                    "name": "CONTROL_CENTRE_RECIEVER_PORT",
-                    "value": "8001"
-                },
-                {
-                    "name": "RECOGNISER_SERVER_PORT",
-                    "value": "8002"
-                },
-                {
-                    "name": "ASCII_SERVER_PORT",
-                    "value": "8004"
-                },
-                {
-                    "name": "EMOTION_SERVER_PORT",
-                    "value": "8006"
-                },
+                { "name": "VID_OUT_DIR", "value": "/home/connorgm/workspace/deco3200-interactive-product-design/assessment_3/webcam_out" },
+                { "name": "CONTROL_CENTRE_RECIEVER_PORT","value": "8001" },
+                { "name": "RECOGNISER_SERVER_PORT", "value": "8002" },
+                { "name": "ASCII_SERVER_PORT", "value": "8004" },
+                { "name": "EMOTION_SERVER_PORT", "value": "8006" },
+                { "name": "DEMOGRAPHIC_SERVER_PORT", "value": "8007" },
+                { "name": "ASCII_DISPLAY_SERVER_ADDR", "value": "localhost" },
+                { "name": "ASCII_DISPLAY_SERVER_PORT", "value": "8010" },
+                { "name": "FACE_POINTS_DISPLAY_SERVER_ADDR", "value": "localhost" },
+                { "name": "FACE_POINTS_DISPLAY_SERVER_PORT", "value": "8011" },
+                { "name": "GENDER_DISPLAY_SERVER_ADDR", "value": "localhost" },
+                { "name": "GENDER_DISPLAY_SERVER_PORT", "value": "8012" },
+                { "name": "EMOTION_DISPLAY_SERVER_ADDR", "value": "localhost" },
+                { "name": "EMOTION_DISPLAY_SERVER_PORT", "value": "8013" },
+                { "name": "LIST_DISPLAY_SERVER_ADDR", "value": "localhost" },
+                { "name": "LIST_DISPLAY_SERVER_PORT", "value": "8014" },
+                { "name": "OSC_TEST_SERVER_ADDR", "value": "localhost" },
+                { "name": "OSC_TEST_SERVER_PORT", "value": "8099" },
             ],
             "externalConsole": false,
             "linux": {
