@@ -7,8 +7,6 @@ class ListDisplayElement {
     String emotion = "SURPRISED";
     float socialScore = 23.7;
 
-    String[] table;
-
     int x, y;
     int height;
     PFont font;
@@ -25,30 +23,20 @@ class ListDisplayElement {
         fontSize = _fontSize;
         idColor = _idColor;
         textColor = _textColor;
-
-        table = loadStrings("table.txt");
     }
 
     void draw(int index) {
-        int tableY = 50;
-        fill(255);
-        for (int i = 0; i < table.length; i++) {
-            text(table[i], 50, tableY);
-            tableY+=10;
-        }
-
         int y = 165+index * height;
         textFont(font, fontSize);
         fill(#77E19F);
         text(id, x+18, y);
         fill(#607FED);
-        text(location, x+113, y);
-        text(datetime, x+230, y);
-        text(age, x+375, y);
-        text(sex, x+420, y);
-        text(emotion, x+475, y);
-        text(socialScore, x+575, y);
-       
+        text(location, x+145, y);
+        text(datetime, x+303, y);
+        text(age, x+494, y);
+        text(sex, x+558, y);
+        text(emotion, x+630, y);
+        text(socialScore, x+750, y);     
     }
 
     void setData(int _id, String _location, String _datetime, int _age, String _sex, String _emotion, float _socialScore) {
