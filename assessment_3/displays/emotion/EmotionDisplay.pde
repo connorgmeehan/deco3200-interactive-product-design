@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Arrays;
 import garciadelcastillo.dashedlines.*;
 
@@ -9,14 +10,24 @@ class EmotionDisplay {
     color BLUE = #0029F3;
     color WHITE = 255;
     color RED = #DC3F36;
+    color GREEN = #6FCF97;
 
     int asciiFontSize = 12;
     int asciiLineHeight = 12;
+    int terminalFontSize = 16;
+    int terminalLineSpacing = 20;
+    int idFontSize = 24;
+    int idLineSpacing = 24;
+    int concatLength = 6;
+    TextDrawer preFakeIdDrawer, fakeIdDrawer;
+    String preConcatenatedId, concatenatedId;
 
     TextDrawer faces1, faces2, faces3, faces4, faces5, faces6, faces7, faces8;
     StateManager stateManager;
     EllipseDrawer circleP1, circleP2, circleP3, circleP4, circleP5, circleP6, circleP7, circleP8, circleP9, circleP10, circleP11, circleP12, circleP13, circleP14;
     DashedRectDrawer rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8;
+
+    TextDrawer initialText, resultsText, resultsTextHighlight;
 
     EmotionDisplay(DashedLines _dash) {
         dash = _dash;
@@ -25,19 +36,23 @@ class EmotionDisplay {
         font2 = loadFont("IBMPlexMono-Medium-18.vlw");
 
         stateManager = new StateManager();
-        stateManager.addState("FACE_1_PROGRESS", 0);
-        stateManager.addState("FACE_2_PROGRESS", 10);
-        stateManager.addState("FACE_3_PROGRESS", 20);
-        stateManager.addState("FACE_4_PROGRESS", 30);
-        stateManager.addState("FACE_5_PROGRESS", 40);
-        stateManager.addState("FACE_6_PROGRESS", 50);
-        stateManager.addState("FACE_7_PROGRESS", 60);
-        stateManager.addState("FACE_8_PROGRESS", 70);
-        stateManager.addState("END", 80);
-
+        stateManager.addState("INITIAL_TEXT", 10);
+        stateManager.addState("FACE_1_PROGRESS", 40);
+        stateManager.addState("FACE_2_PROGRESS", 60);
+        stateManager.addState("FACE_3_PROGRESS", 80);
+        stateManager.addState("FACE_4_PROGRESS", 100);
+        stateManager.addState("FACE_5_PROGRESS", 120);
+        stateManager.addState("FACE_6_PROGRESS", 140);
+        stateManager.addState("FACE_7_PROGRESS", 160);
+        stateManager.addState("FACE_8_PROGRESS", 180);
+        stateManager.addState("READING_ASCII", 220);
+        stateManager.addState("PROCESSING_RESULTS", 300);
+        stateManager.addState("FULL_ID", 350);
+        stateManager.addState("END", 370);
     }
 
-    void setup(String fakeId, String[] face) {
+    void setup(String fakeId, String emotion, String[] face) {
+        stateManager.reset();
         // top left (0,0)
         String[] faces1Strings = getStringSegment(face, 0, 0.5, 0, 0.5); 
         faces1 = new TextDrawer(faces1Strings, 825, 150, 255, asciiLineHeight, font2, asciiFontSize);
@@ -62,7 +77,7 @@ class EmotionDisplay {
         // bottom right (3,1)
         String[] faces8Strings = getStringSegment(face, 0.5, 1, 0.5, 1);
         faces8 = new TextDrawer(faces8Strings, 1125, 750, 255, asciiLineHeight, font2, asciiFontSize);
-
+    
         rect1 = new DashedRectDrawer(dash,  825, 150, int(float(faces1Strings[0].length() * asciiFontSize) * 0.61) , faces1Strings.length * asciiLineHeight, WHITE, "P1");
         rect2 = new DashedRectDrawer(dash, 1125, 150, int(float(faces2Strings[0].length() * asciiFontSize) * 0.61) , faces2Strings.length * asciiLineHeight, WHITE, "P2");
         rect3 = new DashedRectDrawer(dash,  825, 350, int(float(faces3Strings[0].length() * asciiFontSize) * 0.61) , faces3Strings.length * asciiLineHeight, WHITE, "P3");
@@ -86,7 +101,37 @@ class EmotionDisplay {
         circleP12 = new EllipseDrawer(dash, random(225, 245), 715, WHITE, "P12", false);
         circleP13 = new EllipseDrawer(dash, random(305, 325), 750, WHITE, "P13", false);
         circleP14 = new EllipseDrawer(dash, random(405, 425), 745, WHITE, "P14", false);
-        
+
+        concatenatedId = fakeId.substring(0, concatLength);
+        preConcatenatedId = fakeId.substring(0, concatLength-2);
+        fakeIdDrawer = new TextDrawer(concatenatedId, 250, 950, WHITE, idLineSpacing, font2, idFontSize);
+        preFakeIdDrawer = new TextDrawer(preConcatenatedId, 250, 950, WHITE, idLineSpacing, font2, idFontSize);
+        println("concatenatedId: "+concatenatedId);
+
+        String[] initialTextString = {
+            "sudo /etc/init.d/emotion defragment init",
+            "",
+            "* Get figure id [ " + preConcatenatedId + "* ]",
+            "* Analysing figure id...",
+        };
+        initialText = new TextDrawer(initialTextString, 50, 50, WHITE, terminalLineSpacing, font2, terminalFontSize); 
+
+        String[] resultsString = {
+            "* emotion_analysis_response:",
+            "    - emotion.type: ",
+            "    - emotion.confidence ",
+            "",
+            "* Appending to ID and passing emotion to HOST_DB...",
+        };
+        resultsText = new TextDrawer(resultsString, 50, 50 + terminalLineSpacing * 4, WHITE, terminalLineSpacing, font2, terminalFontSize);
+        String[] resultsStringHighlight = {
+            "",
+            "                    " + emotion,
+            "                         " + random(50, 100),
+            "",
+            "",
+        };
+        resultsTextHighlight = new TextDrawer(resultsStringHighlight, 50, 50 + terminalLineSpacing * 4, GREEN, terminalLineSpacing, font2, terminalFontSize);
     }
 
     void draw() {
@@ -97,6 +142,9 @@ class EmotionDisplay {
         // Animate dashes with 'walking ants' effect
         dash.offset(dist);
         dist += 1;
+
+        float initialTextProgress = stateManager.getProgressOfState("INITIAL_TEXT");
+        initialText.drawTextByLine(initialTextProgress);
 
         float faces1Progress = stateManager.getProgressOfState("FACE_1_PROGRESS");
         faces1.drawTextByLine(faces1Progress);
@@ -184,6 +232,72 @@ class EmotionDisplay {
             textFont(font2, 22);
             circleP14.draw();
             rect8.draw();
+        }
+
+        // READING ASCII
+        float readingAsciiProgress = stateManager.getProgressOfState("READING_ASCII");
+        if(readingAsciiProgress > 0.0f) {
+            blendMode(MULTIPLY);
+            fill(GREEN);
+            int faceToScan = int(readingAsciiProgress * 8.0f);
+            if(faceToScan > 0) {
+                rect(rect1.x, rect1.y - asciiFontSize, rect1.width, rect1.height);                
+            }  if (faceToScan > 1) {
+                rect(rect2.x, rect2.y - asciiFontSize, rect2.width, rect2.height);
+            }  if (faceToScan > 2) {
+                rect(rect3.x, rect3.y - asciiFontSize, rect3.width, rect3.height);
+            }  if (faceToScan > 3) {
+                rect(rect4.x, rect4.y - asciiFontSize, rect4.width, rect4.height);
+            }  if (faceToScan > 4) {
+                rect(rect5.x, rect5.y - asciiFontSize, rect5.width, rect5.height);
+            }  if (faceToScan > 5) {
+                rect(rect6.x, rect6.y - asciiFontSize, rect6.width, rect6.height);
+            }  if (faceToScan > 6) {
+                rect(rect7.x, rect7.y - asciiFontSize, rect7.width, rect7.height);
+            }  if (faceToScan > 7) {
+                rect(rect8.x, rect8.y - asciiFontSize, rect8.width, rect8.height);
+            }
+        }
+        blendMode(BLEND);
+
+        // PROCESSING RESULTS
+        float processingResultsProgress = stateManager.getProgressOfState("PROCESSING_RESULTS");
+        if(processingResultsProgress > 0.0f) {
+            resultsText.drawTextByLine(processingResultsProgress);
+            resultsTextHighlight.drawTextByLine(processingResultsProgress);
+        }
+
+        // USER ID
+        float fullIdProgress = stateManager.getProgressOfState("FULL_ID");
+        if(fullIdProgress <= 0.0f) {
+            fill(BLUE);
+            if(initialTextProgress > 1/preConcatenatedId.length()) {
+                int textIndex = int(initialTextProgress * float(preConcatenatedId.length()));
+                rect(
+                    250 - idFontSize,
+                    950 - idFontSize - 6,
+                    idFontSize * 2 + float(idFontSize) * float(textIndex) * 0.61,
+                    48
+                );
+            }
+            preFakeIdDrawer.drawTextByChar(initialTextProgress, stateManager.getState().equals("INITIAL_TEXT"));
+            fill(255);
+            text("USERID:", 112, 950);
+        } else if(fullIdProgress > 0.0f) {
+            noStroke();
+            fill(BLUE);
+            if(fullIdProgress > 1/concatenatedId.length()) {
+                int textIndex = int(fullIdProgress * float(concatLength));
+                rect(
+                    250 - idFontSize,
+                    950 - idFontSize - 6,
+                    idFontSize * 2 + float(idFontSize) * float(textIndex) * 0.61,
+                    48
+                );
+            }
+            fakeIdDrawer.drawTextByChar(fullIdProgress, stateManager.getState().equals("FULL_ID"));
+            fill(255);
+            text("NEW USERID:", 50, 950);
         }
     }
 

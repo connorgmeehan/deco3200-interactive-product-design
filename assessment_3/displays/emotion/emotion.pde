@@ -20,7 +20,7 @@ void setup() {
 
 
   emotionDisplay = new EmotionDisplay(dash);
-  emotionDisplay.setup("1234567890123456", loadStrings("main_face.txt"));
+  emotionDisplay.setup("1234567890123456", "SAD", loadStrings("main_face.txt"));
 }
 
 
@@ -39,6 +39,6 @@ void oscEvent(OscMessage message) {
     String ascii = message.get(3).stringValue();
     println("ascii.length" + ascii.length());
     String lines[] = ascii.split("(\r\n|\r|\n)", -1);
-    emotionDisplay.setup(fakeId, lines);
+    emotionDisplay.setup(fakeId, emotion, lines);
   }
 }
