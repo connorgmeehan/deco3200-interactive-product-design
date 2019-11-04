@@ -9,10 +9,10 @@ ListDisplay listDisplay;
 
 void setup() {
     size(1024, 768);
-    // host = System.getenv("LIST_DISPLAY_SERVER_ADDR");
-    // serverPort = Integer.parseInt(System.getenv("LIST_DISPLAY_SERVER_PORT"));
-    host = "localhost";
-    serverPort = 8013;
+    host = System.getenv("LIST_DISPLAY_SERVER_ADDR");
+    serverPort = Integer.parseInt(System.getenv("LIST_DISPLAY_SERVER_PORT"));
+    // host = "localhost";
+    // serverPort = 8013;
     println("Hosting on " + host + ":" + serverPort);
     oscP5 = new OscP5(this, serverPort);
 
