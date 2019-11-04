@@ -184,7 +184,7 @@ void setup() {
   for (PVector[] array : features) {
       featuresList.add(Arrays.asList(array));
   }
-  genderDisplay.setup(-1, "", true, featuresList);
+  genderDisplay.setup(-1, "1234567890123456", true, featuresList);
  
   host = "localhost";
   serverPort = 8012;
