@@ -1,20 +1,21 @@
+import garciadelcastillo.dashedlines.*;
+
 class DashedRectDrawer {
+  DashedLines dash;
   int x, y;
   color c;
   String label;
   
-  
-  DashedRectDrawer(int _x, int _y, color _c, String _label) {
+  DashedRectDrawer(DashedLines _dash, int _x, int _y, color _c, String _label) {
+    dash = _dash;
     x = _x;
     y = _y;
     c = _c;
     label = _label;
-    
   }
 
   void draw() {
       fill(#DC3F36);
-      textFont(font2, 22);
       text(label, x-50, y+ 75);
         
       noFill();
