@@ -155,35 +155,26 @@ void draw() {
     
   if(faces4Progress > 0.15f) {
         circleP5.draw();
-      }
-
-        
+      }       
   if(faces4Progress > 0.3f) {
         circleP6.draw();
       }
-
-
     if(faces4Progress > 0.45f) {
       circleP7.draw();
     }
-
     if(faces4Progress > 0.6f) {
       circleP8.draw();
 
     } 
-
     if(faces4Progress > 0.75f) {
       circleP9.draw();
 
     } 
-
     if(faces4Progress > 0.9f) {
       circleP10.draw();
 
     } 
 
- 
-  
   float faces5Progress = stateManager.getProgressOfState("FACE_5_PROGRESS");
   faces5.drawTextByLine(faces5Progress);
   if(faces5Progress > 0.0f) {
@@ -201,8 +192,6 @@ void draw() {
 
     }
 
-
-
   float faces7Progress = stateManager.getProgressOfState("FACE_7_PROGRESS");
   faces7.drawTextByLine(faces7Progress);
   if(faces7Progress > 0.0f) {
@@ -211,9 +200,6 @@ void draw() {
 
   }
   
-  
-
-  
   float faces8Progress = stateManager.getProgressOfState("FACE_8_PROGRESS");
   faces8.drawTextByLine(faces8Progress);
   if(faces8Progress > 0.0f) {
@@ -221,9 +207,6 @@ void draw() {
     rect8.draw();
 
   }
-  
-  
-
   
 }
 
