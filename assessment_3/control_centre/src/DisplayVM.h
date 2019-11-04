@@ -26,7 +26,7 @@ struct DisplayVM {
     //   && detectedState != DetectedState::UNKNOWN
     //   && greyscale.getHeight() > 0;
 
-    bool isReady = true;
+    bool isReady = ascii.length() > 0;
 
     ofLog() << "isReadyToBeSend() " << std::endl
       << "\tage: " << age << std::endl

@@ -52,8 +52,9 @@ class AsciiCommunicator:
     # If successful
     if im is not None:
       im = cv.normalize(im,None,0,255,cv.NORM_MINMAX)
+      im = cv.bitwise_not(im)
       pil_image = Image.fromarray(im)
-      ascii_string = from_image(pil_image, 100, brightness=None, contrast=3) 
+      ascii_string = from_image(pil_image, 50, brightness=None, contrast=5) 
       self.pass_result_to_client(ascii_string)
 
   def pass_result_to_client(self, ascii_string):

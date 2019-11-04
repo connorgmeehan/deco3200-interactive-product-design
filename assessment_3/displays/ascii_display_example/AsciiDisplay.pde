@@ -4,6 +4,11 @@ import java.util.List;
 class AsciiDisplay {
     List<List<String>> faces = new ArrayList<List<String>>();
 
+    int miniFaceFontSize = 5;
+    int miniFaceLineHeight = 5;
+    int mainFaceFontSize = 13;
+    int mainFaceLineHeight = 13;
+
     TextDrawer firstLines, startingText, startingTextOK, mainFace, 
     faceA, faceB, faceC, faceD, faceE, faceF, faceG, faceH,
     personDetect, personDetectOk, confidenceCheck, confidenceResults, analysisResults, passingResults, closingLambda, fakeIdDrawer;
@@ -70,7 +75,7 @@ class AsciiDisplay {
         personDetect.setCaretColor(GREEN);
         personDetectOk = new TextDrawer(loadStrings("newPersonDetect_OK.txt"), 70, 300, GREEN, 10, font2, 14);
     
-        confidenceCheck = new TextDrawer(loadStrings("confidenceCheck.txt"), 70, 312, WHITE, 10, font2, 14);
+        confidenceCheck = new TextDrawer(loadStrings("confidenceCheck.txt"), 70, 328, WHITE, 10, font2, 14);
         confidenceCheck.setCaretColor(GREEN);
 
         confidenceResults = new TextDrawer(loadStrings("confidenceResults.txt"), 70, 650, WHITE, 10, font2, 14);
@@ -84,15 +89,15 @@ class AsciiDisplay {
         faces.add(0, Arrays.asList(newFace));
         faces.remove(faces.size() - 1);
         stateManager.reset();
-        mainFace = new TextDrawer(faces.get(0), 525, 370, 255, 5, font, 4);
-        faceA = new TextDrawer(faces.get(1), 100,  370, WHITE, 2, font, 1.5);
-        faceB = new TextDrawer(faces.get(2), 325,  370, WHITE, 2, font, 1.5);
-        faceC = new TextDrawer(faces.get(3), 975,  370, WHITE, 2, font, 1.5);
-        faceD = new TextDrawer(faces.get(4), 1200, 370, WHITE, 2, font, 1.5);
-        faceE = new TextDrawer(faces.get(5), 100,  605, WHITE, 2, font, 1.5);
-        faceF = new TextDrawer(faces.get(6), 325,  605, WHITE, 2, font, 1.5);
-        faceG = new TextDrawer(faces.get(7), 975,  605, WHITE, 2, font, 1.5);
-        faceH = new TextDrawer(faces.get(8), 1200, 605, WHITE, 2, font, 1.5);
+        mainFace = new TextDrawer(faces.get(0), 535, 380, 255, mainFaceLineHeight, font2, mainFaceFontSize);
+        faceA = new TextDrawer(faces.get(1), 100,  370, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceB = new TextDrawer(faces.get(2), 325,  370, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceC = new TextDrawer(faces.get(3), 975,  370, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceD = new TextDrawer(faces.get(4), 1200, 370, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceE = new TextDrawer(faces.get(5), 100,  605, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceF = new TextDrawer(faces.get(6), 325,  605, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceG = new TextDrawer(faces.get(7), 975,  605, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
+        faceH = new TextDrawer(faces.get(8), 1200, 605, WHITE, miniFaceLineHeight, font2, miniFaceFontSize);
         resultString = new ArrayList<String>();
         resultString.add("* new_figure_detect:");
         resultString.add("    - figure.id:"+concatenatedId);
@@ -100,7 +105,7 @@ class AsciiDisplay {
         resultString.add("    - figure.confidence: "+(random(30)+70f)+"");
         analysisResults = new TextDrawer(resultString, 70, 800, 255, 20, font2, 14);
         
-        fakeIdDrawer = new TextDrawer(concatenatedId, 554, 800, 255, 28, font2, 28);
+        fakeIdDrawer = new TextDrawer(concatenatedId, 704, 800, 255, 28, font2, 28);
 
         String[] passingResultsString = {"Returning " + concatenatedId + " features to DATABASE_HOST... 200 OK"};
         passingResults = new TextDrawer(passingResultsString, 70, 880, WHITE, 10, font2, 14);
@@ -147,33 +152,34 @@ class AsciiDisplay {
         // Subfaces green overlay
         blendMode(MULTIPLY);
         fill(GREEN);
+        noStroke();
         if(!stateManager.getState().equals("SUB_FACES_WHITE_1")) {
-            rect(faceA.x, faceA.y - 2, 200, 200);
-            rect(faceH.x, faceH.y - 2, 200, 200);
+            rect(faceA.x, faceA.y - 2, 150, 152);
+            rect(faceH.x, faceH.y - 2, 150, 152);
         } else {
             rect(faceA.x, faceA.y - 2 + subfaceWhite1Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
             rect(faceH.x, faceH.y - 2 + subfaceWhite1Progress * 200, 200, 200 - subfaceWhite1Progress * 200);
         }
 
         if(!stateManager.getState().equals("SUB_FACES_WHITE_2")) {
-            rect(faceB.x, faceB.y - 2, 200, 200);
-            rect(faceG.x, faceG.y - 2, 200, 200);
+            rect(faceB.x, faceB.y - 2, 150, 152);
+            rect(faceG.x, faceG.y - 2, 150, 152);
         } else {
             rect(faceB.x, faceB.y - 2 + subfaceWhite2Progress * 200, 200, 200 - subfaceWhite2Progress * 200);
             rect(faceG.x, faceG.y - 2 + subfaceWhite2Progress * 200, 200, 200 - subfaceWhite2Progress * 200);
         }
 
         if(!stateManager.getState().equals("SUB_FACES_WHITE_3")) {
-            rect(faceC.x, faceC.y - 2, 200, 200);
-            rect(faceF.x, faceF.y - 2, 200, 200);
+            rect(faceC.x, faceC.y - 2, 150, 152);
+            rect(faceF.x, faceF.y - 2, 150, 152);
         } else {
             rect(faceC.x, faceC.y - 2 + subfaceWhite3Progress * 200, 200, 200 - subfaceWhite3Progress * 200);
             rect(faceF.x, faceF.y - 2 + subfaceWhite3Progress * 200, 200, 200 - subfaceWhite3Progress * 200);
         }
 
         if(!stateManager.getState().equals("SUB_FACES_WHITE_4")) {
-            rect(faceD.x, faceD.y - 2, 200, 200);
-            rect(faceE.x, faceE.y - 2, 200, 200);
+            rect(faceD.x, faceD.y - 2, 150, 152);
+            rect(faceE.x, faceE.y - 2, 150, 152);
         } else {
             rect(faceD.x, faceD.y - 2 + subfaceWhite4Progress * 200, 200, 200 - subfaceWhite4Progress * 200);
             rect(faceE.x, faceE.y - 2 + subfaceWhite4Progress * 200, 200, 200 - subfaceWhite4Progress * 200);
@@ -197,7 +203,7 @@ class AsciiDisplay {
         fill(BLUE);
         if(confidenceResultsProgress > 1/concatLength) {
             int textIndex = int(confidenceResultsProgress * float(concatLength));
-            rect(525, 762, 28 * 2 + float(28) * float(textIndex) * 0.61, 48);
+            rect(675, 764, 28 * 2 + float(28) * float(textIndex) * 0.61, 48);
         }
         fakeIdDrawer.drawTextByChar(confidenceResultsProgress);
 

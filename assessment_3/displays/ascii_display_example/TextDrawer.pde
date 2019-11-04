@@ -60,16 +60,18 @@ class TextDrawer {
 
   void drawTextByChar(float progress, boolean shouldTypewriterEnd) {
     int progressIndex = int(float(toDisplay[0].length()) * progress);
-    String toDraw = toDisplay[0].substring(0, progressIndex);
-    fill(caretColor);
-    if(shouldTypewriterEnd
-     && ((progress > 0.01 && progress < 0.99)
-     || (millis() % typewriteSpeed) < (typewriteSpeed / 2))) {
-      float blockX = toDraw.length() * fontSize * 0.61 + 2;
-      rect(x + blockX, y - fontSize + 2, fontSize * 0.61, fontSize);
+    if(progressIndex > 0) {
+      String toDraw = toDisplay[0].substring(0, progressIndex);
+      fill(caretColor);
+      if(shouldTypewriterEnd
+      && ((progress > 0.01 && progress < 0.99)
+      || (millis() % typewriteSpeed) < (typewriteSpeed / 2))) {
+        float blockX = toDraw.length() * fontSize * 0.61 + 2;
+        rect(x + blockX, y - fontSize + 2, fontSize * 0.61, fontSize);
+      }
+      fill(c);
+      textFont(font, fontSize);
+      text(toDraw, x, y);
     }
-    fill(c);
-    textFont(font, fontSize);
-    text(toDraw, x, y);
   }
 }
