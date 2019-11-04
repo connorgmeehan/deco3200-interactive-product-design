@@ -18,7 +18,7 @@ class EllipseDrawer {
     fill(#DC3F36);
     textFont(font2, 16);
     if (drawAbove) {
-        text(label, x, y-50);
+        text(label, x, y-40);
     } else {
         text(label, x, y+50);
     }
