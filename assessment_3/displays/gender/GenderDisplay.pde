@@ -22,15 +22,14 @@ class GenderDisplay {
 
     GenderDisplay() {
       stateManager = new StateManager();
-      stateManager.addState("BOX", 50);
-      stateManager.addState("DRAW_VERTS", 70);
-      // stateManager.addState("FULL_BOX", 120);
-      stateManager.addState("DRAW_TRI", 120);
-      stateManager.addState("BAR1_PROGRESS", 150);
-      stateManager.addState("BAR2_PROGRESS", 200);
-      stateManager.addState("BAR3_PROGRESS", 250);
-      stateManager.addState("DRAW_GENDER", 300);
-      stateManager.addState("FINISH", 300);
+      stateManager.addState("BOX", 0);
+      stateManager.addState("DRAW_VERTS", 20); //70
+      stateManager.addState("DRAW_TRI", 50); //120
+      stateManager.addState("BAR1_PROGRESS", 80); //150
+      stateManager.addState("BAR2_PROGRESS", 105); //200
+      stateManager.addState("BAR3_PROGRESS", 120); //250
+      stateManager.addState("DRAW_GENDER", 150); //300
+      stateManager.addState("FINISH", 150); //300
 
       faceBox = new BoxVisual(125, 200, 400, 400);
       faceBox.setGap(0.0);
@@ -123,14 +122,9 @@ class GenderDisplay {
       // Drawing box
       float rectangleProgress = stateManager.getProgressOfState("BOX");
       if(rectangleProgress > 0.0f) {
-        // faceBox.setGap(1.0f - rectangleProgress);
         faceBox.setGap(0.5f);
         faceBox.draw();
-
-     
-       
       }
-      
       
       float featureProgress = stateManager.getProgressOfState("DRAW_VERTS"); // progress of text ranging from 0.0 to 1.0
       if(featureProgress > 0.0f) {
@@ -145,11 +139,8 @@ class GenderDisplay {
             }
           } 
         }
-
-        
       }
 
-      
       // Draw progress bars
       if(featureProgress > 0.5f) {
         analysisBar1.draw();
@@ -162,7 +153,6 @@ class GenderDisplay {
           analysisBar1.setRandomizeBar(true);
           fill(111, 207, 151, random(100, 255));
           rect(random(125, 450), random(200, 300), random(20, 150), random(20, 80));
-
         } else {
           analysisBar1.setRandomizeBar(false);
         }
@@ -172,7 +162,6 @@ class GenderDisplay {
           analysisBar2.setRandomizeBar(true);
           fill(111, 207, 151, random(100, 255));
           rect(random(125, 450), random(300, 400), random(20, 150), random(20, 80));
-
         } else {
           analysisBar2.setRandomizeBar(false);
         }
@@ -181,15 +170,10 @@ class GenderDisplay {
         if (bar3Progress > 0.0f && bar3Progress < 1.0f) {
           analysisBar3.setRandomizeBar(true);
           fill(111, 207, 151, random(100, 255));
-          rect(random(125, 450), random(400, 500), random(20, 150), random(20, 80));
-          
+          rect(random(125, 450), random(400, 500), random(20, 150), random(20, 80));   
         } else {
           analysisBar3.setRandomizeBar(false);
         }
-
-        
-        
-      
 
     float triangulateProgress = stateManager.getProgressOfState("DRAW_TRI"); // progress of text ranging from 0.0 to 1.0
       if(triangulateProgress > 0.0f) {
@@ -204,13 +188,6 @@ class GenderDisplay {
         }
 
       }
-
-      // if(triangulateProgress > 0.5f)
-
-
-
-
-
 
       fill(0, 255, 0);
       float emotionProgress = stateManager.getProgressOfState("DRAW_GENDER");
