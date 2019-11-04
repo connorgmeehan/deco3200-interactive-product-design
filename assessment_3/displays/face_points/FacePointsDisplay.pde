@@ -48,6 +48,8 @@ class FacePointsDisplay {
     }
 
     void setup(String _fakeId, int _age, PVector[][] _points) {
+        state.reset();
+        
         age = _age;
         preConcatId = _fakeId.substring(0, concatIdLength - 2);
         concatId = _fakeId.substring(0, concatIdLength);

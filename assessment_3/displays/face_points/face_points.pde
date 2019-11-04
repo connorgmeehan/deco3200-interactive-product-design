@@ -183,9 +183,8 @@ void oscEvent(OscMessage message) {
     String fakeId = message.get(1).stringValue();
     int age = message.get(2).intValue();
     println(" uid: "+uid);
+    println("decodingPVectors...");
     PVector[][] points = new PVector[][]{
-      decodePVectorString(message.get(1).stringValue()),
-      decodePVectorString(message.get(2).stringValue()),
       decodePVectorString(message.get(3).stringValue()),
       decodePVectorString(message.get(4).stringValue()),
       decodePVectorString(message.get(5).stringValue()),
