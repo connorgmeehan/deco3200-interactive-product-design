@@ -10,6 +10,16 @@ class TextDrawer {
   //String typewrite;
   color caretColor = color(255, 255);
 
+  TextDrawer(String _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
+    toDisplay = new String[]{_toDisplay};
+    x = _x;
+    y = _y;
+    c = _c;
+    lineSpacing = _lineSpacing;
+    fontSize = _fontSize;
+    font = _font;
+  }
+
   TextDrawer(List<String> _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
     String[] toDisplayArray = new String[_toDisplay.size()];
     toDisplay = _toDisplay.toArray(toDisplayArray);
@@ -18,7 +28,8 @@ class TextDrawer {
     c = _c;
     lineSpacing = _lineSpacing;
     fontSize = _fontSize;
-    font = _font;  }
+    font = _font;
+  }
 
   TextDrawer(String[] _toDisplay, int _x, int _y, color _c, int _lineSpacing, PFont _font, float _fontSize) {
     toDisplay = _toDisplay;

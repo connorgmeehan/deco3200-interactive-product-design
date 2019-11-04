@@ -5,6 +5,7 @@ void setup() {
   smooth();
 
   asciiDisplay = new AsciiDisplay();
+  asciiDisplay.setup("1234567890123456", loadStrings("face_B.txt"));
 }
 
 

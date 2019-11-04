@@ -6,7 +6,11 @@ class AsciiDisplay {
 
     TextDrawer firstLines, startingText, startingTextOK, mainFace, 
     faceA, faceB, faceC, faceD, faceE, faceF, faceG, faceH,
-    personDetect, personDetectOk, confidenceCheck;
+    personDetect, personDetectOk, confidenceCheck, confidenceResults, analysisResults, passingResults, closingLambda, fakeIdDrawer;
+
+    List<String> resultString;
+    int concatLength = 4;
+    String concatenatedId;
 
     StateManager stateManager;
 
@@ -53,12 +57,33 @@ class AsciiDisplay {
         stateManager.addState("PERSON_DETECT", 50);
         stateManager.addState("PAUSE", 60);
         stateManager.addState("CONFIDENCE_CHECK", 70);
-        stateManager.addState("END", 80);
+        stateManager.addState("CONFIDENCE_RESULTS", 80);
+        stateManager.addState("PASSING_RESULTS", 120);
+        stateManager.addState("SHUTTING_LAMBDA", 150);
+        stateManager.addState("END", 170);
 
         firstLines = new TextDrawer(loadStrings("firstLine.txt"), 70, 75, WHITE, 10, font2, 14);
         firstLines.setCaretColor(#6FCF97);
         startingText = new TextDrawer(loadStrings("starting.txt"), 70, 100, 255, 10, font2, 14);
         startingTextOK = new TextDrawer(loadStrings("starting2.txt"), 70, 100, GREEN, 10, font2, 14);
+        personDetect = new TextDrawer(loadStrings("newPersonDetect.txt"), 70, 300, WHITE, 10, font2, 14);
+        personDetect.setCaretColor(GREEN);
+        personDetectOk = new TextDrawer(loadStrings("newPersonDetect_OK.txt"), 70, 300, GREEN, 10, font2, 14);
+    
+        confidenceCheck = new TextDrawer(loadStrings("confidenceCheck.txt"), 70, 312, WHITE, 10, font2, 14);
+        confidenceCheck.setCaretColor(GREEN);
+
+        confidenceResults = new TextDrawer(loadStrings("confidenceResults.txt"), 70, 650, WHITE, 10, font2, 14);
+    }
+
+    void setup(String fakeId, String[] newFace) {
+        println("fakeId: "+fakeId);
+        concatenatedId = fakeId.substring(0, concatLength);
+        println("concatenatedId: "+concatenatedId);
+        
+        faces.add(0, Arrays.asList(newFace));
+        faces.remove(faces.size() - 1);
+        stateManager.reset();
         mainFace = new TextDrawer(faces.get(0), 525, 370, 255, 5, font, 4);
         faceA = new TextDrawer(faces.get(1), 100,  370, WHITE, 2, font, 1.5);
         faceB = new TextDrawer(faces.get(2), 325,  370, WHITE, 2, font, 1.5);
@@ -68,19 +93,22 @@ class AsciiDisplay {
         faceF = new TextDrawer(faces.get(6), 325,  605, WHITE, 2, font, 1.5);
         faceG = new TextDrawer(faces.get(7), 975,  605, WHITE, 2, font, 1.5);
         faceH = new TextDrawer(faces.get(8), 1200, 605, WHITE, 2, font, 1.5);
-        personDetect = new TextDrawer(loadStrings("newPersonDetect.txt"), 70, 300, WHITE, 10, font2, 14);
-        personDetect.setCaretColor(GREEN);
-        personDetectOk = new TextDrawer(loadStrings("newPersonDetect_OK.txt"), 70, 300, GREEN, 10, font2, 14);
+        resultString = new ArrayList<String>();
+        resultString.add("* new_figure_detect:");
+        resultString.add("    - figure.id:"+concatenatedId);
+        resultString.add("    - figure.isNew: TRUE");
+        resultString.add("    - figure.confidence: "+(random(30)+70f)+"");
+        analysisResults = new TextDrawer(resultString, 70, 800, 255, 20, font2, 14);
+        
+        fakeIdDrawer = new TextDrawer(concatenatedId, 554, 800, 255, 28, font2, 28);
 
-        confidenceCheck = new TextDrawer(loadStrings("confidenceCheck.txt"), 70, 312, WHITE, 10, font2, 14);
-        confidenceCheck.setCaretColor(GREEN);
+        String[] passingResultsString = {"Returning " + concatenatedId + " features to DATABASE_HOST... 200 OK"};
+        passingResults = new TextDrawer(passingResultsString, 70, 880, WHITE, 10, font2, 14);
+        passingResults.setCaretColor(GREEN);
 
-    }
-
-    void setup(String fakeId, String[] newFace) {
-        faces.add(0, Arrays.asList(newFace));
-        faces.remove(faces.size() - 1);
-        stateManager.reset();
+        String[] closingLambdaString = {"Killing lambba function..."};
+        closingLambda = new TextDrawer(closingLambdaString, 70, 900, WHITE, 10, font2, 14);
+        closingLambda.setCaretColor(GREEN);
     }
 
     void draw() {
@@ -164,6 +192,21 @@ class AsciiDisplay {
         }
         confidenceCheck.drawTextByChar(confidenceCheckProgress, stateManager.getState().equals("CONFIDENCE_CHECK"));
         
+        float confidenceResultsProgress = stateManager.getProgressOfState("CONFIDENCE_RESULTS");
+        analysisResults.drawTextByLine(confidenceResultsProgress);
+        fill(BLUE);
+        if(confidenceResultsProgress > 1/concatLength) {
+            int textIndex = int(confidenceResultsProgress * float(concatLength));
+            rect(525, 762, 28 * 2 + float(28) * float(textIndex) * 0.61, 48);
+        }
+        fakeIdDrawer.drawTextByChar(confidenceResultsProgress);
+
+        float passingProgress = stateManager.getProgressOfState("PASSING_RESULTS");
+        passingResults.drawTextByChar(passingProgress, stateManager.getState().equals("PASSING_RESULTS"));
+        float shuttingProgress = stateManager.getProgressOfState("SHUTTING_LAMBDA");
+        closingLambda.drawTextByChar(shuttingProgress, shuttingProgress > 0.01f);
+        
+
         stateManager.drawDebug();
     }
 }
