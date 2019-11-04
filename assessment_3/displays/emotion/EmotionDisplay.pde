@@ -52,33 +52,42 @@ class EmotionDisplay {
     }
 
     void setup(String fakeId, String emotion, String[] face) {
-        stateManager.reset();
+        stateManager.reset(); //<>// //<>// //<>//
+        println("Building faces (0,0)...");
         // top left (0,0)
-        String[] faces1Strings = getStringSegment(face, 0, 0.5, 0, 0.5); 
+        String[] faces1Strings = getStringSegment(face, 0.1, 0.6, 0.1, 0.6); 
         faces1 = new TextDrawer(faces1Strings, 825, 150, 255, asciiLineHeight, font2, asciiFontSize);
+        println("Building faces (2,0)...");
         // bottom mid left (2,0) 
         String[] faces2Strings = getStringSegment(face, 0.25, 0.75, 0, 0.5); 
         faces2 = new TextDrawer(faces2Strings, 1125, 150, 255, asciiLineHeight, font2, asciiFontSize);
+        println("Building faces (0,1)...");
         // top right (0,1)
-        String[] faces3Strings = getStringSegment(face, 0, 0.5, 0.25, 0.75); 
+        String[] faces3Strings = getStringSegment(face, 0.1, 0.6, 0.25, 0.75); 
         faces3 = new TextDrawer(faces3Strings, 825, 350, 255, asciiLineHeight, font2, asciiFontSize); 
+        println("Building faces (2,1)...");
         //bottom mid right (2,1)
-        String[] faces4Strings = getStringSegment(face, 0, 0.5, 0.5, 1);
+        String[] faces4Strings = getStringSegment(face, 0.1, 0.5, 0.4, 0.9);
         faces4 = new TextDrawer(faces4Strings, 1125, 350, 255, asciiLineHeight, font2, asciiFontSize);
+        println("Building faces (1,0)...");
         // top mid left (1,0)
-        String[] faces5Strings = getStringSegment(face, 0.5, 1.0, 0.25, 0.75); 
+        String[] faces5Strings = getStringSegment(face, 0.4, 0.9, 0.25, 0.75); 
         faces5 = new TextDrawer(faces5Strings, 825, 550, 255, asciiLineHeight, font2, asciiFontSize); 
+        println("Building faces (3,0)...");
         // bottom left (3,0)
-        String[] faces6Strings = getStringSegment(face, 0.5, 1.0, 0, 0.5); 
+        String[] faces6Strings = getStringSegment(face, 0.5, 1, 0.1, 0.6); 
         faces6 = new TextDrawer(faces6Strings, 1125, 550, 255, asciiLineHeight, font2, asciiFontSize);
-        // top mid right (1,1)
-        String[] faces7Strings = getStringSegment(face, 0.5, 1, 0.25, 0.75);
+        println("Building faces 1,1)...");
+        // top mid right (1,1) //<>// //<>// //<>//
+        String[] faces7Strings = getStringSegment(face, 0.4, 0.9, 0.25, 0.75);
         faces7 = new TextDrawer(faces7Strings, 825, 750, 255, asciiLineHeight, font2, asciiFontSize); 
+        println("Building faces (3,1)...");
         // bottom right (3,1)
-        String[] faces8Strings = getStringSegment(face, 0.5, 1, 0.5, 1);
+        String[] faces8Strings = getStringSegment(face, 0.4, 0.9, 0.4, 0.9);
         faces8 = new TextDrawer(faces8Strings, 1125, 750, 255, asciiLineHeight, font2, asciiFontSize);
-    
-        rect1 = new DashedRectDrawer(dash,  825, 150, int(float(faces1Strings[0].length() * asciiFontSize) * 0.61) , faces1Strings.length * asciiLineHeight, WHITE, "P1");
+
+        println("Buildingrects...");
+        rect1 = new DashedRectDrawer(dash,  825, 150, int(float(faces1Strings[0].length() * asciiFontSize) * 0.61) , faces1Strings.length * asciiLineHeight, WHITE, "P1"); //<>// //<>// //<>//
         rect2 = new DashedRectDrawer(dash, 1125, 150, int(float(faces2Strings[0].length() * asciiFontSize) * 0.61) , faces2Strings.length * asciiLineHeight, WHITE, "P2");
         rect3 = new DashedRectDrawer(dash,  825, 350, int(float(faces3Strings[0].length() * asciiFontSize) * 0.61) , faces3Strings.length * asciiLineHeight, WHITE, "P3");
         rect4 = new DashedRectDrawer(dash, 1125, 350, int(float(faces4Strings[0].length() * asciiFontSize) * 0.61) , faces4Strings.length * asciiLineHeight, WHITE, "P4");
@@ -87,12 +96,13 @@ class EmotionDisplay {
         rect7 = new DashedRectDrawer(dash,  825, 750, int(float(faces7Strings[0].length() * asciiFontSize) * 0.61) , faces7Strings.length * asciiLineHeight, WHITE, "P13"); 
         rect8 = new DashedRectDrawer(dash, 1125, 750, int(float(faces8Strings[0].length() * asciiFontSize) * 0.61) , faces8Strings.length * asciiLineHeight, WHITE, "P14");
 
+        println("Building circles...");
         circleP1 = new EllipseDrawer(dash, random(165, 185), random(365, 385), BLUE, "P1", true);
         circleP2 = new EllipseDrawer(dash, random(320, 330), random(415, 435), BLUE, "P2", true); 
         circleP3 = new EllipseDrawer(dash, random(440, 460), random(415, 435), BLUE, "P3", true); 
         circleP4 = new EllipseDrawer(dash, random(590, 610), random(465, 485), BLUE, "P4", true); 
         circleP5 = new EllipseDrawer(dash, random(165, 185), random(440, 460), BLUE, "P5", false); 
-        circleP6 = new EllipseDrawer(dash, random(240, 260), random(465, 480), BLUE, "P6", false); 
+        circleP6 = new EllipseDrawer(dash, random(240, 260), random(465, 480), BLUE, "P6", false);  //<>// //<>// //<>//
         circleP7 = new EllipseDrawer(dash, random(315, 335), random(490, 510), BLUE, "P7", false); 
         circleP8 = new EllipseDrawer(dash, random(440, 460), random(490, 510), BLUE, "P8", false);  
         circleP9 = new EllipseDrawer(dash, random(515, 535), random(515, 535), BLUE, "P9", false); 
@@ -102,12 +112,14 @@ class EmotionDisplay {
         circleP13 = new EllipseDrawer(dash, random(305, 325), 750, WHITE, "P13", false);
         circleP14 = new EllipseDrawer(dash, random(405, 425), 745, WHITE, "P14", false);
 
+        println("Building concat id...");
         concatenatedId = fakeId.substring(0, concatLength);
         preConcatenatedId = fakeId.substring(0, concatLength-2);
         fakeIdDrawer = new TextDrawer(concatenatedId, 250, 950, WHITE, idLineSpacing, font2, idFontSize);
         preFakeIdDrawer = new TextDrawer(preConcatenatedId, 250, 950, WHITE, idLineSpacing, font2, idFontSize);
         println("concatenatedId: "+concatenatedId);
 
+        println("Building initial text...");
         String[] initialTextString = {
             "sudo /etc/init.d/emotion defragment init",
             "",
@@ -116,6 +128,7 @@ class EmotionDisplay {
         };
         initialText = new TextDrawer(initialTextString, 50, 50, WHITE, terminalLineSpacing, font2, terminalFontSize); 
 
+        println("Building result text...");
         String[] resultsString = {
             "* emotion_analysis_response:",
             "    - emotion.type: ",
@@ -302,18 +315,23 @@ class EmotionDisplay {
     }
 
     String[] getStringSegment(String[] _toSegment, float _top, float _bottom, float _left, float _right) {    
+        println("getting string segment");
         int startRow = int(_top * float( _toSegment.length));
         int endRow = int(_bottom * float(_toSegment.length));
 
         ArrayList<String> returnValue = new ArrayList<String>();
-
+        println("\tputting in new arraylist...");
         for (int i = startRow; i < endRow; i++) {
             int startCol = int(_left * float(_toSegment[0].length()));
             int endCol = int(_right * float(_toSegment[0].length()));
+            println("\t\tdefining startCol: " + startCol + ", endCol: " + endCol + " on segment " + _toSegment[i].length());
+            if(_toSegment[i].length() > endCol) {
+                println("\t\tadded to returnValue...");
+                returnValue.add(_toSegment[i].substring(startCol, endCol));
+            }
             // println("getting segment: " + startCol + ", " + endCol + " of: " + _toSegment[i]);
-            returnValue.add(_toSegment[i].substring(startCol, endCol));
         }
-        
+        println("\tconverting back to array...");        
         String[] arrayList = new String[returnValue.size()];
         return arrayList = returnValue.toArray(arrayList);
     }

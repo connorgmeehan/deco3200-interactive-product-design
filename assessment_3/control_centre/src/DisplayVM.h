@@ -18,8 +18,7 @@ struct DisplayVM {
     detectedState(DetectedState::UNKNOWN) { }
 
   bool isReadyToBeSent() {
-    bool isReady = uid != -1
-      && age != -1
+    bool isReady = age != -1
       && ascii.length() > 0
       && features.size() > 0
       && emotion.length() > 0
@@ -35,7 +34,8 @@ struct DisplayVM {
       << "\temotion.length(): " << emotion.length() << std::endl
       << "\tdetectedState: " << (detectedState == DetectedState::UNKNOWN ? "UNKOWN"
         : detectedState == DetectedState::NEW ? "NEW" : "OLD") << std::endl
-      << "\tisReady: " << ofToString(isReady);
+      << "\tgreyscale.getHeight(): " << greyscale.getHeight()
+      << "\tisReady: " << (isReady ? "READY" : "NOT READY");
     return isReady;
   }
 

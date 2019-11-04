@@ -18,7 +18,7 @@ class Recogniser:
     self.current_metadatas = []
 
   def search_from_encoding(self, encoding):
-    print("Recogniser.search_from_encoding()")
+    print("Recogniser.search_from_encoding() len(self.known_face_encodings) : {}".format(len(self.known_face_encodings)))
     metadata = None
     # If we havn't saved any return None
     if len(self.known_face_encodings) == 0:
@@ -28,8 +28,10 @@ class Recogniser:
     best_match_index = np.argmin(face_distances)
     # If it's within the array bounds and passes the threshold, return it
     if len(face_distances) > best_match_index and face_distances[best_match_index] < self.threshold:
+      print("\tfound face...") 
       metadata = self.known_face_metadatas[best_match_index]
       encoding
+    print("\tcomplete...")
     return metadata
 
   def try_find_face(self, roi):
