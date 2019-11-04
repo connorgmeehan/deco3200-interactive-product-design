@@ -149,168 +149,75 @@ PVector[][] features = {
     new PVector(148.722, 226.08), 
   }, 
 };
-int windowWidth = 1024, windowHeight = 768;
-int total = 0;
-int vertToDrawIndex = 0;
 
-float boundingX = 550, boundingY = 150, boundingWidth = 400, boundingHeight = 400;
-float blendRectX = 550, blendRectY = 150;
-float minY = 768, maxY = 0, minX = 1024, maxX = 0;
+import oscP5.*;
 
-int age = 26;
-
-int textY = 120;
-PFont font; 
-String[] lines;
-
-int count = 0;
-int i = 0;
-int yPosText = 0;
-int xPosText = 0;
+OscP5 oscP5;
+FacePointsDisplay fpDisplay;
 
 void setup() {
-  size(1024, 768);
-  frameRate(10);
-  font = loadFont("IBMPlexMono-18.vlw");
-  textFont(font, 16);
-  yPosText = 15;
+  size(1650, 1024);
 
-  lines = loadStrings("face_point_text.txt");
+  String host = System.getenv("FACE_POINTS_DISPLAY_SERVER_ADDR");
+  int serverPort = Integer.parseInt(System.getenv("FACE_POINTS_DISPLAY_SERVER_PORT"));
+  println("Hosting on " + host + ":" + serverPort);
 
-  // position face
-  for (int i = 0; i < features.length; i++) {
-    for (int j = 0; j < features[i].length; j++) {
-      PVector currentVal = features[i][j];
-      total++;
-      minY = constrain(currentVal.y, 0.0f, minY);
-      maxY = constrain(currentVal.y, maxY, (float) windowHeight);
-      minX = constrain(currentVal.x, 0.0f, minX);
-      maxX = constrain(currentVal.x, maxX, (float) windowWidth);
-    }
-  }
+  oscP5 = new OscP5(this, serverPort);
+  fpDisplay = new FacePointsDisplay();
+  fpDisplay.setup("12345678901234567890", 21, features);
+}
 
-  // map face
-  for (int i = 0; i < features.length; i++) {
-    for (int j = 0; j < features[i].length; j++) {
-      PVector currentVal = features[i][j];
-      float newX = map(currentVal.x, minX, maxX, 600, 900);
-      float newY = map(currentVal.y, minY, maxY, 200, 500);
-      features[i][j] = new PVector(newX, newY);
-    }
+void draw() {
+  background(0);
+  fpDisplay.draw();
+}
+
+/* incoming osc message are forwarded to the oscEvent method. */
+void oscEvent(OscMessage message) {
+  /* print the address pattern and the typetag of the received OscMessage */
+  print("### received an osc message.");
+  print(" addrpattern: "+message.addrPattern()); //<>//
+  println(" typetag: "+message.typetag());
+  if(message.addrPattern().equals("/display/face")) {
+    int uid = message.get(0).intValue();
+    String fakeId = message.get(1).stringValue();
+    int age = message.get(2).intValue();
+    println(" uid: "+uid);
+    PVector[][] points = new PVector[][]{
+      decodePVectorString(message.get(1).stringValue()),
+      decodePVectorString(message.get(2).stringValue()),
+      decodePVectorString(message.get(3).stringValue()),
+      decodePVectorString(message.get(4).stringValue()),
+      decodePVectorString(message.get(5).stringValue()),
+      decodePVectorString(message.get(6).stringValue()),
+      decodePVectorString(message.get(7).stringValue()),
+      decodePVectorString(message.get(8).stringValue()),
+      decodePVectorString(message.get(9).stringValue()),
+      decodePVectorString(message.get(10).stringValue()),
+      decodePVectorString(message.get(11).stringValue()),
+      decodePVectorString(message.get(12).stringValue()),
+      decodePVectorString(message.get(13).stringValue()),
+      decodePVectorString(message.get(14).stringValue()),
+      decodePVectorString(message.get(15).stringValue()),
+    };
+
+    println("resetting display... done!"); //<>//
+    fpDisplay.setup(fakeId, age, points);
+    println("resetting display... done!"); //<>//
   }
 }
 
+PVector[] decodePVectorString(String toDecode) {
+  // Split on delim
+  String[] items = toDecode.split("\\s*,\\s*");
 
-String message;
-
-void draw() {
-  background(#06090B);
-  textFont(font, 10);
-  fill(255);
-
-  // START FACE
-
-  textFont(font, 14);
-  vertToDrawIndex++;
-  count++;
-
-  // loop sketch
-  //if (vertToDrawIndex > total) {
-  //  vertToDrawIndex = 0;
-  //}
-
-  int totalIndex = 0;
-
-  // create bounding box around face
-  noFill();
-  stroke(125);
-  strokeWeight(2);
-  rect(boundingX, boundingY, boundingWidth, boundingHeight);
-  strokeWeight(3);
-  stroke(0);
-  line(boundingX + (boundingWidth/5), boundingY, boundingX + (boundingWidth/5*4), boundingY);
-  line(boundingX + (boundingWidth/5), boundingY+boundingHeight, boundingX + (boundingWidth/5*4), boundingY+boundingHeight);
-  line(boundingX, boundingY + (boundingHeight/5), boundingX, boundingY + (boundingHeight/5*4));
-  line(boundingX + boundingWidth, boundingY + (boundingHeight/5), boundingX + boundingWidth, boundingY + (boundingHeight/5*4));
-
-  fill(#F9FFFF);
-  text("age_approx(", 590, textY);
-  text(") = ", 724, textY);
-  fill(#6FCF97);
-  text("value", 683, textY);
-  text(age + ";", 755, textY);
-
-
-  // display code line by line
-  for (int i = 0; i < lines.length; i++) {
-    if (i < count) {
-      fill(#F9FFFF);
-      textFont(font, 10);
-      text("" + lines[i] + "", xPosText+20, yPosText*i);
-    }
+  // Build array list of pvec
+  ArrayList<PVector> points = new ArrayList<PVector>();
+  for(int j = 0; j < items.length; j+=2) {
+    PVector vec = new PVector(Integer.parseInt(items[j]), Integer.parseInt(items[j+1])); //<>//
+    points.add(vec); //<>//
   }
-
-  textFont(font, 14);
-  //if (count > 50) {
-  //   yPosText-=1; 
-  //    }
-
-
-  // iterate through points
-  noStroke();
-  strokeWeight(1);
-  for (int i = 0; i < features.length-1; i++) {
-    //text("["+i+"]", features[i][0].x + i * 5, features[i][0].y - 20);
-    for (int j = 0; j < features[i].length-1; j+=1) {
-      PVector currentVal = features[i][j];
-      PVector nextVert = features[i][j+1];
-
-      totalIndex++;
-
-      noStroke();
-      noFill();
-
-      // loop text point values
-      if (totalIndex == vertToDrawIndex) {
-        fill(255);
-        text("[ ", 808, textY);
-        text("]", 900, textY);
-        text(",", 853, textY);
-        fill(#0029F3);
-        text(round(currentVal.x) + "  " + round(currentVal.y), 824, textY);
-        //println(currentVal);
-      } 
-
-      // draw points and lines
-      if (totalIndex < vertToDrawIndex) {
-        fill(255);
-        ellipse(currentVal.x, currentVal.y, 7, 7);
-        stroke(255);
-        line(currentVal.x, currentVal.y, nextVert.x, nextVert.y);
-
-
-        if (j == features[i].length-2) {
-          ellipse(nextVert.x, nextVert.y, 7, 7);
-          if ( i == 4 || i == 9 || i == 10 || i == 5) {
-            line(nextVert.x, nextVert.y, features[i][0].x, features[i][0].y);
-          }
-        }
-      }
-
-
-
-      // blue glow
-      blendMode(DARKEST);
-      fill(#0029F3);
-      noStroke();
-      rect(blendRectX+1, blendRectY+1, boundingWidth-3, boundingHeight/10);
-      blendRectY = blendRectY + 0.2;
-      blendMode(NORMAL);
-
-      // reset blue glow
-      if (blendRectY >= 483) {
-        blendRectY = 150;
-      }
-    }
-  }
+  // Convert to array
+  PVector[] retval = new PVector[points.size()];
+  return points.toArray(retval);
 }
