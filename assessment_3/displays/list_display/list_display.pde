@@ -22,11 +22,6 @@ void setup() {
 void draw() {
     background(0);
 
-    tempCount++;
-    if(tempCount > 500) {
-        listDisplay.setup(int(random(5000, 10000)), "1234567890", 21, "MALE", "SAD");
-    }
-
     listDisplay.draw();
 }
 

@@ -18,15 +18,15 @@ struct DisplayVM {
     detectedState(DetectedState::UNKNOWN) { }
 
   bool isReadyToBeSent() {
-    // bool isReady = uid != -1
-    //   && age != -1
-    //   && ascii.length() > 0
-    //   && features.size() > 0
-    //   && emotion.length() > 0
-    //   && detectedState != DetectedState::UNKNOWN
-    //   && greyscale.getHeight() > 0;
+    bool isReady = uid != -1
+      && age != -1
+      && ascii.length() > 0
+      && features.size() > 0
+      && emotion.length() > 0
+      && detectedState != DetectedState::UNKNOWN
+      && greyscale.getHeight() > 0;
 
-    bool isReady = ascii.length() > 0;
+    // bool isReady = ascii.length() > 0;
 
     ofLog() << "isReadyToBeSend() " << std::endl
       << "\tage: " << age << std::endl

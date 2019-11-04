@@ -103,7 +103,10 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   lastGreyscale.update();
 
   std::string fakeId = _generateRandomString(16);
-  ofLog() << "Fake ID: " << fakeId;
+  ofLog() << "\tFake ID: " << fakeId;
+  ofLog() << "\tAge: " << _displayViewModel.age;
+  ofLog() << "\tisMale: " << _displayViewModel.isMale;
+  ofLog() << "\tEmotion: " << _displayViewModel.emotion;
   
   ofxOscMessage asciiMessage;
   asciiMessage.setAddress("/display/ascii");

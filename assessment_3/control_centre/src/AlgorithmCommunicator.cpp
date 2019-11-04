@@ -27,6 +27,8 @@ void AlgorithmCommunicator::setup(DisplayCommunicator* pDisplayCommunicator) {
   _demographicSender.setup(_host, _demographicServerPort);
   ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
   _reciever.setup(_recieverPort);
+
+  _lastUserDetectTime = ofGetElapsedTimef();
 }
 
 void AlgorithmCommunicator::update() {
@@ -69,22 +71,26 @@ void AlgorithmCommunicator::draw() {
 
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi, ofImage& greyscale) {
   ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ") to " << _host << ":" << _recogniserServerPort;
-  _lastGreyscale = greyscale;
+  if(ofGetElapsedTimef() > _lastUserDetectTime + _userDetectInterval) {
+    _lastGreyscale = greyscale;
 
-  // Save last roi's dimensions
-  _lastWidth = roi.getWidth();
-  _lastHeight = roi.getHeight();
+    // Save last roi's dimensions
+    _lastWidth = roi.getWidth();
+    _lastHeight = roi.getHeight();
 
-  // Send image over FIFO
-  _fifoWriteThread.setPixels(roi);
+    // Send image over FIFO
+    _fifoWriteThread.setPixels(roi);
 
-  // Send OSC to recogniser
-  ofxOscMessage recogniserMessage;
-  recogniserMessage.setAddress("/algorithm/roi");
-  recogniserMessage.addInt32Arg(uid);
-  recogniserMessage.addInt32Arg(roi.getWidth());
-  recogniserMessage.addInt32Arg(roi.getHeight());
-  _recogniserSender.sendMessage(recogniserMessage, false);
+    // Send OSC to recogniser
+    ofxOscMessage recogniserMessage;
+    recogniserMessage.setAddress("/algorithm/roi");
+    recogniserMessage.addInt32Arg(uid);
+    recogniserMessage.addInt32Arg(roi.getWidth());
+    recogniserMessage.addInt32Arg(roi.getHeight());
+    _recogniserSender.sendMessage(recogniserMessage, false);
+  } else {
+    ofLog() << "\t user detected at "<<ofGetElapsedTimef()<<" before time... "<<_lastUserDetectTime + _userDetectInterval<<" skipping...";
+  }
 }
 
 void AlgorithmCommunicator::clearRois() {
@@ -100,6 +106,7 @@ void AlgorithmCommunicator::setFaceTrackingFeaturesGetter(std::function<std::vec
 void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   ofLog() << "User Detected uid: " << uid << ", isNew: " << (isNew ? "true" : "false");
   if(isNew) {
+    _lastUserDetectTime = ofGetElapsedTimef();
     _lastUid = uid;
     ofLog() << "\tSending ascii to " << _host << ":" << _asciiServerPort << "...";
     ofxOscMessage asciiMessage;
