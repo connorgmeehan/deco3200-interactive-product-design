@@ -34,12 +34,36 @@ class GenderDisplay {
       image = new PImage();
       hasImage = false;
 
+      float minY = height, maxY = 0, minX = width, maxX = 0;
+      // get position of verts
+      for (int i = 0; i < features.size(); i++) {
+        for (int j = 0; j < features.get(i).size(); j++) {
+          PVector currentVal = features.get(i).get(j);
+          minY = constrain(currentVal.y, 0.0f, minY);
+          maxY = constrain(currentVal.y, maxY, (float) height);
+          minX = constrain(currentVal.x, 0.0f, minX);
+          maxX = constrain(currentVal.x, maxX, (float) width);
+        }
+      }
+
+      // map face
+      for (int i = 0; i < features.size(); i++) {
+        for (int j = 0; j < features.get(i).size(); j++) {
+          PVector currentVal = features.get(i).get(j);
+          float newX = map(currentVal.x, minX, maxX, 600, 900);
+          float newY = map(currentVal.y, minY, maxY, 200, 500);
+          features.get(i).set(j, new PVector(newX, newY));
+        }
+      }
+
       Vector<Vector2D> pointSet = new Vector<Vector2D>();
       for(int i = 0; i < features.size(); i++) {
-        for(int j = 0; j < features.get(i).size(); j+=2) {
-          if(j != features.get(i).size()) {
-            PVector vec = features.get(i).get(j);
-            pointSet.add(new Vector2D(vec.x, vec.y));
+        if(i != 6 || i != 7) {
+          for(int j = 0; j < features.get(i).size(); j+=2) {
+            if(j != features.get(i).size()) {
+              PVector vec = features.get(i).get(j);
+              pointSet.add(new Vector2D(vec.x, vec.y));
+            }
           }
         }
       }
@@ -56,12 +80,15 @@ class GenderDisplay {
       println("triangleSoup size: " + triangleSoup.size());
       for(int i = 0; i < triangleSoup.size(); i++) {
         Triangle2D triangle = triangleSoup.get(i);
+        noFill();
         PShape shape = createShape();
         shape.beginShape();
         shape.vertex((float)triangle.a.x, (float)triangle.a.y);
         shape.vertex((float)triangle.b.x, (float)triangle.b.y);
         shape.vertex((float)triangle.c.x, (float)triangle.c.y);
         shape.endShape(CLOSE);
+        shape.setStroke(#33FFFF);
+        shape.setFill(color(0, 0, 0, 0));
         shapes.add(shape);
       }
       println("GenderDisplay::setup(uid: "+uid+", isMale: "+isMale+", features.size(): " + features.size());
@@ -78,6 +105,8 @@ class GenderDisplay {
       
       float featureProgress = stateManager.getProgressOfState("DRAW_FACE"); // progress of text ranging from 0.0 to 1.0
       if(featureProgress > 0.0f) {
+        fill(0, 0);
+        stroke(0, 0, 200);
         int featureIndex = int(float(features.size()) * featureProgress); // multiply it by length of all the texts that we want to draw
         int shapeIndex = int(float(shapes.size()) * featureProgress);
         for ( int i = 0; i < shapes.size(); i++) {
@@ -86,8 +115,8 @@ class GenderDisplay {
           }
         }
 
-        fill(0, 0, 255);
-
+        fill(255, 0, 0);
+        noStroke();
         for ( int i = 0; i < features.size(); i++) {
           if(featureIndex > i) {
             for(int j = 0; j < features.get(i).size(); j++) {
