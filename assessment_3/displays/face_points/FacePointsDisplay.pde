@@ -19,7 +19,7 @@ class FacePointsDisplay {
     int age;
     String fakeId;
     String preConcatId, concatId;
-    int concatIdLength = 2;
+    int concatIdLength = 4;
 
     BoxVisual boxVisual;
     TextDrawer initialText, preConcatIdText, concatIdText,
@@ -49,7 +49,7 @@ class FacePointsDisplay {
 
     void setup(String _fakeId, int _age, PVector[][] _points) {
         state.reset();
-        
+
         age = _age;
         preConcatId = _fakeId.substring(0, concatIdLength - 2);
         concatId = _fakeId.substring(0, concatIdLength);

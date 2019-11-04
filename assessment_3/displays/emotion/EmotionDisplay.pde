@@ -18,7 +18,7 @@ class EmotionDisplay {
     int terminalLineSpacing = 20;
     int idFontSize = 24;
     int idLineSpacing = 24;
-    int concatLength = 6;
+    int concatLength = 8;
     TextDrawer preFakeIdDrawer, fakeIdDrawer;
     String preConcatenatedId, concatenatedId;
 

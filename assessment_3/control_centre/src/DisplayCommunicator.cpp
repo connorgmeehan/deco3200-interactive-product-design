@@ -102,7 +102,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   lastGreyscale.setFromPixels((const unsigned char *) greyscaleBuffer.getData(), 150, 150, ofImageType::OF_IMAGE_GRAYSCALE);
   lastGreyscale.update();
 
-  std::string fakeId = _generateRandomString(16);
+  std::string fakeId = _generateRandomString(10);
   ofLog() << "\tFake ID: " << fakeId;
   ofLog() << "\tAge: " << _displayViewModel.age;
   ofLog() << "\tisMale: " << _displayViewModel.isMale;

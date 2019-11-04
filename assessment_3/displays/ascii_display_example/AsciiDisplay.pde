@@ -14,7 +14,7 @@ class AsciiDisplay {
     personDetect, personDetectOk, confidenceCheck, confidenceResults, analysisResults, passingResults, closingLambda, fakeIdDrawer;
 
     List<String> resultString;
-    int concatLength = 4;
+    int concatLength = 2;
     String concatenatedId;
 
     StateManager stateManager;

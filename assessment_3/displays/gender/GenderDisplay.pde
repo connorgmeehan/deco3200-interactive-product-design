@@ -28,7 +28,7 @@ class GenderDisplay {
     String firstLine = "sex(lowconfidence_est) = ";
     String sexF = "female;";
     String sexM = "male;";
-    int concatLength = 5;
+    int concatLength = 6;
     String concatenatedId;
 
     GenderDisplay() {
