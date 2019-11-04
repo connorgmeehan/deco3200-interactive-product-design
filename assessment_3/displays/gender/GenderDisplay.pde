@@ -13,26 +13,35 @@ class GenderDisplay {
 
     BoxVisual faceBox;
 
+    int terminalFontSize = 12, terminalLineHeight = 18;
+    TextDrawer initTextDrawer;
+
     // Beth
     PFont font;
     AnalysisBar analysisBar1, analysisBar2, analysisBar3;
     color GREEN = #6FCF97;
     color OPAQUE_GREEN = color(111, 207, 151, 51);
 
+    int idFontSize = 24;
+    int idLineHeight = 32;
 
     GenderDisplay() {
       stateManager = new StateManager();
-      stateManager.addState("BOX", 0);
-      stateManager.addState("DRAW_VERTS", 20); //70
-      stateManager.addState("DRAW_TRI", 50); //120
-      stateManager.addState("BAR1_PROGRESS", 80); //150
-      stateManager.addState("BAR2_PROGRESS", 105); //200
-      stateManager.addState("BAR3_PROGRESS", 120); //250
-      stateManager.addState("DRAW_GENDER", 150); //300
-      stateManager.addState("FINISH", 150); //300
+      stateManager.addState("INIT_TEXT", 0);
+      stateManager.addState("BOX", 50);
+      stateManager.addState("DRAW_VERTS", 70); //70
+      stateManager.addState("DRAW_TRI", 90); //120
+      stateManager.addState("BAR1_PROGRESS", 110); //150
+      stateManager.addState("BAR2_PROGRESS", 145); //200
+      stateManager.addState("BAR3_PROGRESS", 170); //250
+      stateManager.addState("DRAW_GENDER", 190); //300
+      stateManager.addState("FINISH", 210); //300
 
       faceBox = new BoxVisual(125, 200, 400, 400);
       faceBox.setGap(0.0);
+
+      font = loadFont("IBMPlexMono-18.vlw");
+      initTextDrawer = new TextDrawer(loadStrings("init_text.txt"), 50, 50, 255, terminalLineHeight, font, terminalFontSize);
     }
 
     void setup(int _uid, String _fakeId, boolean _isMale, List<List<PVector>> _features) {
@@ -106,7 +115,6 @@ class GenderDisplay {
       }
 
       // Beth's code®
-      font = loadFont("IBMPlexMono-18.vlw");
       analysisBar1 = new AnalysisBar(600, 280, OPAQUE_GREEN, "*", font);
       analysisBar2 = new AnalysisBar(600, 380, OPAQUE_GREEN, "*", font);
       analysisBar3 = new AnalysisBar(600, 480, OPAQUE_GREEN, "*", font);
@@ -118,6 +126,9 @@ class GenderDisplay {
 
     void draw() {
       stateManager.incrementFrame();
+
+      float initTextProgress = stateManager.getProgressOfState("INIT_TEXT");
+      initTextDrawer.drawTextByLine(initTextProgress);
 
       // Drawing box
       float rectangleProgress = stateManager.getProgressOfState("BOX");
