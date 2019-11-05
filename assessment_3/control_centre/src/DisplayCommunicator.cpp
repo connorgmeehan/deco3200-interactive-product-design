@@ -155,7 +155,6 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   listMessage.setAddress("/display/list");
   listMessage.addStringArg(fakeId);
   listMessage.addInt32Arg(_displayViewModel.uid);
-  listMessage.addStringArg(fakeId);
   _listDisplaySender.sendMessage(listMessage, false);
   ofLog() << "_listDisplaySender.sendMessage() -> to " << _listDisplaySender.getHost() << ":" << _listDisplaySender.getPort();
 }
