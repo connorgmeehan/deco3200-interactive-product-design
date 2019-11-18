@@ -1,5 +1,10 @@
 assessment_3/libfacedetection
 
+assessment_3/displays/displays/dist
+*.log
+*.lock
+node_modules
+.idea
 
 # Ignore demographics detector
 !/assessment_3/demographics/env
