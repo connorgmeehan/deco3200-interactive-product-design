@@ -1,4 +1,2 @@
-*.log
-*.lock
-node_modules
-.idea
+node_modules/
+npm-debug.log

@@ -1,10 +1,12 @@
 assessment_3/libfacedetection
 
-assessment_3/displays/displays/dist
-*.log
-*.lock
-node_modules
-.idea
+*/node_modules/*
+
+!assessment_3/displays/displays/.vscode
+assessment_3/displays/displays/.vscode*
+!assessment_3/displays/displays/node_modules
+assessment_3/displays/displays/node_modules*
+
 
 # Ignore demographics detector
 !/assessment_3/demographics/env
