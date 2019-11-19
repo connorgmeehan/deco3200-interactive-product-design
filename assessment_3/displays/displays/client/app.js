@@ -9,18 +9,20 @@ import startOSC from './js/startOSC';
 
 ;(function() {
   console.log('I am the main application entrypoint');
-  const container = document.getElementById('root');
-  container.innerHTML = 'Hello World';
 
-  console.log(`loading ${window.location.pathname}`);
-  switch (window.location.pathname) {
-  case '/face_points.html':
+  console.log(`loading ${window.location.search}`);
+  switch (window.location.search) {
+  case '?face_points=active':
     window.currentDisplay = new FacePoints();
     break;
-  case '/sex.html':
+  case '?sex=active':
     window.currentDisplay = new SexDisplay();
     break;
+  case '?age=active':
+  case '?ascii=active':
   default:
+    const menuElement = document.getElementById('menu');
+    menuElement.classList.add('Menu__Active');
     break;
   }
 

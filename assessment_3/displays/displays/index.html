@@ -3,7 +3,18 @@
     <title>Sample App</title>
   </head>
   <body>
-    <div id="root"><!-- CONTENT --></div>
+    <div class="Menu" id='menu'>
+      <h4>Select a display</h4>
+      <a class="Menu_Option" href="/?face_points=active">facepoints</a>
+      <a class="Menu_Option" href="/?sex=active">sex</a>
+      <a class="Menu_Option" href="/?age=active">age</a>
+      <a class="Menu_Option" href="/?ascii=active">ascii</a>
+    </div>
+
+    <div class="Display" id="face-points"></div>
+    <div class="Display" id="sex"></div>
+    <div class="Display" id="age"></div>
+    <div class="Display" id="acii"></div>
     <script src="/bundle.js"></script>
   </body>
 </html>
