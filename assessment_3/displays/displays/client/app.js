@@ -26,5 +26,5 @@ import startOSC from './js/startOSC';
     break;
   }
 
-  startOSC();
+  startOSC(window.currentDisplay.reset);
 })();

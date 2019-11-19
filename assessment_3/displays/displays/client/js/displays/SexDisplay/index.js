@@ -1,7 +1,11 @@
 class SexDisplay {
-    constructor() {
-        console.log('sex display');
-    }
+  constructor() {
+    console.log('sex display');
+  }
+
+  reset() {
+    
+  }
 }
 
 export default SexDisplay;

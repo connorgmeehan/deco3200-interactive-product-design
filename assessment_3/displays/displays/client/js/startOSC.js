@@ -1,6 +1,6 @@
 const OSC = require('osc/dist/osc-browser');
 
-function startOSC() {
+function startOSC(displayCallback) {
   const oscPort = new OSC.WebSocketPort({
     url: 'ws://localhost:3000', // URL to your Web Socket server.
     metadata: true
@@ -10,6 +10,7 @@ function startOSC() {
 
   oscPort.on('message', function(oscMsg) {
     console.log('An OSC message just arrived!', oscMsg);
+    displayCallback(oscMsg.args);
   });
   oscPort.on('ready', function() {
     console.log('OSC client socket connection initialised');
