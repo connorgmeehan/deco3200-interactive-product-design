@@ -1,0 +1,34 @@
+.AsciiDisplay {
+  padding: 2rem;
+  background: $color-black;
+
+  &_InitialText {
+    width: 100%;
+    height: 30%;
+  }
+
+  &_AsciiBlock {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 40%;
+  }
+
+  &_MainFace {
+    width: 40%;
+  }
+
+  &_SmallFaceContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 30%;
+  }
+
+  &_SmallFace {
+    width: 50%;
+  }
+
+  &_FinalText {
+    width: 100%;
+    height: 30%;
+  }
+}

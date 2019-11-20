@@ -1,6 +1,22 @@
+@import './utils.scss';
+@import './typography.scss';
+@import '/node_modules/typer-js/typer.css';
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     padding: 0;
     margin: 0;
+    color: $color-white;
+    background: $color-black;
+
+    @extend .t--terminal;
+}
+
+a {
+    color: $color-green;
 }
 
 .Display {
@@ -8,7 +24,7 @@ body {
 
     width: 100vw;
     height: 100vh;
-    background: red;
+    background: $color-grey;
 
     &__Active {
         display: block;
@@ -17,11 +33,19 @@ body {
 
 .Menu {
     display: none;
+    padding: 2rem;
+
     &__Active {
         display: block;
+    }
+
+    &_Option {
+        margin-right: 1rem;
     }
 }
 
 .u--display-none {
     display: none;
 }
+
+@import './AsciiDisplay.scss';
