@@ -1,5 +1,7 @@
 const getFakeData = () => {
-  const face = [
+  const uid = 2;
+  const fakeId = 'E2F4B2FF54';
+  const faceString = [
     "``````````````````````````````````````````````````",
     "``````````````````````````````````````````````````",
     "``````````````````````````````````````````````````",
@@ -28,7 +30,7 @@ const getFakeData = () => {
     ".......------::::://////////::-.`                 ",
     "............-----:::::////////::-.`               "
   ];
-  return face;
+  return {uid, fakeId, faceString};
 };
 
 export default getFakeData;

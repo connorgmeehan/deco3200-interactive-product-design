@@ -50,10 +50,29 @@ class State {
 
   setTriggerTime = (time) => this.triggerTime = time;
   setResetTime = (time) => this.resetTime = time;
+
+  /**
+   * @description Clears all callbacks, returns the instance of state
+   * @returns {State}
+   * @memberof State
+   */
+  clearCallbacks() {
+    this.callbacks = [];
+    return this;
+  }
+
+  /**
+   * @description Adds a callback that triggers when the state starts
+   * @param {Function} - Callback to add
+   * @returns {State}
+   * @readonly
+   * @memberof State
+   */
   addCallback = (...callbacks) => {
     callbacks.forEach(cb => this.callbacks.push(cb));
     return this;
   }
+
   runCallbacks = () => this.callbacks.forEach(cb => cb(this));
 }
 
@@ -63,6 +82,16 @@ class StateManager {
   states = [new State('INITIAL_STATE', 0.0)];
 
   constructor() {
+  }
+  
+  /**
+   * @function getCurrentState
+   * @description Gets the current state
+   * @returns {State} - The current state;
+   */
+  getCurrentState() {
+    const time = curTime();
+    return this.states.find(state => state.triggerTime > time);
   }
 
   /**
@@ -104,13 +133,14 @@ class StateManager {
       state.setResetTime(this.resetTime);
       state.setTriggerTime(this.resetTime + offset);
 
-      console.log(`State of ${state.name} triggerTime: ${state.triggerTime}`);
-      offset += state.duration;
-
+      console.log(`State of ${state.name} triggerTime: ${state.triggerTime}, duration: ${state.duration}, adding duration to offset, now equals ${offset}`);
+      
       setTimeout(() => {
-        console.log(`State of ${state.name} has triggered running callbacks now.`);
+        console.log(`State of ${state.name} has triggered running callbacks now at ${curTime()}`);
         state.runCallbacks();
       }, offset);
+      
+      offset += state.duration * 1000;
     });
 
     this.resetCallbacks.forEach(cb => {
@@ -120,6 +150,21 @@ class StateManager {
 
   addResetCallback(cb) {
     this.resetCallbacks.push(cb);
+  }
+
+  createDebugElement() {
+    const el = document.createElement('div');
+    el.style.position = 'fixed';
+    el.style.background = 'black';
+    el.style.color = 'white';
+    el.style.padding = '10px';
+
+    setInterval(() => {
+      const state = this.getCurrentState();
+      el.textContent = `time: ${curTime()} | ${state.name} | ${this.progress}`;
+    }, 50);
+
+    document.body.appendChild(el);
   }
 }
 

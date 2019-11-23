@@ -1,13 +1,11 @@
-import typer from 'typer-js';
+import LineWriter from '../../helpers/Linewriter';
 
 const startMainFaceText = (duration, mainFaceString) => {
-  const faceTyper = typer('.AsciiDisplay_MainFace', { duration: duration })
-    .cursor({block: true, blink: 'hard', color: '#6BFF2D'});
-
+  const lineWriter = new LineWriter('.AsciiDisplay_MainFace', {duration});
   mainFaceString.forEach(line => {
-    console.log(line);
-    faceTyper.line(line);
+    lineWriter.line(line);
   });
+  lineWriter.start();
 };
 
 export default startMainFaceText;
