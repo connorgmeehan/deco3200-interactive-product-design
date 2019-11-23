@@ -30,7 +30,22 @@ const shuffle = (array) => {
   return array;
 };
 
+/**
+ * Splits string into chunks of len's length
+ * @param {String} str
+ * @param {Number} len
+ * @returns {Array<String}
+ */
+export const splitSubstring = (str, len) => {
+  var ret = [ ];
+  for (var offset = 0, strLen = str.length; offset < strLen; offset += len) {
+    ret.push(str.substring(offset, offset + len));
+  }
+  return ret;
+};
+
 export default {
   getStringArrayTotalLength,
-  getLinePauseOfStringArray
+  getLinePauseOfStringArray,
+  splitSubstring
 };

@@ -71,6 +71,7 @@ class AsciiLineWriters {
     this.subFaceLineWriters.forEach(lw => {
       lw.kill();
     });
+    document.querySelector('.AsciiDisplay_ReturnText').innerHTML = '';
   }
 }
 

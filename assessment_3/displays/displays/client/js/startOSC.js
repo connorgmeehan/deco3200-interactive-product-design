@@ -1,3 +1,5 @@
+import { splitSubstring } from './helpers/utils';
+
 const OSC = require('osc/dist/osc-browser');
 
 function startOSC(display) {
@@ -9,10 +11,9 @@ function startOSC(display) {
   console.log(oscPort);
 
   oscPort.on('message', function(oscMsg) {
-    console.log(oscMsg);
     switch (oscMsg.address) {
     case '/display/face':
-      if (display.type == 'ascii-points') {
+      if (display.type == 'face-points') {
         display.reset(oscMsg.args);
       }
       break;
@@ -21,7 +22,15 @@ function startOSC(display) {
         display.reset(oscMsg.args);
       }
       break;
-    case 'display/img':
+    case '/display/ascii':
+      if (display.type == 'ascii') {
+        console.log('/display/ascii recieved...');
+        const uid = oscMsg.args[0].value;
+        const fakeId = oscMsg.args[1].value;
+        const faceLines = splitSubstring(oscMsg.args[2].value, 51);
+        display.reset(uid, fakeId, faceLines);
+      }
+    case '/display/img':
       break;
 
     case '/display/emotion':

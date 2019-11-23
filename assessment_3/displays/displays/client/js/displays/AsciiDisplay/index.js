@@ -48,10 +48,10 @@ class AsciiDisplay extends GenericDisplay {
     this.uid = uid;
     this.fakeId = fakeId;
     this.faceString = faceString;
-    if (this.secondaryFaces.length > this.maxFaces) {
-      this.secondaryFaces.pop();
-    }
     this.secondaryFaces.push(faceString);
+    if (this.secondaryFaces.length > this.maxFaces) {
+      this.secondaryFaces.splice(0, 1);
+    }
 
     this.stateManager.findState('MAIN_FACE').clearCallbacks().addCallback(state => {
       this.asciiLineWriters.startMainFaceText(state.duration, faceString);
