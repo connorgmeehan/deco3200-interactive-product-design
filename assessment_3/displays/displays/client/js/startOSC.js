@@ -1,4 +1,4 @@
-import { splitSubstring } from './helpers/utils';
+import { splitSubstring, escapeHtml } from './helpers/utils';
 
 const OSC = require('osc/dist/osc-browser');
 
@@ -27,7 +27,8 @@ function startOSC(display) {
         console.log('/display/ascii recieved...');
         const uid = oscMsg.args[0].value;
         const fakeId = oscMsg.args[1].value;
-        const faceLines = splitSubstring(oscMsg.args[2].value, 51);
+        let faceLines = splitSubstring(oscMsg.args[2].value, 51);
+        faceLines = faceLines.map(line => escapeHtml(line));
         display.reset(uid, fakeId, faceLines);
       }
     case '/display/img':

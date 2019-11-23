@@ -44,8 +44,18 @@ export const splitSubstring = (str, len) => {
   return ret;
 };
 
+export const escapeHtml = (unsafe) => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export default {
   getStringArrayTotalLength,
   getLinePauseOfStringArray,
-  splitSubstring
+  splitSubstring,
+  escapeHtml
 };

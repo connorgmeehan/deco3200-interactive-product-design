@@ -113,6 +113,7 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   asciiMessage.addInt32Arg(_displayViewModel.uid);
   asciiMessage.addStringArg(fakeId);
   asciiMessage.addStringArg(_displayViewModel.ascii);
+  ofLog() << _displayViewModel.ascii;
   _asciiDisplaySender.sendMessage(asciiMessage, false);
   ofLog() << "_asciiDisplaySender.sendMessage() -> to " << _asciiDisplaySender.getHost() << ":" << _asciiDisplaySender.getPort() << " ascii.length() " << _displayViewModel.ascii.length();
 
