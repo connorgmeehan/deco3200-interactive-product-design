@@ -4,31 +4,37 @@
 
   &_InitialText {
     width: 100%;
-    height: 30%;
+    height: 20%;
   }
 
   &_AsciiBlock {
     display: flex;
     flex-wrap: nowrap;
-    height: 40%;
+    height: 60%;
   }
 
   &_MainFace {
-    width: 40%;
+    width: auto;
+    margin: auto;
   }
 
   &_SmallFaceContainer {
     display: flex;
     flex-wrap: wrap;
     width: 30%;
+    font-size: 8px;
   }
 
   &_SmallFace {
-    width: 50%;
+    margin: 0 auto;
+    justify-content: space-around;
+    &__Bottom {
+      align-items: flex-end;
+    }
   }
 
   &_FinalText {
     width: 100%;
-    height: 30%;
+    height: 15%;
   }
 }

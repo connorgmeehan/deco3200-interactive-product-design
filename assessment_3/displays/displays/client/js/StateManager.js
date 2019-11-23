@@ -80,6 +80,7 @@ class StateManager {
   resetTime = 0.0;
   resetCallbacks = []; // Array of functions called when reset is run
   states = [new State('INITIAL_STATE', 0.0)];
+  timeouts = [];
 
   constructor() {
   }
@@ -125,6 +126,9 @@ class StateManager {
    * @description Resets the StateManager to restart the animation
    */
   reset() {
+    this.timeouts.forEach(t => clearTimeout(t));
+    this.timeouts = [];
+    
     this.resetTime = curTime();
     let offset = 0;
 
@@ -135,10 +139,10 @@ class StateManager {
 
       console.log(`State of ${state.name} triggerTime: ${state.triggerTime}, duration: ${state.duration}, adding duration to offset, now equals ${offset}`);
       
-      setTimeout(() => {
+      this.timeouts.push(setTimeout(() => {
         console.log(`State of ${state.name} has triggered running callbacks now at ${curTime()}`);
         state.runCallbacks();
-      }, offset);
+      }, offset));
       
       offset += state.duration * 1000;
     });

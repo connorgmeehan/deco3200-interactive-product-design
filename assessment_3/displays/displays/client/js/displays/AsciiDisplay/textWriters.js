@@ -1,6 +1,21 @@
 import LineWriter from '../../helpers/Linewriter';
 
-const startInitialText = (duration) => {
+export const startMainFaceText = (duration, mainFaceString) => {
+  const lineWriter = new LineWriter('.AsciiDisplay_MainFace', {duration});
+  mainFaceString.forEach(line => {
+    lineWriter.line(line);
+  });
+  lineWriter.start();
+  return lineWriter;
+};
+
+export const startSubFaceText = (element, lines, duration) => {
+  const lineWriter = new LineWriter(element, {duration}, lines);
+  lineWriter.start();
+  return lineWriter;
+};
+
+export const startInitialText = (duration) => {
   const displayText = [
     'sudo /etc/init.d/dbus restart',
     '* Starting system message bus dbus [ <span class="u--color-green">OK</span> ]',
@@ -13,6 +28,11 @@ const startInitialText = (duration) => {
   ];
   const lineWriter = new LineWriter('.AsciiDisplay_InitialText', { duration }, displayText);
   lineWriter.start();
+  return lineWriter;
 };
 
-export default startInitialText;
+export default {
+  startInitialText,
+  startMainFaceText,
+  startSubFaceText
+};

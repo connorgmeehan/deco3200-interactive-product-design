@@ -6,15 +6,19 @@
 
 class LineWriter {
   speed = 50;
+  timeouts = [];
   /**
    *Creates an instance of LineWriter.
-   * @param {String} selector
+   * @param {String|HTMLElement} selector - HTML element or string selector of element
    * @param {LineWriterOptions} options 
    * @param {Array<String>} [html=[]] - Array of html to linewrite
    * @memberof LineWriter
    */
   constructor(selector, options, html = []) {
-    this.element = document.querySelector(selector);
+    this.element = typeof(selector) == typeof('')
+      ? document.querySelector(selector)
+      : selector;
+
     if (!this.element) {
       throw ('LineWriter selector did not find matching html element');
     }
@@ -29,17 +33,26 @@ class LineWriter {
   }
 
   start() {
+    this.kill();
+
     const interval = this.duration != false
       ? this.duration / this.html.length
       : this.speed;
 
     this.html.forEach((htmlLine, i) => {
-      setTimeout(() => {
-        const newElement = document.createElement('div');
-        newElement.innerHTML = htmlLine;
-        this.element.appendChild(newElement);
-      }, i * interval);
+      this.timeouts.push(
+        setTimeout(() => {
+          const newElement = document.createElement('div');
+          newElement.innerHTML = htmlLine;
+          this.element.appendChild(newElement);
+        }, i * interval)
+      );
     });
+  }
+
+  kill() {
+    this.timeouts.forEach(timeout => clearTimeout(timeout));
+    this.timeouts = [];
   }
 }
 
