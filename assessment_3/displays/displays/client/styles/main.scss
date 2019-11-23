@@ -44,8 +44,13 @@ a {
     }
 }
 
-.u--display-none {
-    display: none;
+.StateDebugElement {
+    position: fixed;
+    background: black;
+    color: white;
+    padding: 10px;
+    left: 0;
+    top: 0;
 }
 
 @import './AsciiDisplay.scss';

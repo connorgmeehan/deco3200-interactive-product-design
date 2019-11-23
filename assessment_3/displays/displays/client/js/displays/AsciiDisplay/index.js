@@ -82,11 +82,11 @@ class AsciiDisplay extends GenericDisplay {
       shuffle(this.asciiLineWriters.subFaceLineWriters).forEach((lineWriter, i) => {
         setTimeout(() => {
           console.log(`Starting subface ${i} applyClass timeout = ${i * individualDuration}`);
-          lineWriter.applyClass('u--color-green', individualDuration);
+          lineWriter.applyClass('u--color-white', individualDuration);
         }, i * individualDuration * 1000);
 
         setTimeout(() => {
-          lineWriter.removeClass('u--color-green', individualDuration);
+          lineWriter.removeClass('u--color-white', individualDuration);
         }, (i+1) * individualDuration * 1000);
       });
     });

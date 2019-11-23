@@ -25,10 +25,15 @@
   }
 
   &_SmallFace {
+    @extend .u--color-green;
     margin: 0 auto;
     justify-content: space-around;
     &__Bottom {
       align-items: flex-end;
     }
+  }
+
+  &_ReturnText {
+    margin-top: 1rem;
   }
 }

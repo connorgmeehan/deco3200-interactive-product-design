@@ -158,11 +158,8 @@ class StateManager {
 
   createDebugElement() {
     const el = document.createElement('div');
-    el.style.position = 'fixed';
-    el.style.background = 'black';
-    el.style.color = 'white';
-    el.style.padding = '10px';
-
+    el.classList.add('StateDebugElement');
+    
     setInterval(() => {
       const state = this.getCurrentState();
       el.textContent = `time: ${curTime()} | ${state.name} | ${this.progress}`;

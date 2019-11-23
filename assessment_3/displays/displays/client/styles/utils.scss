@@ -2,9 +2,9 @@ $color-black : #121211;
 $color-off-black : #171716;
 $color-dark-grey : #232423;
 $color-grey : #30302F;
-$color-green : #6BFF2D;
+$color-green : #6FCF97;
 $color-white : #EEE;
-$color-red : red;
+$color-red : DC3F36;
 
 .u--color-green {
   color: $color-green;
@@ -16,4 +16,8 @@ $color-red : red;
 
 .u--color-white {
   color: $color-white;
+}
+
+.u--display-none {
+  display: none;
 }

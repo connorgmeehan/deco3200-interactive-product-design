@@ -53,8 +53,8 @@ class AsciiLineWriters {
     this.detectedText.start();
   }
 
-  startReturningDataText(duration) {
-    this.returningDataTyper = typer('.AsciiDisplay_ResultText')
+  startReturningDataText() {
+    this.returningDataTyper = typer('.AsciiDisplay_ReturnText')
       .line('Returning result to DATABASE HOST')
       .pause(300).continue('.')
       .pause(300).continue('.')
