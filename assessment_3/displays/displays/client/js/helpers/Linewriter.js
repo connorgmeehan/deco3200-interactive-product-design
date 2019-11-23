@@ -7,6 +7,7 @@
 class LineWriter {
   speed = 50;
   timeouts = [];
+  childLines = [];
   /**
    *Creates an instance of LineWriter.
    * @param {String|HTMLElement} selector - HTML element or string selector of element
@@ -53,6 +54,32 @@ class LineWriter {
   kill() {
     this.timeouts.forEach(timeout => clearTimeout(timeout));
     this.timeouts = [];
+    this.element.innerHTML = '';
+  }
+
+  applyClass(className, duration = 0) {
+    const elements = [...this.element.children];
+    elements.forEach((child, i) => {
+      this.timeouts.push(setTimeout(() => {
+        child.classList.add(className);
+      }, i * duration * 1000 / elements.length));
+    });
+  }
+
+  removeClass(className, duration = 0) {
+    const elements = [...this.element.children];
+    elements.forEach((child, i) => {
+      this.timeouts.push(setTimeout(() => {
+        child.classList.remove(className);
+      }, i * duration * 1000 / elements.length));
+    });
+  }
+
+  flashClass(className) {
+    this.applyClass(className);
+    window.requestAnimationFrame(() => {
+      this.removeClass(className);
+    });
   }
 }
 
