@@ -51,11 +51,39 @@ export const escapeHtml = (unsafe) => {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-}
+};
+
+/**
+ * Cuts out a square segment of a string array
+ *
+ * @param {Array<String>} stringArray
+ * @param {Number} left - Distance from left ranging from [0,1]
+ * @param {Number} top - Distance from top ranging from [0,1]
+ * @param {Number} right - Distance from right ranging from [0,1]
+ * @param {Number} bottom - Distance from bottom ranging from [0,1]
+ */
+export const segmentStringArray = (stringArray, left, top, right, bottom) => {
+  console.debug(left, top, right, bottom);
+  if ([left, top, right, bottom].find(val => val < 0 || val > 1)) {
+    throw ('Error: segmentStringArray - Input is less than 0 or greater than 1');
+  }
+
+  const startRow = Math.floor(stringArray.length * top);
+  const endRow = Math.floor(stringArray.length * bottom);
+  
+  let newStringArray = stringArray.slice(startRow, endRow).map( line => {
+    const startCol = Math.floor(line.length * left);
+    const endCol = Math.floor(line.length * right);
+
+    return line.slice(startCol, endCol);
+  });
+  return newStringArray;
+};
 
 export default {
   getStringArrayTotalLength,
   getLinePauseOfStringArray,
   splitSubstring,
-  escapeHtml
+  escapeHtml,
+  segmentStringArray
 };

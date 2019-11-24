@@ -1,0 +1,24 @@
+.EmotionDisplay {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  &_MainBlock {
+    width: 60%;
+  }
+
+  &_SegmentBlock {
+    width: 40%;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &_FaceSegment {
+    width: fit-content;
+    height: fit-content;
+    &__Active {
+      border: 1px dashed $color-white;
+    }
+  }
+}
