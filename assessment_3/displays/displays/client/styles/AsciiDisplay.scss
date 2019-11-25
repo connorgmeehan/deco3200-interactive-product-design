@@ -1,0 +1,41 @@
+.AsciiDisplay {
+  padding: 2rem;
+  background: $color-black;
+
+  &_InitialText {
+    width: 100%;
+  }
+
+  &_AsciiBlock {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 1rem 0;
+  }
+
+  &_MainFace {
+    white-space: pre;
+    width: auto;
+    margin: auto;
+  }
+
+  &_SmallFaceContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 30%;
+    font-size: 8px;
+  }
+
+  &_SmallFace {
+    white-space: pre;
+    @extend .u--color-green;
+    margin: 0 auto;
+    justify-content: space-around;
+    &__Bottom {
+      align-items: flex-end;
+    }
+  }
+
+  &_ReturnText {
+    margin-top: 1rem;
+  }
+}
