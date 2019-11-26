@@ -1,6 +1,8 @@
 .EmotionDisplay {
+  &.Display__Active {
+    display: flex;
+  }
   padding: 1rem;
-  display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   &_MainBlock {
