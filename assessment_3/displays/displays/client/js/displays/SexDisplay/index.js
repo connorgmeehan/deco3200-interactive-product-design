@@ -1,3 +1,7 @@
+import p5 from 'p5';
+
+import sexDisplayCanvas from './sexDisplayCanvas';
+
 import GenericDisplay from '../GenericDisplay';
 
 class SexDisplay extends GenericDisplay {
@@ -9,7 +13,7 @@ class SexDisplay extends GenericDisplay {
     console.log('face points display');
     const sex = document.getElementById('sex');
     sex.classList.add('Display__Active');
-
+    this.facePointsP5 = new p5(sexDisplayCanvas, sex);
   }
 
   reset() {
