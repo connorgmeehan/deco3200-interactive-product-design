@@ -6,6 +6,7 @@ import StateManager from '../../StateManager';
 import EmotionLineWriters from './EmotionLineWriters';
 import getFakeData from '../AsciiDisplay/getFakeData';
 import FaceSegmentDisplay from './FaceSegmentDisplay';
+import FakeIdDisplayer from '../components/FakeIdDisplayer';
 
 class EmotionDisplay extends GenericDisplay {
   type = 'emotion';
@@ -25,13 +26,16 @@ class EmotionDisplay extends GenericDisplay {
     window.stateManager = this.stateManager;
     this.stateManager.addState('INITIAL_TEXT', 2.0);
     this.stateManager.addState('FEATURES_DISPLAY', 2.0);
-    this.stateManager.addState('SCAN', 4.0);
-    this.stateManager.addState('END', 1.0);
+    this.stateManager.addState('SCAN', 3.0);
+    this.stateManager.addState('RESULTS', 2.0);
+    this.stateManager.addState('ID', 2.0);
+    this.stateManager.addState('END', 5.0);
     
     // Initialise class properties
     this.emotionCanvas = new p5(emotionCanvas, canvasContainer);
     this.lineWriters = new EmotionLineWriters();
     this.segmentsContainer = document.querySelector('.EmotionDisplay_SegmentBlock');
+    this.fakeIdDisplayer = new FakeIdDisplayer(document.querySelector('.EmotionDisplay_IdText'));
 
     // Reset
     setTimeout(() => {
@@ -73,6 +77,14 @@ class EmotionDisplay extends GenericDisplay {
           segment.startScanAnimation(duration);
         }, timeout * 1000);
       });
+    });
+
+    this.stateManager.findState('RESULTS').clearCallbacks().addCallback(state => {
+      this.lineWriters.startResultText(state.duration, emotion);
+    });
+
+    this.stateManager.findState('ID').clearCallbacks().addCallback(state => {
+      this.fakeIdDisplayer.drawUserObject(this.fakeId, state.duration, 10, emotion);
     });
 
     // Reset state manager

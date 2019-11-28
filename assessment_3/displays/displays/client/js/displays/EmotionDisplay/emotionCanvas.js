@@ -54,7 +54,7 @@ const sketchConstructor = (p5) => {
   p5.setup = () => {
     console.log('Emotion Canvas Setup');
     width = 1000;
-    height = 800;
+    height = 700;
     p5.createCanvas(width, height);
     stateManager.addResetCallback(reset);
     reset();

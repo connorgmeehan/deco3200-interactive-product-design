@@ -1,0 +1,20 @@
+.FakeId {
+  margin-top: 1rem;
+  padding: 1rem;
+  color: white;
+
+  &_Id {
+    &__Updating {
+      background: white;
+    }
+  }
+
+  &__Active {
+      background: $color-blue;
+  }
+
+  &_Container {
+      display: flex;
+      justify-content: center;
+  }
+}
