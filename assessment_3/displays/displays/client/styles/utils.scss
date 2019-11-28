@@ -2,12 +2,17 @@ $color-black : #121211;
 $color-off-black : #171716;
 $color-dark-grey : #232423;
 $color-grey : #30302F;
+$color-light-green : #96e3b6;
 $color-green : #6FCF97;
 $color-white : #EEE;
 $color-red : DC3F36;
 
 .u--color-green {
   color: $color-green;
+}
+
+.u--color-light-green {
+  color: $color-light-green;
 }
 
 .u--color-red {

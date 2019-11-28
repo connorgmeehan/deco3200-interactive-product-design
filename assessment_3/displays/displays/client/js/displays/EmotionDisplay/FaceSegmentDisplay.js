@@ -1,5 +1,5 @@
 import { segmentStringArray } from "../../helpers/utils";
-import LineWriter from "../../helpers/Linewriter";
+import LineWriter from "../components/Linewriter";
 
 class FaceSegmentDisplay {
   id;
@@ -45,11 +45,14 @@ class FaceSegmentDisplay {
     this.faceStrings = segmentStringArray(faceStrings, leftOffset, topOffset, leftOffset + ratioWidth, topOffset + ratioHeight);
   }
 
-  startDraw(duration) {
+  startDraw(duration, completedCallback = null) {
     console.debug(`FaceSegmentDisplay.startDraw(duration: ${duration}), id: ${this.id}`);
     this.element.classList.add('EmotionDisplay_FaceSegment__Active');
     
     this.lineWriter = new LineWriter(this.element, {duration}, this.faceStrings);
+    if (completedCallback) {
+      this.lineWriter.addCompletedCallback(completedCallback);
+    }
     this.lineWriter.start(); 
     const idTag = document.createElement('div');
     idTag.classList.add('EmotionDisplay_IdTag');
@@ -57,9 +60,15 @@ class FaceSegmentDisplay {
     this.element.appendChild(idTag);
   }
 
-  startDrawAfter(duration, delay) {
+  startScanAnimation(duration) {
+    this.lineWriter.applyClass('u--color-green', duration, () => {
+      this.lineWriter.flashClass('u--color-white');
+    })
+  }
+
+  startDrawAfter(duration, delay, completedCallback = null) {
     this.timeout = setTimeout(() => {
-      this.startDraw(duration);
+      this.startDraw(duration, completedCallback);
     }, delay * 1000);
   }
 

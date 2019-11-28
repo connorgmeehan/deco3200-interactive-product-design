@@ -1,4 +1,4 @@
-import LineWriter from '../../helpers/Linewriter';
+import LineWriter from '../components/Linewriter';
 import typer from 'typer-js';
 
 class AsciiLineWriters {

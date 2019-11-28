@@ -74,6 +74,12 @@ class State {
   }
 
   runCallbacks = () => this.callbacks.forEach(cb => cb(this));
+
+  getInterval(curInterval, maxInterval, gap = 0) {
+    const intervalDuration = this.duration / maxInterval;
+    const timeout =  intervalDuration * curInterval;
+    return {timeout, duration: intervalDuration - gap};
+  }
 }
 
 class StateManager {

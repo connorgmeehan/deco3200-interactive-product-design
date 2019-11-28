@@ -49,6 +49,10 @@ class LineWriter {
         }, i * interval)
       );
     });
+
+    if (this.completedCallback) {
+      setTimeout(this.completedCallback, this.html.length * interval);
+    }
   }
 
   kill() {
@@ -57,29 +61,43 @@ class LineWriter {
     this.element.innerHTML = '';
   }
 
-  applyClass(className, duration = 0) {
+  applyClass(className, duration = 0, callback = null) {
     const elements = [...this.element.children];
     elements.forEach((child, i) => {
       this.timeouts.push(setTimeout(() => {
         child.classList.add(className);
       }, i * duration * 1000 / elements.length));
     });
+    
+    if (callback) {
+      setTimeout(callback, duration * 1000);
+    }
   }
 
-  removeClass(className, duration = 0) {
+  removeClass(className, duration = 0, callback = null) {
     const elements = [...this.element.children];
     elements.forEach((child, i) => {
       this.timeouts.push(setTimeout(() => {
         child.classList.remove(className);
       }, i * duration * 1000 / elements.length));
     });
+    if (callback) {
+      setTimeout(callback, duration * 1000);
+    }
   }
 
   flashClass(className) {
+    console.log(`Linewriter.flashClass(className: ${className})`);
     this.applyClass(className);
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.removeClass(className);
-    });
+    }, 100);
+  }
+
+  setCompletedCallback(callback) {
+    if (callback) {
+      this.completedCallback = callback;
+    }
   }
 }
 

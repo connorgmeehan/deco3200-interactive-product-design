@@ -25,6 +25,7 @@ class EmotionDisplay extends GenericDisplay {
     window.stateManager = this.stateManager;
     this.stateManager.addState('INITIAL_TEXT', 2.0);
     this.stateManager.addState('FEATURES_DISPLAY', 2.0);
+    this.stateManager.addState('SCAN', 4.0);
     this.stateManager.addState('END', 1.0);
     
     // Initialise class properties
@@ -63,6 +64,15 @@ class EmotionDisplay extends GenericDisplay {
         faceSegment.startDrawAfter(individualDuration, i * individualDuration);
         this.segments.push(faceSegment);
       }
+    });
+
+    this.stateManager.findState('SCAN').clearCallbacks().addCallback(state => {
+      this.segments.forEach((segment, i) => {
+        const {timeout, duration} = state.getInterval(i, this.maxSegments, 0.1);
+        setTimeout(() => {
+          segment.startScanAnimation(duration);
+        }, timeout * 1000);
+      });
     });
 
     // Reset state manager
