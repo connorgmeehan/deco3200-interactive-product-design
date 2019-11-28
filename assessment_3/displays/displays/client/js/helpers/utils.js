@@ -80,10 +80,15 @@ export const segmentStringArray = (stringArray, left, top, right, bottom) => {
   return newStringArray;
 };
 
+export const signedRandom = (val) => {
+  return Math.random() * val * 2 - val;
+}
+
 export default {
   getStringArrayTotalLength,
   getLinePauseOfStringArray,
   splitSubstring,
   escapeHtml,
-  segmentStringArray
+  segmentStringArray,
+  signedRandom
 };

@@ -1,3 +1,6 @@
+import p5 from 'p5';
+import emotionCanvas from './emotionCanvas';
+
 import GenericDisplay from '../GenericDisplay';
 import StateManager from '../../StateManager';
 import EmotionLineWriters from './EmotionLineWriters';
@@ -13,22 +16,27 @@ class EmotionDisplay extends GenericDisplay {
   constructor() {
     super();
     console.log('emotion display');
-    const demographic = document.getElementById('emotion');
-    demographic.classList.add('Display__Active');
-
-    // Initialise class properties
-    this.lineWriters = new EmotionLineWriters();
-    this.segmentsContainer = document.querySelector('.EmotionDisplay_SegmentBlock');
+    const emotionDisplayElement = document.getElementById('emotion');
+    emotionDisplayElement.classList.add('Display__Active');
+    const canvasContainer = document.querySelector('.EmotionDisplay_Canvas');
 
     // Intitialise states
     this.stateManager = new StateManager();
-    this.stateManager.addState('INITIAL_TEXT', 1.0);
+    window.stateManager = this.stateManager;
+    this.stateManager.addState('INITIAL_TEXT', 2.0);
     this.stateManager.addState('FEATURES_DISPLAY', 2.0);
     this.stateManager.addState('END', 1.0);
+    
+    // Initialise class properties
+    this.emotionCanvas = new p5(emotionCanvas, canvasContainer);
+    this.lineWriters = new EmotionLineWriters();
+    this.segmentsContainer = document.querySelector('.EmotionDisplay_SegmentBlock');
 
     // Reset
-    const {uid, fakeId, faceString, emotion} = getFakeData();
-    this.reset(uid, fakeId, faceString, emotion);
+    setTimeout(() => {
+      const {uid, fakeId, faceString, emotion} = getFakeData();
+      this.reset(uid, fakeId, faceString, emotion);
+    }, 1000);
   }
 
   reset(uid, fakeId, faceString, emotion) {

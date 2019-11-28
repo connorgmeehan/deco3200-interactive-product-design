@@ -2,6 +2,8 @@ import { segmentStringArray } from "../../helpers/utils";
 import LineWriter from "../../helpers/Linewriter";
 
 class FaceSegmentDisplay {
+  id;
+  parent;
   container; // Stores container element of all face segments
   element; // Stores HTML element of component
   timeout; // Stores timout from startDrawAfter
@@ -15,15 +17,19 @@ class FaceSegmentDisplay {
    * @param {Number} height
    * @memberof FaceSegmentDisplay
    */
-  constructor(container, faceStrings, id, width, height) {
+  constructor(parent, faceStrings, id, width, height) {
     if (!faceStrings || faceStrings.length == 0) {
       throw ('Error: Did not pass in face strings');
     }
+    this.id = id;
+    this.parent = parent;
+    const container = document.createElement('div');
+    container.classList.add('EmotionDisplay_FaceSegment_Container');
     this.container = container;
     this.element = document.createElement('div');
     this.element.classList.add('EmotionDisplay_FaceSegment');
     this.container.appendChild(this.element);
-
+    parent.appendChild(this.container);
     const ratioWidth = width / faceStrings[0].length;
     const ratioHeight = height / faceStrings.length;
     const leftOffset = Math.random() * (1.0 - ratioWidth);
@@ -37,15 +43,18 @@ class FaceSegmentDisplay {
 
     this.id = id;
     this.faceStrings = segmentStringArray(faceStrings, leftOffset, topOffset, leftOffset + ratioWidth, topOffset + ratioHeight);
-    console.log(`Segmented string array -> ${this.faceStrings}`);
   }
 
   startDraw(duration) {
-    console.log(`FaceSegmentDisplay.startDraw(duration: ${duration}), id: ${this.id}`);
+    console.debug(`FaceSegmentDisplay.startDraw(duration: ${duration}), id: ${this.id}`);
     this.element.classList.add('EmotionDisplay_FaceSegment__Active');
     
     this.lineWriter = new LineWriter(this.element, {duration}, this.faceStrings);
     this.lineWriter.start(); 
+    const idTag = document.createElement('div');
+    idTag.classList.add('EmotionDisplay_IdTag');
+    idTag.innerText = `P${this.id}`;
+    this.element.appendChild(idTag);
   }
 
   startDrawAfter(duration, delay) {
