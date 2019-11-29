@@ -32,6 +32,10 @@ function startOSC(display) {
         display.reset(uid, fakeId, faceLines);
       }
     case '/display/img':
+      if (display.type == 'emotion') {
+        console.log(oscMsg.args);
+        display.resetImage(oscMsg.args);
+      }
       break;
 
     case '/display/emotion':

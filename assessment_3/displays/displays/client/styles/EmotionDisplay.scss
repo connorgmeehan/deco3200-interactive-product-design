@@ -1,0 +1,41 @@
+.EmotionDisplay {
+  &.Display__Active {
+    display: flex;
+  }
+  padding: 1rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  &_MainBlock {
+    width: 60%;
+  }
+
+  &_SegmentBlock {
+    width: 40%;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &_FaceSegment {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    &__Active {
+      border: 1px dashed $color-white;
+    }
+
+    &_Container {
+      width: 50%;
+    }
+  }
+
+  &_IdTag {
+    @extend .t--terminal;
+    font-size: 18px;
+    color: red;
+    position: absolute;
+    top: 50%;
+    left: -50px;
+    transform: translateY(-50%);
+  }
+}
