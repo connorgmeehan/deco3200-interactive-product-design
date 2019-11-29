@@ -39,12 +39,7 @@ watcher.on('ready', function() {
 });
 
 // Anything else gets passed to the client app's server rendering
-app.get('*', function(req, res, next) {
-  require('./client/server-render')(req.path, function(err, page) {
-    if (err) return next(err);
-    res.send(page);
-  });
-});
+app.use('/', express.static('public'));
 
 // Do "hot-reloading" of react stuff on the server
 // Throw away the cached client modules and let them be re-required next time

@@ -8,6 +8,7 @@ import AsciiDisplay from './js/displays/AsciiDisplay';
 // Use webpack normally
 import './styles/main.scss';
 import startOSC from './js/startOSC';
+import EmotionDisplay from './js/displays/EmotionDisplay';
 
 ;(function() {
   console.log(`loading ${window.location.search}`);
@@ -20,6 +21,9 @@ import startOSC from './js/startOSC';
     break;
   case '?demographic=active':
     window.currentDisplay = new DemographicDisplay();
+    break;
+  case '?emotion=active':
+    window.currentDisplay = new EmotionDisplay();
     break;
   case '?ascii=active':
     window.currentDisplay = new AsciiDisplay();

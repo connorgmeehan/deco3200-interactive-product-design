@@ -30,7 +30,8 @@ const getFakeData = () => {
     ".......------::::://////////::-.`                 ",
     "............-----:::::////////::-.`               "
   ];
-  return {uid, fakeId, faceString, emotion: 'neutral'};
-};
+  const emotion = 'NEUTRAL';
+  return {uid, fakeId, faceString, emotion};
+}
 
 export default getFakeData;
