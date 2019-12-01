@@ -1,0 +1,27 @@
+.FacePointsDisplay {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  &_Wrapper {
+    margin: auto auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+  }
+
+  &_InitialText {
+    height: 100px;
+  }
+
+  &_ResultText {
+    margin-left: 50px;
+    margin-right: auto;
+    height: 40px;
+  }
+
+  &_Results {
+    height: 70px;
+  }
+}

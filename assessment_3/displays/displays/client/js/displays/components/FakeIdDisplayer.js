@@ -31,7 +31,7 @@ class FakeIdDisplayer {
       htmlLines.push(`USER.EMOTION: ${emotion}`);
     }
     if (age) {
-      htmlLines.push(`USER.AGE: ${emotion}`);
+      htmlLines.push(`USER.AGE: ${age}`);
     }
     if (sex) {
       htmlLines.push(`USER.SEX: ${sex}`);

@@ -28,7 +28,7 @@ class State {
    * @readonly
    * @memberof State
    */
-  get ended() { return this.triggerTime + this.duration > curTime(); }
+  get ended() { return this.progress === 1.0; }
 
 
   /**
@@ -37,7 +37,7 @@ class State {
    * @readonly
    * @memberof State
    */
-  get started() { return this.triggerTime > curTime(); }
+  get started() { return this.progress > 0; }
 
 
   /**
@@ -46,7 +46,9 @@ class State {
    * @readonly
    * @memberof State
    */
-  get progress() { return clamp((this.triggerTime - curTime()) / this.duration); }
+  get progress() { 
+    return clamp((curTime() - this.triggerTime) / this.duration, 0, 1.0);
+  }
 
   setTriggerTime = (time) => this.triggerTime = time;
   setResetTime = (time) => this.resetTime = time;
@@ -108,7 +110,7 @@ class StateManager {
    * @param {Number} duration - Duration of state in seconds
    * @returns {State} - The newly created state;
    */
-  addState = (stateName, duration) => {
+  addState(stateName, duration){
     this.states.push(new State(stateName, duration));
     if (process.env.NODE_ENV === 'development') {
       this.findState(stateName).addCallback(() => {
@@ -148,9 +150,9 @@ class StateManager {
       this.timeouts.push(setTimeout(() => {
         console.log(`State of ${state.name} has triggered running callbacks now at ${curTime()}`);
         state.runCallbacks();
-      }, offset));
+      }, offset * 1000));
       
-      offset += state.duration * 1000;
+      offset += state.duration;
     });
 
     this.resetCallbacks.forEach(cb => {
