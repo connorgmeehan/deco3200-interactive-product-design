@@ -99,8 +99,7 @@ class StateManager {
    * @returns {State} - The current state;
    */
   getCurrentState() {
-    const time = curTime();
-    return this.states.find(state => state.triggerTime > time);
+    return this.states.find(state => state.started && !state.ended);
   }
 
   /**
