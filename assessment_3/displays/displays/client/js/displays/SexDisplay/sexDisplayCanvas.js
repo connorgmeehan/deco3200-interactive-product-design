@@ -12,11 +12,15 @@ const sexDisplayCanvas = (p5) => {
   const canvasHeight = 800;
   window.p5 = p5; 
 
+  const boxState = window.stateManager.findState('BOX');  
+
   const backgroundColor = '#30302F';
   const boxVisual = new BoxVisual(p5, 50, 50, 700, 700);
   faceVisual = new FaceVisual(p5, 100, 100, 600, 600);
+  faceVisual.setLineColor(p5.color(111, 207, 151));
+  faceVisual.setPointColor(p5.color(255));
+  faceVisual.setScanColor(p5.color(150, 227, 182));
 
-  const boxState = window.stateManager.findState('BOX');  
   
   p5.setup = () => {
     p5.createCanvas(canvasWidth, canvasHeight);        

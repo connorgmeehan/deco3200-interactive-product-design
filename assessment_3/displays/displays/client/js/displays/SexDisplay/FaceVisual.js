@@ -2,12 +2,19 @@ import Delaunay from './Delauney';
 
 class FaceVisual {
   features = [];
+  triangles = [];
   p5;
   delauney;
+
   x;
   y;
   width;
   height;
+  
+  pointColor;
+  lineColor;
+  scanColor;
+  
   pointState;
   tesselateState;
 
@@ -21,42 +28,76 @@ class FaceVisual {
     const stateManager = window.stateManager;
     this.pointState = stateManager.findState('INITIAL_POINTS');
     this.tesselateState = stateManager.findState('TESSELATION');
+    this.scanState = stateManager.findState('SCAN');
   }
 
   draw() {
-    
-    const pointsProgress = this.pointState.progress;
-    // Face points
-    this.p5.noStroke();
-    this.p5.fill(255);
-    var vertexIndex = 0;
-    var pointsLimit = Math.floor(pointsProgress * this.featuresTotalCount);
-    for (var i = 0; i < this.features.length; i++) {
-      for (var j = 0; j < this.features[i].length; j++) {
-        let thisVec = this.features[i][j];
-        if (vertexIndex < pointsLimit) {
-          this.p5.ellipse(thisVec[0], thisVec[1], 7, 7);
-        }
-        vertexIndex++;
-      }
+    const isScanState = this.scanState.started && !this.scanState.ended;
+    let scanIndex = Number.NEGATIVE_INFINITY;
+    if (isScanState) {
+      scanIndex = 10 + Math.floor(Math.random() * 10);
     }
 
-    const tessProgress = this.tesselateState.progress;
-
+    this.p5.noFill();
+    this.p5.stroke(this.lineColor);
     for (let i = 0; i < this.triangles.length; i += 3) {
+      if (i % scanIndex == 0) {
+        this.p5.fill(this.scanColor);
+      }
       this.p5.beginShape();
-      this.p5.fill(255-(i / this.triangles.length)*255, 0, 128);
       this.p5.vertex(this.features[this.triangles[i]][0], this.features[this.triangles[i]][1]);
       this.p5.vertex(this.features[this.triangles[i+1]][0], this.features[this.triangles[i+1]][1]);
       this.p5.vertex(this.features[this.triangles[i+2]][0], this.features[this.triangles[i+2]][1]);
       this.p5.endShape(this.p5.CLOSE);
+      if (i % scanIndex == 0) {
+        this.p5.noFill();
+      }
     }
+
+    const pointsProgress = this.pointState.progress;
+    // Face points
+    this.p5.noStroke();
+    this.p5.fill(this.pointColor);
+    var vertexIndex = 0;
+    var pointsLimit = Math.floor(pointsProgress * this.features.length);
+    for (var i = 0; i < this.features.length; i++) {
+      let thisVec = this.features[i];
+      if (vertexIndex < pointsLimit) {
+        this.p5.ellipse(thisVec[0], thisVec[1], 7, 7);
+      }
+      vertexIndex++;
+    }
+  }
+
+  setPointColor(color) {
+    this.pointColor = color;
+  }
+
+  setLineColor(color) {
+    this.lineColor = color;
+  }
+
+  setScanColor(color) {
+    this.scanColor = color;
   }
   
   reset(features) {
-    const mappedFeatures = this.mapFeaturesToRect(features, this.x, this.y, this.width, this.height);
-    this.features = [].concat(...mappedFeatures);
-    this.triangles = Delaunay.triangulate(this.features);
+    let formattedFeatures = this.mapFeaturesToRect(features, this.x, this.y, this.width, this.height);
+    formattedFeatures = [].concat(...formattedFeatures);
+    this.features = formattedFeatures;
+    const nFeatures = formattedFeatures.length;
+    
+    this.tesselateState.clearCallbacks().addCallback(state => {
+
+      formattedFeatures.forEach((el, i) => {
+        const {timeout} = state.getInterval(i, nFeatures);
+        setTimeout(() => {
+          this.triangles = Delaunay.triangulate(this.features.slice(0, i));
+        }, timeout * 1000);
+      });
+
+    });
+  
   }
 
   mapFeaturesToRect(vects, x, y, width, height) {
