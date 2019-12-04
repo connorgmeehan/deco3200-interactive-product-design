@@ -1,7 +1,9 @@
 .FacePointsDisplay {
   padding: 1rem 0;
-  display: flex;
   justify-content: center;
+  &.Display__Active {
+    display: flex;
+  }
   &_Wrapper {
     margin: auto auto;
     display: flex;

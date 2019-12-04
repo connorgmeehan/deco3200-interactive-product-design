@@ -14,12 +14,20 @@ function startOSC(display) {
     switch (oscMsg.address) {
     case '/display/face':
       if (display.type == 'face-points') {
-        display.reset(oscMsg.args);
+        const uid = oscMsg.args[0].value;
+        const fakeId = oscMsg.args[1].value;
+        const age = oscMsg.args[2].value;
+        const encodedPoints = new Array(12).map((el, i) => oscMsg.args[i + 3].value);
+        display.reset(uid, fakeId, age, encodedPoints);
       }
       break;
     case '/display/gender':
-      if (display.type == 'demographic') {
-        display.reset(oscMsg.args);
+      if (display.type == 'sex') {
+        const uid = oscMsg.args[0].value;
+        const fakeId = oscMsg.args[1].value;
+        const sex = oscMsg.args[2].value;
+        const encodedPoints = new Array(12).map((el, i) => oscMsg.args[i + 3].value);
+        display.reset(uid, fakeId, sex, encodedPoints);
       }
       break;
     case '/display/ascii':
@@ -40,7 +48,11 @@ function startOSC(display) {
 
     case '/display/emotion':
       if (display.type == 'emotion') {
-        display.reset(oscMsg.args);
+        const uid = oscMsg.args[0].value;
+        const fakeId = oscMsg.args[1].value;
+        const emotion = oscMsg.args[2].value;
+        const ascii = oscMsg.args[3].value.split(/\r?\n/);
+        display.reset(uid, fakeId, ascii, emotion);
       }
       break;
     default:

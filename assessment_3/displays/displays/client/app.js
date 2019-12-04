@@ -2,7 +2,6 @@
 
 import FacePoints from './js/displays/FacePointsDisplay';
 import SexDisplay from './js/displays/SexDisplay';
-import DemographicDisplay from './js/displays/EmotionDisplay';
 import AsciiDisplay from './js/displays/AsciiDisplay';
 
 // Use webpack normally
@@ -18,9 +17,6 @@ import EmotionDisplay from './js/displays/EmotionDisplay';
     break;
   case '?sex=active':
     window.currentDisplay = new SexDisplay();
-    break;
-  case '?demographic=active':
-    window.currentDisplay = new DemographicDisplay();
     break;
   case '?emotion=active':
     window.currentDisplay = new EmotionDisplay();
