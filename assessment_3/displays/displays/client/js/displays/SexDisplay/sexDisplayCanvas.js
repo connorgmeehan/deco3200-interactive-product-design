@@ -3,7 +3,7 @@ import FaceVisual from './FaceVisual';
 import BarVisual from "./BarVisual";
 
 let faceVisual;
-const maxBarVisuals = 3;
+const maxBarVisuals = 11;
 let barVisuals = [];
 
 export const resetDisplay = (points) => {
@@ -27,7 +27,7 @@ const sexDisplayCanvas = (p5) => {
 
   for (let i = 0; i < maxBarVisuals; i++) {
     barVisuals.push(
-      new BarVisual(p5, 650, 100 + i * 175, 500, 50)
+      new BarVisual(p5, 650, 35 + i * 55, 500, 25)
         .setSegmentColor(p5.color('#1B3127'))
         .setBarColor(p5.color('#6FCF971'))
         .setBarLoadingColor(p5.color('#E5E5E5'))
@@ -36,7 +36,7 @@ const sexDisplayCanvas = (p5) => {
 
   const scanState = window.stateManager.findState('SCAN').clearCallbacks().addCallback(state => {
     barVisuals.forEach((bv, i) => {
-      const {timeout, duration} = state.getInterval(i, maxBarVisuals, 0.2);
+      const {timeout, duration} = state.getInterval(i, maxBarVisuals);
       setTimeout(() => {
         bv.setState('active');
       }, timeout * 1000);

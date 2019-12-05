@@ -13,6 +13,8 @@ class BarVisual {
 
     this.barSegmentWidth = (width / this.barSegments) * this.gapRatio;
     this.barSegmentSpacing = (width / this.barSegments);
+
+    this.font = this.p5.loadFont('/fonts/IBMPlexMono-SemiBold.ttf');
   }
 
   setSegmentColor(color) {
@@ -39,11 +41,13 @@ class BarVisual {
 
     if (this.state == 'active') {
       this.p5.fill(this.barLoadingColor);
-      this.barLength = this.p5.noise(this.x + this.y + this.curTime() * 10);
+      this.barLength = this.p5.noise(this.curTime() * 5, this.y);
     } else {
       this.p5.fill(this.barColor);
     }
-    
+    this.p5.textAlign(this.p5.LEFT);
+    this.p5.textSize(12);
+    this.p5.text(Math.floor(this.barLength*100), this.x, this.y - 10);
     this.p5.rect(this.x, this.y, this.width * this.barLength, this.height);
   }
 
