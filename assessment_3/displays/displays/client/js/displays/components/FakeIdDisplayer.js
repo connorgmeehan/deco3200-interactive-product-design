@@ -23,10 +23,13 @@ class FakeIdDisplayer {
   drawUserObject(fakeId, duration, length, emotion = null, age = null, sex = null) {
     this.fakeId = fakeId;
     this.idLength = length;
-    const preUpdateLength = length > 2
+    const preUpdateLength = length >= 2
       ? length - 2
       : length;
-    const htmlLines = [ `USER.ID: <span class="FakeId_Id">${fakeId.substring(0, preUpdateLength)}</span>` ];
+    
+    const htmlLines = preUpdateLength === 0 
+      ? [ 'USER.ID: <span class="FakeId_Id u--display-none">00</span>']
+      : [ `USER.ID: <span class="FakeId_Id">${fakeId.substring(0, preUpdateLength)}</span>` ];
     if (emotion) {
       htmlLines.push(`USER.EMOTION: ${emotion}`);
     }
@@ -54,6 +57,9 @@ class FakeIdDisplayer {
     const idSpan = this.element.querySelector('.FakeId_Id');
     idSpan.innerHTML = this.fakeId.substring(0, this.idLength);
     idSpan.classList.add('FakeId_Id__Updating');
+    idSpan.classList.forEach(className => {
+      className === "u--display-none" && idSpan.classList.remove("u--display-none");
+    });
     setTimeout(() => {
       idSpan.classList.remove('FakeId_Id__Updating');
     }, 300);
