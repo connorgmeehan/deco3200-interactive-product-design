@@ -57,8 +57,8 @@ const sexDisplayCanvas = (p5) => {
     boxVisual.setGap(1.0 - boxState.progress / 2);
     boxVisual.draw();
     faceVisual.draw();
-
-    barVisuals.forEach(bv => bv.draw());
+    const barVisualsIndexThreshold = boxState.progress * barVisuals.length;
+    barVisuals.forEach((bv, i) => i < barVisualsIndexThreshold && bv.draw());
   };
 };
 
