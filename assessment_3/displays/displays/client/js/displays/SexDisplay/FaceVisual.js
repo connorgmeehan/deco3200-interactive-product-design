@@ -33,15 +33,16 @@ class FaceVisual {
 
   draw() {
     const isScanState = this.scanState.started && !this.scanState.ended;
-    let scanIndex = Number.NEGATIVE_INFINITY;
-    if (isScanState) {
-      scanIndex = 10 + Math.floor(Math.random() * 10);
+    if (isScanState && this.p5.frameCount % 5 == 0) {
+      this.scanIndex = 10 + Math.floor(Math.random() * 10);
+    } else if (!isScanState) {
+      this.scanIndex = Number.NEGATIVE_INFINITY;
     }
 
     this.p5.noFill();
     this.p5.stroke(this.lineColor);
     for (let i = 0; i < this.triangles.length; i += 3) {
-      if (i % scanIndex == 0) {
+      if (i % this.scanIndex == 0) {
         this.p5.fill(this.scanColor);
       }
       this.p5.beginShape();
@@ -49,7 +50,7 @@ class FaceVisual {
       this.p5.vertex(this.features[this.triangles[i+1]][0], this.features[this.triangles[i+1]][1]);
       this.p5.vertex(this.features[this.triangles[i+2]][0], this.features[this.triangles[i+2]][1]);
       this.p5.endShape(this.p5.CLOSE);
-      if (i % scanIndex == 0) {
+      if (i % this.scanIndex == 0) {
         this.p5.noFill();
       }
     }

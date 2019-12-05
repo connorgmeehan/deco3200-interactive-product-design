@@ -82,7 +82,7 @@ export const segmentStringArray = (stringArray, left, top, right, bottom) => {
 
 export const signedRandom = (val) => {
   return Math.random() * val * 2 - val;
-}
+};
 
 export default {
   getStringArrayTotalLength,
