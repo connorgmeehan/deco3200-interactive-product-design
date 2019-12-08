@@ -66,7 +66,7 @@ class FakeIdDisplayer {
   }
 
   clear() {
-    this.typer.kill();
+    this.typer && this.typer.kill();
     this.element.classList.remove('FakeId__Active');
     this.element.innerHTML = '';
   }

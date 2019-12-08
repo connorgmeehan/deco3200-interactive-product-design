@@ -18,14 +18,14 @@ class EmotionLineWriters {
     ];
     const charDuration = duration / (getStringArrayTotalLength(htmlLines));
     this.intitialTextTyper = typer('.EmotionDisplay_InitialText', {speed: charDuration})
-      .line(htmlLines[0]).pause(300)
-      .line(htmlLines[1]).pause(300)
-      .line(htmlLines[2]).pause(300)
-      .line(htmlLines[3]).pause(300)
-      .line(htmlLines[4]).pause(300)
-      .pause(300).continue('.')
-      .pause(300).continue('.')
-      .pause(300).continue('.');
+      .line(htmlLines[0]).pause(200)
+      .line(htmlLines[1]).pause(200)
+      .line(htmlLines[2]).pause(200)
+      .line(htmlLines[3]).pause(200)
+      .line(htmlLines[4]).pause(200)
+      .pause(200).continue('.')
+      .pause(200).continue('.')
+      .pause(200).continue('.');
   }
 
   startResultText(duration) {
@@ -37,12 +37,16 @@ class EmotionLineWriters {
     const charDuration = duration / getStringArrayTotalLength(htmlLines);
     this.resultTyper = typer('.EmotionDisplay_ResultText', {speed: charDuration})
       .line(htmlLines[0])
-      .line(htmlLines[1])
+      .line(htmlLines[1]);
   }
 
   killAll() {
-    this.intitialTextWriter && this.intitialTextWriter.kill();
+    this.intitialTextTyper && this.intitialTextTyper.kill();
     document.querySelector('.EmotionDisplay_InitialText').innerHTML = '';
+    this.resultTyper && this.resultTyper.kill();
+    document.querySelector('.EmotionDisplay_ResultText').innerHTML = '';
+    const kill = new Event('killTyper');
+    document.body.dispatchEvent(kill);
   }
 }
 

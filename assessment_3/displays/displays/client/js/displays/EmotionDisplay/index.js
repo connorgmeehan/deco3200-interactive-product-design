@@ -49,6 +49,8 @@ class EmotionDisplay extends GenericDisplay {
     this.lineWriters.killAll();
     this.segments.forEach(segment => segment.kill());
     this.segments = [];
+    this.segmentsContainer.innerHTML = '';
+    this.fakeIdDisplayer.clear();
 
     // Set data
     this.uid = uid;

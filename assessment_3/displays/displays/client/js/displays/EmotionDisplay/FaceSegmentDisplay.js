@@ -73,7 +73,7 @@ class FaceSegmentDisplay {
   }
 
   kill() {
-    this.lineWriter.kill();
+    this.lineWriter && this.lineWriter.kill();
     this.element.innerHTML = '';
     clearTimeout(this.timeout);
   }
