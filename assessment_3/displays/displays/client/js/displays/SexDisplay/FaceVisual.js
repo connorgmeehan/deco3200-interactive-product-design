@@ -83,6 +83,7 @@ class FaceVisual {
   }
   
   reset(features) {
+    this.triangles = [];
     let formattedFeatures = this.mapFeaturesToRect(features, this.x, this.y, this.width, this.height);
     formattedFeatures = [].concat(...formattedFeatures);
     this.features = formattedFeatures;

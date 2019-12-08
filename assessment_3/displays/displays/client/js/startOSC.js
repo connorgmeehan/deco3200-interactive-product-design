@@ -17,7 +17,10 @@ function startOSC(display) {
         const uid = oscMsg.args[0].value;
         const fakeId = oscMsg.args[1].value;
         const age = oscMsg.args[2].value;
-        const encodedPoints = new Array(12).map((el, i) => oscMsg.args[i + 3].value);
+        let encodedPoints = [];
+        for (let i = 3; i < oscMsg.args.length; i++) {
+          encodedPoints.push(oscMsg.args[i].value.split(","));
+        }
         display.reset(uid, fakeId, age, encodedPoints);
       }
       break;
@@ -26,7 +29,16 @@ function startOSC(display) {
         const uid = oscMsg.args[0].value;
         const fakeId = oscMsg.args[1].value;
         const sex = oscMsg.args[2].value;
-        const encodedPoints = new Array(12).map((el, i) => oscMsg.args[i + 3].value);
+        let encodedPoints = [];
+        for (let i = 3; i < oscMsg.args.length; i++) {
+          const featurePoints = oscMsg.args[i].value.split(",");
+          const formattedFeaturePoints = [];
+          for (let j = 0; j < featurePoints.length; j+=2) {
+            formattedFeaturePoints.push([featurePoints[j], featurePoints[j+1]]);
+          }
+          encodedPoints.push(formattedFeaturePoints);
+        }
+        console.log('DISPLAY SEX', uid, fakeId, sex, encodedPoints);
         display.reset(uid, fakeId, sex, encodedPoints);
       }
       break;
