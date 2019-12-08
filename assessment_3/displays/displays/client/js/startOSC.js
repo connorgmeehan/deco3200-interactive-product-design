@@ -19,9 +19,14 @@ function startOSC(display) {
         const age = oscMsg.args[2].value;
         let encodedPoints = [];
         for (let i = 3; i < oscMsg.args.length; i++) {
-          encodedPoints.push(oscMsg.args[i].value.split(","));
+          const featurePoints = oscMsg.args[i].value.split(",");
+          const formattedFeaturePoints = [];
+          for (let j = 0; j < featurePoints.length; j+=2) {
+            formattedFeaturePoints.push([featurePoints[j], featurePoints[j+1]]);
+          }
+          encodedPoints.push(formattedFeaturePoints);
         }
-        display.reset(uid, fakeId, age, encodedPoints);
+        display.reset(uid, fakeId, encodedPoints, age);
       }
       break;
     case '/display/gender':
