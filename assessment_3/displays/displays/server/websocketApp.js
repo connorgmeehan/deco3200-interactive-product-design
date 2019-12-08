@@ -1,7 +1,11 @@
 import osc from 'osc';
 import WebSocket from 'ws';
 
+
 const websocketApp = (server) => {
+  const HOST = process.env.DISPLAY_HOST || "192.168.0.70";
+  const PORT = process.env.DISPLAY_PORT || "8080";
+  
   // Listen for Web Socket requests.
   var wss = new WebSocket.Server({
     server: server
@@ -10,6 +14,7 @@ const websocketApp = (server) => {
   let socketPort;
   // Listen for Web Socket connections.
   wss.on("connection", function(socket) {
+    console.log(socket);
     socketPort = new osc.WebSocketPort({
       socket: socket,
       metadata: true
@@ -21,11 +26,9 @@ const websocketApp = (server) => {
   });
 
   // Recieving OSC 
-  const listenPort = process.env.FACE_POINTS_DISPLAY_SERVER_PORT || "3001";
-
   var udpPort = new osc.UDPPort({
-    localAddress: "localhost",
-    localPort: listenPort,
+    localAddress: HOST,
+    localPort: PORT,
     metadata: true
   });
 
@@ -48,19 +51,7 @@ const websocketApp = (server) => {
 
   // When the port is read, send an OSC message to, say, SuperCollider
   udpPort.on("ready", function() {
-    udpPort.send({
-      address: "/s_new",
-      args: [
-        {
-          type: "s",
-          value: "default"
-        },
-        {
-          type: "i",
-          value: 100
-        }
-      ]
-    }, "127.0.0.1", 8000);
+    console.log(`Receiving OSC on ${HOST}:${PORT}`);
   });
 
 };

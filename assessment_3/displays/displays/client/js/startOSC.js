@@ -4,7 +4,7 @@ const OSC = require('osc/dist/osc-browser');
 
 function startOSC(display) {
   const oscPort = new OSC.WebSocketPort({
-    url: 'ws://localhost:3000', // URL to your Web Socket server.
+    url: 'ws://192.168.0.70:8080', // URL to your Web Socket server.
     metadata: true
   });
   console.log(`OSC client socket connection intialising on ${oscPort.options.url}...`);

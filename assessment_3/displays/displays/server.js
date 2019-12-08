@@ -54,7 +54,9 @@ const server = http.createServer(app);
 // Add websocket control
 websocketApp(server);
 
-server.listen(3000, 'localhost', function(err) {
+const listenPort = process.env.FACE_POINTS_DISPLAY_SERVER_PORT || "8080";
+
+server.listen(listenPort, '192.168.0.70', function(err) {
   if (err) throw err;
 
   const addr = server.address();
