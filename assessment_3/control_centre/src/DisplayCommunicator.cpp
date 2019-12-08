@@ -91,9 +91,9 @@ void DisplayCommunicator::_trySendModelToDisplays() {
 void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "\n\n\nSending model to displays...";
   
-  std::vector<std::string> encodedFeatures(_displayViewModel.features.size());
+  std::vector<std::string> encodedFeatures;
   for(int i = 0; i < encodedFeatures.size(); i++) {
-    encodedFeatures[i] = _encodePolyline(_displayViewModel.features[i]);
+    encodedFeatures.push_back(_encodePolyline(_displayViewModel.features[i]));
   }
   ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size() << " pixelSize: " << viewModel.greyscale.getPixels().getBytesPerPixel();
   ofBuffer greyscaleBuffer;
