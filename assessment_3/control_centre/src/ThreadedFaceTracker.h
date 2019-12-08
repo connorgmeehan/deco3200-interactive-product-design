@@ -23,11 +23,10 @@ class ThreadedFaceTracker {
 
     void setDeliverPayloadCallback(ThreadedFaceTrackerCallback callback);
     void setClearRoiTrackerCallback(std::function<void()> callback);
-    void setPadding(int padding);
     std::vector<ofPolyline> getFaceTrackingFeatures();
 
   private:
-    static int _padding;
+    static int _topPadding, _rightPadding, _bottomPadding, _leftPadding;
     static float _maxOrientationDifference;
 
     ofRectangle _getBoundingRect(ofxFaceTracker & tracker);

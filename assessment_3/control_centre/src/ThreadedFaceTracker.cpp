@@ -1,8 +1,11 @@
 #include "ThreadedFaceTracker.h"
 #include "ProjectDefines.h"
 
-int ThreadedFaceTracker::_padding = 40;
-float ThreadedFaceTracker::_maxOrientationDifference = 0.4f;
+int ThreadedFaceTracker::_topPadding = 60;
+int ThreadedFaceTracker::_rightPadding = 40;
+int ThreadedFaceTracker::_bottomPadding = 10;
+int ThreadedFaceTracker::_leftPadding = 40;
+float ThreadedFaceTracker::_maxOrientationDifference = 0.6f;
 
 ThreadedFaceTracker::~ThreadedFaceTracker() {
 }
@@ -33,10 +36,6 @@ std::vector<ofPolyline> ThreadedFaceTracker::getFaceTrackingFeatures() {
   }
 
   return retval;
-}
-
-void ThreadedFaceTracker::setPadding(int padding) {
-  _padding = padding;
 }
 
 void ThreadedFaceTracker::update() {
@@ -99,10 +98,10 @@ ofRectangle ThreadedFaceTracker::_getBoundingRect(ofxFaceTracker & tracker) {
   for(int i = 1; i < points.size(); i++) {
     bounds.growToInclude(points[i]);
   }
-  bounds.x = ofClamp(bounds.x - _padding, 0, bounds.x);
-  bounds.y = ofClamp(bounds.y - _padding, 0, bounds.y);
-  bounds.width = ofClamp(bounds.width + _padding * 2, bounds.width, (_grabber.getWidth() - bounds.x) + bounds.width + _padding * 2);
-  bounds.height = ofClamp(bounds.height + _padding * 2, bounds.height, (_grabber.getHeight() - bounds.y) + bounds.height + _padding * 2);
+  bounds.x = ofClamp(bounds.x - _leftPadding, 0, bounds.x);
+  bounds.y = ofClamp(bounds.y - _topPadding, 0, bounds.y);
+  bounds.width = ofClamp(bounds.width + _leftPadding + _rightPadding, bounds.width, (_grabber.getWidth() - bounds.x) + bounds.width + _leftPadding + _rightPadding);
+  bounds.height = ofClamp(bounds.height + _topPadding + _bottomPadding * 2, bounds.height, (_grabber.getHeight() - bounds.y) + bounds.height + _leftPadding + _rightPadding);
 
   return bounds;
 }
