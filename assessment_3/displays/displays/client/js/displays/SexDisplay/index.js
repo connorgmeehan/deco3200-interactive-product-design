@@ -46,11 +46,13 @@ class SexDisplay extends GenericDisplay {
     });
     
     this.stateManager.findState('RESULTS').clearCallbacks().addCallback(state => {
-      this.fakeIdDisplay.drawUserObject(fakeId, state.duration, 6, null, null, sex);
+      this.fakeIdDisplay.drawUserObject(fakeId, state.duration, 6, null, null, sex ? "MALE" : "FEMALE");
     });
     
     resetDisplay(points);
     this.stateManager.reset();
+
+
   }
 }
 
