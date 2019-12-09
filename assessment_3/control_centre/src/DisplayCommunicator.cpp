@@ -92,10 +92,11 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "\n\n\nSending model to displays...";
   
   std::vector<std::string> encodedFeatures;
-  for(int i = 0; i < encodedFeatures.size(); i++) {
+  for(int i = 0; i < viewModel.features.size(); i++) {
     encodedFeatures.push_back(_encodePolyline(_displayViewModel.features[i]));
   }
-  ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size() << " pixelSize: " << viewModel.greyscale.getPixels().getBytesPerPixel();
+  ofLog() << "encodedFeatures.size(): " << encodedFeatures.size();
+  // ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size() << " pixelSize: " << viewModel.greyscale.getPixels().getBytesPerPixel();
   ofBuffer greyscaleBuffer;
   ofSaveImage(viewModel.greyscale.getPixels(), greyscaleBuffer, ofImageFormat::OF_IMAGE_FORMAT_JPEG, ofImageQualityType::OF_IMAGE_QUALITY_WORST);
   
@@ -115,7 +116,6 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   asciiMessage.addStringArg(_displayViewModel.ascii);
   ofLog() << _displayViewModel.ascii;
   _asciiDisplaySender.sendMessage(asciiMessage, false);
-  ofLog() << "_asciiDisplaySender.sendMessage() -> to " << _asciiDisplaySender.getHost() << ":" << _asciiDisplaySender.getPort() << " ascii.length() " << _displayViewModel.ascii.length();
 
   ofxOscMessage faceMessage;
   faceMessage.setAddress("/display/face");

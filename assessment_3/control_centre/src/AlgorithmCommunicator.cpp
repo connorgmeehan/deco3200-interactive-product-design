@@ -70,8 +70,9 @@ void AlgorithmCommunicator::draw() {
 }
 
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi, ofImage& greyscale) {
-  ofLog() << "\nAlgorithmCommunicator::sendRoi(uint64_t uid: " << uid << ") to " << _host << ":" << _recogniserServerPort;
+  std::cout << "try send roi (uid: " << uid << ") -> " << _host << ":" << _recogniserServerPort;
   if(ofGetElapsedTimef() > _lastUserDetectTime + _userDetectInterval) {
+    std::cout << "... success";
     _lastGreyscale = greyscale;
 
     // Save last roi's dimensions
@@ -89,8 +90,9 @@ void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi, ofImage& greysca
     recogniserMessage.addInt32Arg(roi.getHeight());
     _recogniserSender.sendMessage(recogniserMessage, false);
   } else {
-    ofLog() << "\t user detected at "<<ofGetElapsedTimef()<<" before time... "<<_lastUserDetectTime + _userDetectInterval<<" skipping...";
+    std::cout << "... "<<ofToString(ofGetElapsedTimef(), 1)<<"/"<<ofToString(_lastUserDetectTime + _userDetectInterval, 1)<<" skipping...";
   }
+  std::cout << std::endl;
 }
 
 void AlgorithmCommunicator::clearRois() {
