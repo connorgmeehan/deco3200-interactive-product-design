@@ -38,6 +38,9 @@ class FacePointsDisplay extends GenericDisplay {
   }
 
   reset(uid, fakeId, features, age) {
+    this.lineWriters.killAll();
+    this.fakeIdDisplayer.clear();
+    
     reset(features, age);
 
     // Initialise on state change behaviour

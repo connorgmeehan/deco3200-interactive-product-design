@@ -41,8 +41,10 @@ class EmotionLineWriters {
   }
 
   killAll() {
-    this.intitialTextWriter && this.intitialTextWriter.kill();
-    document.querySelector('.EmotionDisplay_InitialText').innerHTML = '';
+    this.intitialTextTyper && this.intitialTextTyper.kill();
+    this.resultTyper && this.resultTyper.kill();
+    document.querySelector('.FacePointsDisplay_InitialText').innerHTML = '';
+    document.querySelector('.FacePointsDisplay_ResultText').innerHTML = '';
   }
 }
 
