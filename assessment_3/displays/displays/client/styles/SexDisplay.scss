@@ -1,6 +1,13 @@
 .SexDisplay {
   padding: 2rem;
+  &.Display__Active {
+    display: flex;
+  }
+  flex-direction: column;
+  align-items: center;
   &_InitialText {
     height: 95px;
+
   }
 }
+

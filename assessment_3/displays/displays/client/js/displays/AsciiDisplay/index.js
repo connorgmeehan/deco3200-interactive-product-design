@@ -3,6 +3,7 @@ import StateManager from '../../StateManager';
 import getFakeData from './getFakeData';
 import AsciiLineWriters from './AsciiLineWriters';
 import {shuffle} from '../../helpers/utils';
+import FakeIdDisplayer from '../components/FakeIdDisplayer';
 
 class AsciiDisplay extends GenericDisplay {
   type = 'ascii';
@@ -20,6 +21,8 @@ class AsciiDisplay extends GenericDisplay {
     const facePoints = document.getElementById('ascii');
     facePoints.classList.add('Display__Active');
     this.asciiLineWriters = new AsciiLineWriters();
+    
+    this.fakeIdDisplayer = new FakeIdDisplayer(document.querySelector('.AsciiDisplay_ResultText'));
 
     this.stateManager = new StateManager();
     this.stateManager.addState('INITIAL_TEXT', 1.0).addCallback(state => {
@@ -33,12 +36,13 @@ class AsciiDisplay extends GenericDisplay {
     this.stateManager.addState('RETURN_DATA', 1.0);
     this.stateManager.addState('END', 0.0);
 
+    
+
     const {uid, fakeId, faceString} = getFakeData();
     console.log(uid, fakeId, faceString);
     for (let i = 0; i < this.maxFaces; i++) {
       this.reset(uid, fakeId, faceString);
     }
-    this.stateManager.createDebugElement();
   }
 
   reset(uid, fakeId, faceString) {
@@ -91,7 +95,8 @@ class AsciiDisplay extends GenericDisplay {
       });
     });
     this.stateManager.findState('DETECTED').clearCallbacks().addCallback(state => {
-      this.asciiLineWriters.startDetectedText(this.fakeId, state.duration);
+      // this.asciiLineWriters.startDetectedText(this.fakeId, state.duration);
+      this.fakeIdDisplayer.drawUserObject(fakeId, state.duration, 2);
     });
     this.stateManager.findState('RETURN_DATA').clearCallbacks().addCallback(state => {
       this.asciiLineWriters.startReturningDataText(state.duration);

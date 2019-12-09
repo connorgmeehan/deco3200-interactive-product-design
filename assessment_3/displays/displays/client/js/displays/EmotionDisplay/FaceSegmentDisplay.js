@@ -57,7 +57,7 @@ class FaceSegmentDisplay {
     const idTag = document.createElement('div');
     idTag.classList.add('EmotionDisplay_IdTag');
     idTag.innerText = `P${this.id}`;
-    this.element.appendChild(idTag);
+    this.container.appendChild(idTag);
   }
 
   startScanAnimation(duration) {

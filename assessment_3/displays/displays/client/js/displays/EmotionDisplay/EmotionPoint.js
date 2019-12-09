@@ -27,14 +27,14 @@ class EmotionPoint {
     }
     this.p5.push();
     this.p5.noFill();
-    this.p5.drawingContext.setLineDash([5, 15]);
-    this.p5.strokeWeight(5);
+    this.p5.drawingContext.setLineDash([5, 12]);
+    this.p5.strokeWeight(4);
     this.p5.stroke(this.color);
     this.p5.ellipse(this.x, this.y, this.radius, this.radius);
     this.p5.pop();
 
     this.p5.textAlign(this.p5.CENTER);
-    this.p5.textSize(20);
+    this.p5.textSize(15);
     this.p5.noStroke();
     this.p5.fill(255, 0, 0);
     this.p5.textFont(this.font);

@@ -27,9 +27,15 @@ class FakeIdDisplayer {
       ? length - 2
       : length;
     
-    const htmlLines = preUpdateLength === 0 
+    const htmlLines = [
+      '<span class="u--font-weight-regular">PROCESS_RESULTS</span>',
+      '<span class="u--font-weight-regular" style="line-height: 0.8rem">----------------</span>',
+      '<span class="u--font-weight-regular u--invisible" style="line-height: 1rem">----------------</span>',
+    ];
+    
+    htmlLines.push(preUpdateLength === 0 
       ? [ 'USER.ID: <span class="FakeId_Id u--display-none">00</span>']
-      : [ `USER.ID: <span class="FakeId_Id">${fakeId.substring(0, preUpdateLength)}</span>` ];
+      : [ `USER.ID: <span class="FakeId_Id">${fakeId.substring(0, preUpdateLength)}</span>` ]);
     if (emotion) {
       htmlLines.push(`USER.EMOTION: ${emotion}`);
     }

@@ -1,7 +1,9 @@
 .FakeId {
   margin-top: 1rem;
-  padding: 1rem;
+  padding: 2rem;
   color: white;
+
+  @extend .t--terminal-large;
 
   &_Id {
     &__Updating {
@@ -14,7 +16,10 @@
   }
 
   &_Container {
-      display: flex;
-      justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
   }
 }
