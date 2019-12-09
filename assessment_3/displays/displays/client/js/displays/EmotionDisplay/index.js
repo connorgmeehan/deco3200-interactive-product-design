@@ -24,6 +24,7 @@ class EmotionDisplay extends GenericDisplay {
     // Intitialise states
     this.stateManager = new StateManager();
     window.stateManager = this.stateManager;
+    this.stateManager.addState('DELAY', 25);
     this.stateManager.addState('INITIAL_TEXT', 2.0);
     this.stateManager.addState('FEATURES_DISPLAY', 2.0);
     this.stateManager.addState('SCAN', 3.0);
@@ -84,7 +85,7 @@ class EmotionDisplay extends GenericDisplay {
     });
 
     this.stateManager.findState('ID').clearCallbacks().addCallback(state => {
-      this.fakeIdDisplayer.drawUserObject(this.fakeId, state.duration, 10, emotion);
+      this.fakeIdDisplayer.drawUserObject(this.fakeId, state.duration, 8, emotion);
     });
 
     // Reset state manager

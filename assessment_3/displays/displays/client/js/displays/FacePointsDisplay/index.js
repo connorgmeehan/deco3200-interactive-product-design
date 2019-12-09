@@ -18,6 +18,7 @@ class FacePointsDisplay extends GenericDisplay {
     facePoints.classList.add('Display__Active');
 
     this.stateManager = new StateManager();
+    this.stateManager.addState('DELAY', 7.5);
     this.stateManager.addState('INIT', 2);
     this.stateManager.addState('BOX', 0.25);
     this.stateManager.addState('FACE_LINES', 1);
@@ -49,7 +50,7 @@ class FacePointsDisplay extends GenericDisplay {
     });
 
     this.stateManager.findState('RETURN').clearCallbacks().addCallback(state => {
-      this.fakeIdDisplayer.drawUserObject(fakeId, state.duration, 6, null, age, null);
+      this.fakeIdDisplayer.drawUserObject(fakeId, state.duration, 4, null, age, null);
     });
 
     this.stateManager.reset();
