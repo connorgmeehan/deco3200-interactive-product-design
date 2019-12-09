@@ -11,17 +11,16 @@ const websocketApp = (server) => {
     server: server
   });
 
-  let socketPort;
+  let socketPorts = [];
   // Listen for Web Socket connections.
   wss.on("connection", function(socket) {
-    socketPort = new osc.WebSocketPort({
-      socket: socket,
-      metadata: true
-    });
 
-    socketPort.on("message", function(oscMsg) {
-      console.log("An OSC Message was received!", oscMsg);
-    });
+    socketPorts.push(
+      new osc.WebSocketPort({
+        socket: socket,
+        metadata: true
+      })
+    );
   });
 
   // Recieving OSC 
@@ -35,11 +34,26 @@ const websocketApp = (server) => {
   udpPort.on("message", function(oscMsg, timeTag, info) {
     console.log("An OSC message just arrived!", oscMsg.address, info.size);
     console.log("Remote info is: ", info);
-    if (socketPort) {
-      socketPort.send({
-        address: oscMsg.address,
-        args: oscMsg.args,
+    if (socketPorts) {
+      let failedSocketIndices = [];
+
+      // Iterate through active sockets
+      socketPorts.forEach((socket, i) => {
+        try {
+          socket.send({
+            address: oscMsg.address,
+            args: oscMsg.args,
+          });
+        } catch {
+          failedSocketIndices.push(i);
+        }
       });
+
+      // Remove failed sockets
+      failedSocketIndices.forEach(socketToRemoveIndex => {
+        socketPorts.splice(socketToRemoveIndex, 1);
+      });
+
     } else {
       console.log('WebSocketPort not intialised, can\'t pass to client.');
     }
