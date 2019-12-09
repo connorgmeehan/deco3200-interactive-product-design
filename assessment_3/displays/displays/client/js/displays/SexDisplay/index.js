@@ -39,7 +39,8 @@ class SexDisplay extends GenericDisplay {
   }
 
   reset(uid, fakeId, sex, points) {
-    
+    this.fakeIdDisplay.clear();
+
     this.stateManager.findState('INIT').clearCallbacks().addCallback(state => {
       this.lineWriters.startInitialText(state.duration);
     });

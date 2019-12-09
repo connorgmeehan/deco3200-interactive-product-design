@@ -11,7 +11,7 @@
         "cwd": "${workspaceFolder}",
         "environment": [
             { "name": "DISPLAY_HOST", "value": "localhost" },
-            { "name": "DISPLAY_PORT", "value": "8080" },
+            { "name": "DISPLAY_PORT", "value": "8081" },
         ],
         "externalConsole": false,
         "MIMode": "gdb",

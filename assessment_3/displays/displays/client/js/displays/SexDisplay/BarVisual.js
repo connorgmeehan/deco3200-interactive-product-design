@@ -62,6 +62,7 @@ class BarVisual {
 
   reset() {
     this.state = 'inactive';
+    this.barLength = 0;
   }
 }
 

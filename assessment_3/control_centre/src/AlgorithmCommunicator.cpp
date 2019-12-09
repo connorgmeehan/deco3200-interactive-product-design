@@ -28,7 +28,7 @@ void AlgorithmCommunicator::setup(DisplayCommunicator* pDisplayCommunicator) {
   ofLog() << "\tstarting control panels's OSC reciever on port:" << _recieverPort;
   _reciever.setup(_recieverPort);
 
-  _lastUserDetectTime = ofGetElapsedTimef();
+  _nextDetectTrigger = ofGetElapsedTimef();
 }
 
 void AlgorithmCommunicator::update() {
@@ -71,7 +71,7 @@ void AlgorithmCommunicator::draw() {
 
 void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi, ofImage& greyscale) {
   std::cout << "try send roi (uid: " << uid << ") -> " << _host << ":" << _recogniserServerPort;
-  if(ofGetElapsedTimef() > _lastUserDetectTime + _userDetectInterval) {
+  if(ofGetElapsedTimef() > _nextDetectTrigger) {
     std::cout << "... success";
     _lastGreyscale = greyscale;
 
@@ -90,7 +90,7 @@ void AlgorithmCommunicator::sendRoi(uint64_t uid, ofImage& roi, ofImage& greysca
     recogniserMessage.addInt32Arg(roi.getHeight());
     _recogniserSender.sendMessage(recogniserMessage, false);
   } else {
-    std::cout << "... "<<ofToString(ofGetElapsedTimef(), 1)<<"/"<<ofToString(_lastUserDetectTime + _userDetectInterval, 1)<<" skipping...";
+    std::cout << "... "<<ofToString(ofGetElapsedTimef(), 1)<<"/"<<ofToString(_nextDetectTrigger, 1)<<" skipping...";
   }
   std::cout << std::endl;
 }
@@ -108,7 +108,7 @@ void AlgorithmCommunicator::setFaceTrackingFeaturesGetter(std::function<std::vec
 void AlgorithmCommunicator::_handleUserDetected(int uid, bool isNew) {
   ofLog() << "User Detected uid: " << uid << ", isNew: " << (isNew ? "true" : "false");
   if(isNew) {
-    _lastUserDetectTime = ofGetElapsedTimef();
+    _nextDetectTrigger = ofGetElapsedTimef() + _userDetectInterval;
     _lastUid = uid;
     ofLog() << "\tSending ascii to " << _host << ":" << _asciiServerPort << "...";
     ofxOscMessage asciiMessage;
