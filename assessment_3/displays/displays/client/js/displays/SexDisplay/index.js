@@ -19,7 +19,7 @@ class SexDisplay extends GenericDisplay {
     sexDisplay.classList.add('Display__Active');
 
     this.stateManager = new StateManager();
-    this.stateManager.addState('DELAY', 17.75);
+    // this.stateManager.addState('DELAY', 17.75);
     this.stateManager.addState('INIT', 1.0);
     this.stateManager.addState('BOX', 0.25);
     this.stateManager.addState('INITIAL_POINTS', 1.0);
@@ -39,7 +39,8 @@ class SexDisplay extends GenericDisplay {
   }
 
   reset(uid, fakeId, sex, points) {
-    
+    this.fakeIdDisplay.clear();
+
     this.stateManager.findState('INIT').clearCallbacks().addCallback(state => {
       this.lineWriters.startInitialText(state.duration);
     });

@@ -39,7 +39,7 @@ class AlgorithmCommunicator {
 		ofxOscSender _demographicSender;
 
 		float _userDetectInterval = 5.0f;
-		float _lastUserDetectTime;
+		float _nextDetectTrigger;
 		int _lastUid, _lastWidth, _lastHeight;
 		ofImage _lastGreyscale;
 };

@@ -19,7 +19,7 @@ class DisplayCommunicator {
     bool _checkIfNewUid(int uid);
 		void _trySendModelToDisplays();
     void _sendModel(DisplayVM& viewModel);
-    std::string _encodePolyline(ofPolyline & polyline);
+    std::string _encodePolyline(ofPolyline polyline);
     std::string _generateRandomString(int length);
 
 		DisplayVM _displayViewModel;

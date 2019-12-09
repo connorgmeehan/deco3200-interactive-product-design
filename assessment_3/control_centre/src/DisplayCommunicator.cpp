@@ -93,7 +93,11 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   
   std::vector<std::string> encodedFeatures;
   for(int i = 0; i < viewModel.features.size(); i++) {
-    encodedFeatures.push_back(_encodePolyline(_displayViewModel.features[i]));
+    auto encodedPolyline = _encodePolyline(_displayViewModel.features[i]);
+    if(encodedPolyline.length() == 0) {
+      return;
+    }
+    encodedFeatures.push_back(encodedPolyline);
   }
   ofLog() << "encodedFeatures.size(): " << encodedFeatures.size();
   // ofLog() << "Converting pixels to buffer, pixeltype: " << viewModel.greyscale.getPixels().getPixelFormat() << " size: " << viewModel.greyscale.getPixels().size() << " pixelSize: " << viewModel.greyscale.getPixels().getBytesPerPixel();
@@ -114,7 +118,6 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   asciiMessage.addInt32Arg(_displayViewModel.uid);
   asciiMessage.addStringArg(fakeId);
   asciiMessage.addStringArg(_displayViewModel.ascii);
-  ofLog() << _displayViewModel.ascii;
   _asciiDisplaySender.sendMessage(asciiMessage, false);
 
   ofxOscMessage faceMessage;
@@ -166,13 +169,23 @@ void DisplayCommunicator::_sendModel(DisplayVM& viewModel) {
   ofLog() << "_listDisplaySender.sendMessage() -> to " << _listDisplaySender.getHost() << ":" << _listDisplaySender.getPort();
 }
 
-std::string DisplayCommunicator::_encodePolyline(ofPolyline & polyline) {
+std::string DisplayCommunicator::_encodePolyline(ofPolyline polyline) {
   std::string polylineBuffer;
-  for(auto & vector3 : polyline) {
-    polylineBuffer += ofToString(roundf(vector3.x))+","+ofToString(roundf(vector3.y))+",";
+  int i = 0;
+  auto & verts = polyline.getVertices();
+  ofLog() << "verts.size(): " << verts.size();
+  if(verts.size() > 0) {
+    for(auto & vector3 : verts) {
+      std::cout << "vec["<<i<<"]" << vector3.x << "," << vector3.y << ", "; 
+      polylineBuffer += ofToString(roundf(vector3.x))+","+ofToString(roundf(vector3.y))+",";
+      i++;
+    }
+    std::cout << ", popping back..." << std::endl;
+    polylineBuffer.pop_back();
+    std::cout << polylineBuffer << ", returning result..." << std::endl;
+    return polylineBuffer;
   }
-  polylineBuffer.pop_back();
-  return polylineBuffer;
+  return "";
 }
 
 std::string DisplayCommunicator::_generateRandomString(int length) {
