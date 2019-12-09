@@ -6,6 +6,9 @@ assessment_3/libfacedetection
 assessment_3/displays/displays/.vscode*
 !assessment_3/displays/displays/node_modules
 assessment_3/displays/displays/node_modules*
+assessment_3/displays/list_display/bin/list_display
+assessment_3/displays/list_display/bin/list_display_debug
+assessment_3/displays/list_display/bin/list_display_debug
 
 
 # Ignore demographics detector

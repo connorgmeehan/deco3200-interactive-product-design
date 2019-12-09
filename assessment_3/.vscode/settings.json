@@ -91,5 +91,8 @@
         "netfwd": "cpp",
         "tensor": "cpp"
     },
-    "C_Cpp.default.intelliSenseMode": "gcc-x64"
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "python.pythonPath": "/usr/sbin/python",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
 }

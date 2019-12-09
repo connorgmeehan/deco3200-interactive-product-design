@@ -1,6 +1,28 @@
 {
     "version": "0.2.0",
     "configurations": [
+    {
+        "name": "(gdb) Launch list display",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/displays/list_display/bin/list_display_debug",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [
+            { "name": "DISPLAY_HOST", "value": "localhost" },
+            { "name": "DISPLAY_PORT", "value": "8080" },
+        ],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ]
+    },
         {
             "name": "Python: Current File",
             "type": "python",
@@ -15,6 +37,8 @@
                 "ASCII_CLIENT_PORT": "8005",
                 "EMOTION_SERVER_PORT": "8006",
                 "DEMOGRAPHIC_SERVER_PORT": "8007",
+                "DISPLAY_HOST": "localhost",
+                "DISPLAY_PORT": "8080",
                 "VID_OUT_DIR": "/home/connorgm/deco3200-interactive-product-design/assessment_3/webcam_out",
             }
         },
@@ -33,18 +57,18 @@
                 { "name": "ASCII_SERVER_PORT", "value": "8004" },
                 { "name": "EMOTION_SERVER_PORT", "value": "8006" },
                 { "name": "DEMOGRAPHIC_SERVER_PORT", "value": "8007" },
-                { "name": "ASCII_DISPLAY_SERVER_ADDR", "value": "localhost" },
-                { "name": "ASCII_DISPLAY_SERVER_PORT", "value": "3000" },
-                { "name": "FACE_POINTS_DISPLAY_SERVER_ADDR", "value": "localhost" },
-                { "name": "FACE_POINTS_DISPLAY_SERVER_PORT", "value": "3000" },
-                { "name": "GENDER_DISPLAY_SERVER_ADDR", "value": "localhost" },
-                { "name": "GENDER_DISPLAY_SERVER_PORT", "value": "3000" },
-                { "name": "EMOTION_DISPLAY_SERVER_ADDR", "value": "localhost" },
-                { "name": "EMOTION_DISPLAY_SERVER_PORT", "value": "3000" },
-                { "name": "LIST_DISPLAY_SERVER_ADDR", "value": "localhost" },
-                { "name": "LIST_DISPLAY_SERVER_PORT", "value": "3000" },
-                { "name": "OSC_TEST_SERVER_ADDR", "value": "localhost" },
-                { "name": "OSC_TEST_SERVER_PORT", "value": "3000" },
+                { "name": "ASCII_DISPLAY_SERVER_ADDR", "value": "192.168.0.70" },
+                { "name": "ASCII_DISPLAY_SERVER_PORT", "value": "8080" },
+                { "name": "FACE_POINTS_DISPLAY_SERVER_ADDR", "value": "192.168.0.70" },
+                { "name": "FACE_POINTS_DISPLAY_SERVER_PORT", "value": "8080" },
+                { "name": "GENDER_DISPLAY_SERVER_ADDR", "value": "192.168.0.70" },
+                { "name": "GENDER_DISPLAY_SERVER_PORT", "value": "8080" },
+                { "name": "EMOTION_DISPLAY_SERVER_ADDR", "value": "192.168.0.70" },
+                { "name": "EMOTION_DISPLAY_SERVER_PORT", "value": "8080" },
+                { "name": "LIST_DISPLAY_SERVER_ADDR", "value": "192.168.0.70" },
+                { "name": "LIST_DISPLAY_SERVER_PORT", "value": "8080" },
+                { "name": "OSC_TEST_SERVER_ADDR", "value": "192.168.0.70" },
+                { "name": "OSC_TEST_SERVER_PORT", "value": "8080" },
             ],
             "externalConsole": false,
             "linux": {
