@@ -35,8 +35,12 @@
   font-weight: 600;
 }
 
+.t--terminal-small {
+  @extend .t--terminal;
+  font-size: 0.7rem;
+}
+
 .t--terminal-large {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 600;
-  font-size: 2rem;
+  @extend .t--terminal;
+  font-size: 1.5rem;
 }

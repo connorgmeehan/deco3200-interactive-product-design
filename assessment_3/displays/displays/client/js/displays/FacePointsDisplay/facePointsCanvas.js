@@ -20,14 +20,14 @@ const reset = (featuresArray, userAge) => {
 
 const sketch = (p5) => {
     
-  const canvasWidth = 800;
-  const canvasHeight = 800;
+  const canvasWidth = 650;
+  const canvasHeight = 650;
     
   window.p5 = p5; 
   
-  const boxVisual = new BoxVisual(p5, 50, 50, 700, 700);
-  faceVisual = new FaceVisual(p5, 100, 100, 600, 600);
-  const scanLine = new ScanLine(p5, 51, 51, 698, 100, 698);
+  const boxVisual = new BoxVisual(p5, 50, 50, 550, 550);
+  faceVisual = new FaceVisual(p5, 100, 100, 450, 450);
+  const scanLine = new ScanLine(p5, 51, 51, 548, 100, 548);
   const color = p5.color(0, 41, 243);
   scanLine.setColor(color);
 
