@@ -3,7 +3,7 @@ import WebSocket from 'ws';
 
 
 const websocketApp = (server) => {
-  const HOST = process.env.DISPLAY_HOST || "192.168.0.70";
+  const HOST = process.env.DISPLAY_HOST || "localhost";
   const PORT = process.env.DISPLAY_PORT || "8080";
   
   // Listen for Web Socket requests.
@@ -14,7 +14,6 @@ const websocketApp = (server) => {
   let socketPort;
   // Listen for Web Socket connections.
   wss.on("connection", function(socket) {
-    console.log(socket);
     socketPort = new osc.WebSocketPort({
       socket: socket,
       metadata: true
@@ -28,7 +27,7 @@ const websocketApp = (server) => {
   // Recieving OSC 
   var udpPort = new osc.UDPPort({
     localAddress: HOST,
-    localPort: PORT,
+    localPort: Number.parseInt(PORT) + 1,
     metadata: true
   });
 

@@ -2,9 +2,12 @@ import { splitSubstring, escapeHtml } from './helpers/utils';
 
 const OSC = require('osc/dist/osc-browser');
 
+const HOST = process.env.DISPLAY_HOST || "localhost";
+const PORT = process.env.DISPLAY_PORT || "8080";
+
 function startOSC(display) {
   const oscPort = new OSC.WebSocketPort({
-    url: 'ws://192.168.0.70:8080', // URL to your Web Socket server.
+    url: `ws://${HOST}:${PORT}`, // URL to your Web Socket server.
     metadata: true
   });
   console.log(`OSC client socket connection intialising on ${oscPort.options.url}...`);

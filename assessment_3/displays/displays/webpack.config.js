@@ -19,7 +19,11 @@ export default {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.EnvironmentPlugin({
+      'DISPLAY_HOST': JSON.stringify(process.env.DISPLAY_HOST),
+      'DISPLAY_PORT': JSON.stringify(process.env.DISPLAY_PORT),
+    }),
   ],
   resolve: {
     extensions: ['.js'],
